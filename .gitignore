@@ -1,0 +1,21 @@
+# Build outputs
+build/
+output/
+sysroot/
+
+# Downloaded/generated sources
+sources/
+libs/
+
+# Toolchain generated content
+toolchain/
+
+# Keep the toolchain configuration
+!trimui-toolchain.config
+
+# Docker / local noise
+*.log
+*.tmp
+*.swp
+*~
+.DS_Store

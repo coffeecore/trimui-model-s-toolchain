@@ -1,0 +1,42 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    autoconf \
+    automake \
+    bison \
+    build-essential \
+    ca-certificates \
+    curl \
+    file \
+    flex \
+    gawk \
+    git \
+    help2man \
+    libncurses-dev \
+    libtool-bin \
+    libtool \
+    make \
+    pkg-config \
+    python3 \
+    rsync \
+    texinfo \
+    unzip \
+    wget \
+    xz-utils \
+    bzip2 \
+    zstd \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd --create-home --shell /bin/bash builder
+
+WORKDIR /workspace
+
+RUN chown -R builder:builder /workspace
+
+USER builder
+
+ENV HOME=/home/builder
+
+CMD ["/bin/bash"]
