@@ -23,9 +23,11 @@ RUN apt-get update && apt-get install -y \
     rsync \
     texinfo \
     unzip \
+    zip \
     wget \
     xz-utils \
     bzip2 \
+    cmake \
     zstd \
     && rm -rf /var/lib/apt/lists/*
 
@@ -34,6 +36,9 @@ RUN useradd --create-home --shell /bin/bash builder
 WORKDIR /workspace
 
 RUN chown -R builder:builder /workspace
+
+RUN mkdir -p /opt/trimui-toolchain/bin \
+    && chown -R builder:builder /opt/trimui-toolchain
 
 USER builder
 

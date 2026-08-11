@@ -25,7 +25,7 @@ Ce qu'on sait déjà :
 - crosstool-ng ne peut pas être compilé en root donc prévoir utilisateur "builder" sur le docker
 - le checkout des submodules doit passer par https pas ssh
 - les librairies qu'on a déjà identifié :
-	- https://github.com/madler/zlib.git v1.3.1
+	- https://github.com/madler/zlib.git v1.3.1 : déjà fait
 	- https://github.com/libsdl-org/SDL-1.2.git release-1.2.15
 	- https://github.com/libsdl-org/SDL_image.git release-1.2.12
 	- https://github.com/libsdl-org/SDL_mixer.git release-1.2.12
@@ -41,8 +41,8 @@ Commande make que je veux :
 
 
 Ce que je veux pouvoir faire dans le contenur, chaque commande make doit s'accompagner d'une commande préfixée de "clean" pour nettoyer ce que je la commande make a fait :
-- make build-toolchain : récupération des sources et compilation de la toolchain
-- make install-toolchain : créer les liens symboliques, copie les fichiers où il faut etc.
+- make build-toolchain : récupération des sources et compilation de la toolchain : on a déjà
+- make install-toolchain : créer les liens symboliques, copie les fichiers où il faut etc. : on a déjà
 - make build-libs : récupération des sources et compilation des librairies nécessaires à tous les projets à compiler. Je veux une sous commande make par librairies, donc la commande "make build-libs" appellera ces sous-commandes
 - make install-libs : créer les liens symboliques, copie les fichiers où il faut etc. Je veux une sous commande make par librairies, donc la commande "make install-libs" appellera ces sous-commandes
 - make minui : récupération des sources et compilation du projet minui legacy
