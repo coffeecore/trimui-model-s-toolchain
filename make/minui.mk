@@ -4,18 +4,38 @@
 # MinUI is kept completely upstream-clean. Compatibility fixes live here in the
 # orchestration layer instead of modifying MinUI or its submodules.
 
-MINUI_DIR := $(WORKSPACE)/sources/minui
+MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
+MINUI_DIR := /workspace/sources/minui
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
 MINUI_BUILD_DIR := $(MINUI_DIR)/build
 MINUI_PAYLOAD_DIR := $(MINUI_BUILD_DIR)/PAYLOAD
 MINUI_ROMS_DIR := $(MINUI_BUILD_DIR)/Roms
 
-.PHONY: build-minui clean-build-minui
+.PHONY: build-minui clean-build-minui source-minui clean-source-minui
+
+source-minui:
+	@if [ ! -d "$(MINUI_DIR)/.git" ]; then \
+		mkdir -p "$(dir $(MINUI_DIR))"; \
+		git clone \
+			$(MINUI_REPO) \
+			$(MINUI_DIR); \
+	fi
+
+	# Certains submodules upstream utilisent des URLs SSH GitHub.
+	# On les réécrit temporairement en HTTPS sans modifier .gitmodules.
+	cd "$(MINUI_DIR)" && \
+		git \
+			-c url."https://github.com/".insteadOf="git@github.com:" \
+			-c url."https://github.com/".insteadOf="ssh://git@github.com/" \
+			submodule update --init --recursive --jobs=$(JOBS)
+
+clean-source-minui:
+	rm -rf $(MINUI_DIR)
 
 # Reproduce the upstream build order. The only manually expanded emulator target
 # is PicoDrive (`gen`) because MinUI references platform/trimui/skin, while the
 # pinned PicoDrive commit actually provides platform/opendingux/data/skin.
-build-minui:
+build-minui: source-minui
 	$(MAKE) -C $(MINUI_DIR) readme
 	$(MAKE) -C $(MINUI_DIR) sys
 
