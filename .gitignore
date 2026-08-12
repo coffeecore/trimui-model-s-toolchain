@@ -19,3 +19,5 @@ toolchain/
 *.swp
 *~
 .DS_Store
+
+tmp/
