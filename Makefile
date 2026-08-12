@@ -22,20 +22,61 @@ include make/toolchain.mk
 include make/libs.mk
 include make/minui.mk
 include make/arnold.mk
+include make/stella.mk
 
 .PHONY: help shell toolchain libs setup
 
 
 # Show the high-level commands intended for normal use.
 help:
-	@printf '%s\n' \
-		'make toolchain          Rebuild and install the cross-toolchain' \
-		'make libs               Rebuild and install common libraries' \
-		'make setup              Run toolchain then libs' \
-		'make build-minui        Build and package MinUI Legacy' \
-		'make clean-build-minui  Remove MinUI build artifacts' \
-		'' \
-		'Optional: append JOBS=N to limit parallel compilation.'
+	@echo "Trimui Model S build environment"
+	@echo
+	@echo "Main targets:"
+	@echo "  setup                 Build and install toolchain + libraries"
+	@echo "  toolchain             Clean, build and install the toolchain"
+	@echo "  libs                  Clean, build and install common libraries"
+	@echo "  minui                 Clean and build MinUI Legacy"
+	@echo "  arnold                Clean, build and install Arnold"
+	@echo "  stella                Clean, build and install Stella"
+	@echo
+	@echo "Toolchain:"
+	@echo "  build-toolchain       Build the crosstool-NG toolchain"
+	@echo "  install-toolchain     Install toolchain sysroot and compatibility wrappers"
+	@echo "  clean-build-toolchain Clean toolchain build"
+	@echo "  clean-install-toolchain"
+	@echo
+	@echo "Libraries:"
+	@echo "  build-libs            Build all common libraries"
+	@echo "  install-libs          Install all common libraries"
+	@echo "  clean-build-libs      Clean all library builds"
+	@echo "  clean-install-libs    Clean installed libraries"
+	@echo "  clean-source-libs     Remove downloaded library sources"
+	@echo
+	@echo "MinUI Legacy:"
+	@echo "  source-minui          Clone/update MinUI sources and submodules"
+	@echo "  build-minui           Build MinUI Legacy and bundled emulators"
+	@echo "  clean-build-minui     Clean MinUI build"
+	@echo "  clean-source-minui    Remove MinUI sources"
+	@echo
+	@echo "Arnold:"
+	@echo "  source-arnold         Checkout pinned Arnold source"
+	@echo "  build-arnold          Build Arnold"
+	@echo "  install-arnold        Install GX4000.pak into output/arnold"
+	@echo "  clean-build-arnold    Clean Arnold build"
+	@echo "  clean-install-arnold  Remove Arnold output"
+	@echo "  clean-source-arnold   Remove Arnold sources"
+	@echo
+	@echo "Stella:"
+	@echo "  source-stella         Checkout pinned Stella source"
+	@echo "  configure-stella      Generate Trimui config.mak"
+	@echo "  build-stella          Build Stella"
+	@echo "  install-stella        Install Atari2600.pak into output/stella"
+	@echo "  clean-build-stella    Clean Stella build"
+	@echo "  clean-install-stella  Remove Stella output"
+	@echo "  clean-source-stella   Remove Stella sources"
+	@echo
+	@echo "Options:"
+	@echo "  JOBS=N                Number of parallel jobs (default: nproc)"
 
 # Open an interactive shell in the build container.
 shell:
