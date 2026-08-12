@@ -11,7 +11,11 @@ MINUI_BUILD_DIR := $(MINUI_DIR)/build
 MINUI_PAYLOAD_DIR := $(MINUI_BUILD_DIR)/PAYLOAD
 MINUI_ROMS_DIR := $(MINUI_BUILD_DIR)/Roms
 
-.PHONY: build-minui clean-build-minui source-minui clean-source-minui
+.PHONY: build-minui clean-build-minui source-minui clean-source-minui minui
+
+minui:
+	$(MAKE) clean-build-minui
+	$(MAKE) build-minui
 
 source-minui:
 	@if [ ! -d "$(MINUI_DIR)/.git" ]; then \

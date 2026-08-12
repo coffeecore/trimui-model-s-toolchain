@@ -21,6 +21,7 @@ include make/common.mk
 include make/toolchain.mk
 include make/libs.mk
 include make/minui.mk
+include make/arnold.mk
 
 .PHONY: help shell toolchain libs setup
 

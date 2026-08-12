@@ -48,6 +48,11 @@ BZIP2_VERSION := 1.0.8
 BZIP2_DIR := $(WORKSPACE)/libs/bzip2
 BZIP2_BUILD_DIR := $(WORKSPACE)/build/bzip2
 
+LIBMAD_VERSION := 0.15.1b
+LIBMAD_DIR := /workspace/libs/libmad
+LIBMAD_BUILD_DIR := /workspace/build/libmad
+LIBMAD_ARCHIVE := /workspace/libs/libmad-$(LIBMAD_VERSION).tar.gz
+
 .PHONY: \
 	prepare-build-sysroot \
 	build-libs clean-build-libs install-libs clean-install-libs clean-source-libs \
@@ -60,7 +65,8 @@ BZIP2_BUILD_DIR := $(WORKSPACE)/build/bzip2
 	build-sdl-ttf clean-build-sdl-ttf install-sdl-ttf clean-install-sdl-ttf \
 	build-tinyalsa clean-build-tinyalsa install-tinyalsa clean-install-tinyalsa \
 	build-alsa-lib clean-build-alsa-lib install-alsa-lib clean-install-alsa-lib \
-	build-bzip2 clean-build-bzip2 install-bzip2 clean-install-bzip2
+	build-bzip2 clean-build-bzip2 install-bzip2 clean-install-bzip2 \
+	build-libmad clean-build-libmad install-libmad clean-install-libmad
 
 # ------------------------------------------------------------------------------
 # Global library orchestration
@@ -105,9 +111,13 @@ build-libs: prepare-build-sysroot
 	$(MAKE) build-bzip2 SYSROOT=$(BUILD_SYSROOT)
 	$(MAKE) install-bzip2 SYSROOT=$(BUILD_SYSROOT)
 
+	$(MAKE) build-libmad SYSROOT=$(BUILD_SYSROOT)
+	$(MAKE) install-libmad SYSROOT=$(BUILD_SYSROOT)
+
 # Clean build artifacts only. Git source checkouts are intentionally retained so
 # normal rebuilds do not redownload every dependency.
 clean-build-libs:
+	$(MAKE) clean-build-libmad SYSROOT=$(BUILD_SYSROOT)
 	$(MAKE) clean-build-bzip2 SYSROOT=$(BUILD_SYSROOT)
 	$(MAKE) clean-build-alsa-lib SYSROOT=$(BUILD_SYSROOT)
 	$(MAKE) clean-build-tinyalsa SYSROOT=$(BUILD_SYSROOT)
@@ -133,9 +143,11 @@ install-libs:
 	$(MAKE) install-tinyalsa
 	$(MAKE) install-alsa-lib
 	$(MAKE) install-bzip2
+	$(MAKE) install-libmad
 
 # Remove installed library files in reverse dependency order.
 clean-install-libs:
+	$(MAKE) clean-install-libmad
 	$(MAKE) clean-install-bzip2
 	$(MAKE) clean-install-alsa-lib
 	$(MAKE) clean-install-tinyalsa
@@ -159,7 +171,9 @@ clean-source-libs:
 		$(SDL_TTF_DIR) \
 		$(TINYALSA_DIR) \
 		$(ALSA_LIB_DIR) \
-		$(BZIP2_DIR)
+		$(BZIP2_DIR) \
+		$(LIBMAD_DIR) \
+		$(LIBMAD_ARCHIVE)
 
 # ------------------------------------------------------------------------------
 # zlib
@@ -594,3 +608,53 @@ install-bzip2:
 clean-install-bzip2:
 	rm -f $(SYSROOT)/usr/include/bzlib.h
 	rm -f $(SYSROOT)/usr/lib/libbz2.a
+
+# ------------------------------------------------------------------------------
+# libmad
+# ------------------------------------------------------------------------------
+build-libmad:
+	@if [ ! -f "$(LIBMAD_ARCHIVE)" ]; then \
+		curl -L \
+			"https://sourceforge.net/projects/mad/files/libmad/$(LIBMAD_VERSION)/libmad-$(LIBMAD_VERSION).tar.gz/download" \
+			-o "$(LIBMAD_ARCHIVE)"; \
+	fi
+
+	rm -rf $(LIBMAD_DIR)
+	rm -rf $(LIBMAD_BUILD_DIR)
+
+	mkdir -p $(LIBMAD_DIR)
+	mkdir -p $(LIBMAD_BUILD_DIR)
+
+	tar -xzf $(LIBMAD_ARCHIVE) \
+		-C $(LIBMAD_DIR) \
+		--strip-components=1
+
+	cd $(LIBMAD_BUILD_DIR) && \
+		CC="$(CROSS_COMPILE)gcc --sysroot=$(SYSROOT)" \
+		AR="$(CROSS_COMPILE)ar" \
+		RANLIB="$(CROSS_COMPILE)ranlib" \
+		CFLAGS="-O2" \
+		$(LIBMAD_DIR)/configure \
+			--host=$(TARGET) \
+			--prefix=/usr \
+			--disable-shared \
+			--enable-static
+
+	# libmad 0.15.1b génère des CFLAGS contenant -fforce-mem,
+	# option obsolète supprimée des GCC modernes.
+	# On surcharge CFLAGS au moment du make sans modifier les sources upstream.
+	$(MAKE) -C $(LIBMAD_BUILD_DIR) \
+		CFLAGS="-O2" \
+		-j$(JOBS)
+
+clean-build-libmad:
+	rm -rf $(LIBMAD_BUILD_DIR)
+
+install-libmad:
+	test -f $(LIBMAD_BUILD_DIR)/.libs/libmad.a
+	DESTDIR=$(SYSROOT) $(MAKE) -C $(LIBMAD_BUILD_DIR) install
+
+clean-install-libmad:
+	rm -f $(SYSROOT)/usr/lib/libmad.a
+	rm -f $(SYSROOT)/usr/lib/libmad.la
+	rm -f $(SYSROOT)/usr/include/mad.h
