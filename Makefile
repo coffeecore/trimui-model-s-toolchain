@@ -24,6 +24,7 @@ include make/minui.mk
 include make/arnold.mk
 include make/stella.mk
 include make/gngeo.mk
+include make/retro8.mk
 
 .PHONY: help shell toolchain libs setup
 
@@ -40,6 +41,7 @@ help:
 	@echo "  arnold                Clean, build and install Arnold"
 	@echo "  stella                Clean, build and install Stella"
 	@echo "  gngeo                 Clean, build and install GnGeo"
+	@echo "  retro8                Clean, build and install Retro8"
 	@echo
 	@echo "Toolchain:"
 	@echo "  build-toolchain       Build the crosstool-NG toolchain"
@@ -85,6 +87,14 @@ help:
 	@echo "  clean-build-gngeo     Clean GnGeo build"
 	@echo "  clean-install-gngeo   Remove GnGeo output"
 	@echo "  clean-source-gngeo    Remove GnGeo sources"
+	@echo
+	@echo "Retro8:"
+	@echo "  source-retro8         Checkout pinned Retro8 source"
+	@echo "  build-retro8          Build Retro8"
+	@echo "  install-retro8        Install PICO-8.pak into output/retro8"
+	@echo "  clean-build-retro8    Clean Retro8 build"
+	@echo "  clean-install-retro8  Remove Retro8 output"
+	@echo "  clean-source-retro8   Remove Retro8 sources"
 	@echo
 	@echo "Options:"
 	@echo "  JOBS=N                Number of parallel jobs (default: nproc)"
