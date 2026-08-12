@@ -23,6 +23,7 @@ include make/libs.mk
 include make/minui.mk
 include make/arnold.mk
 include make/stella.mk
+include make/gngeo.mk
 
 .PHONY: help shell toolchain libs setup
 
@@ -38,6 +39,7 @@ help:
 	@echo "  minui                 Clean and build MinUI Legacy"
 	@echo "  arnold                Clean, build and install Arnold"
 	@echo "  stella                Clean, build and install Stella"
+	@echo "  gngeo                 Clean, build and install GnGeo"
 	@echo
 	@echo "Toolchain:"
 	@echo "  build-toolchain       Build the crosstool-NG toolchain"
@@ -74,6 +76,15 @@ help:
 	@echo "  clean-build-stella    Clean Stella build"
 	@echo "  clean-install-stella  Remove Stella output"
 	@echo "  clean-source-stella   Remove Stella sources"
+	@echo
+	@echo "GnGeo:"
+	@echo "  source-gngeo          Checkout pinned GnGeo source"
+	@echo "  configure-gngeo       Configure GnGeo for Trimui"
+	@echo "  build-gngeo           Build GnGeo"
+	@echo "  install-gngeo         Install NEOGEO.pak into output/gngeo"
+	@echo "  clean-build-gngeo     Clean GnGeo build"
+	@echo "  clean-install-gngeo   Remove GnGeo output"
+	@echo "  clean-source-gngeo    Remove GnGeo sources"
 	@echo
 	@echo "Options:"
 	@echo "  JOBS=N                Number of parallel jobs (default: nproc)"
