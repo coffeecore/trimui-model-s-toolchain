@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     bzip2 \
     cmake \
     zstd \
+    bash-completion \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash builder
@@ -39,6 +40,9 @@ RUN chown -R builder:builder /workspace
 
 RUN mkdir -p /opt/trimui-toolchain/bin \
     && chown -R builder:builder /opt/trimui-toolchain
+
+RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/builder/.bashrc \
+    && chown builder:builder /home/builder/.bashrc
 
 USER builder
 

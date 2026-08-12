@@ -1,3 +1,5 @@
+# 1
+
 On va reprendre la mise en place d'un environement de dev pour Trimui model s sous docker
 
 Liste des projets qu'on doit pouvoir recompiler :
@@ -62,3 +64,14 @@ Les dossiers que je veux dans le projet :
 - build
 
 Est-ce clair ? des suggestions avant de commencer ? des remarques ? ai-je oublié des choses ?
+
+# 2
+
+Avant d'avancer Arnold, le makefile (que je remets en piece jointe) est plutot volumineux maintenant (presque 1000 lignes)
+
+Est-ce qu on peut :
+
+- le diviser en un  makefile pour toolchain, un make file pour libs, un make file pour minui ? On fera donc un makefile Arnold
+- possible d'avoir une commande make toolchain pour supprimer, build, installer la toolchain ? (dans le makefile global) et de meme pour libs ? pour éviter d'avoir à taper des commandes à la suite lors du premier lancement du projet
+- tu peux voir que je commente les lignes avec $$(nproc) pour remplacer par 4. Possible d'en faire une variable avec par defaut $$(nproc) et que je viens surcharger par 4 sur la ligne du dessous
+- ajoute des commentaires pour comprendre tout ce qui est fait
