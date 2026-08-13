@@ -38,6 +38,7 @@ SMSPLUS_GX_REV := 8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f
 SNES9X2002_REV := 5bd8bd6d449be8a2ef7909e1aeb2bd8c9c0da8cb
 SNES9X2005_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
 STELLA2014_REV := 4a7da82595d27b8df7af1ecb467a64b642a41bc9
+MAME2003_PLUS_REV := e9cebbf19dec88d52469bfa1f4a0add4c82fd9df
 
 
 # -----------------------------------------------------------------------------
@@ -62,6 +63,8 @@ SMSPLUS_GX_REPO := https://github.com/libretro/smsplus-gx.git
 SNES9X2002_REPO := https://github.com/libretro/snes9x2002.git
 SNES9X2005_REPO := https://github.com/libretro/snes9x2005.git
 STELLA2014_REPO := https://github.com/libretro/stella2014-libretro.git
+MAME2003_PLUS_REPO := https://github.com/libretro/mame2003-plus-libretro.git
+
 
 
 # -----------------------------------------------------------------------------
@@ -99,7 +102,8 @@ picoarch-validated: \
 	picoarch-smsplus-gx \
 	picoarch-snes9x2002 \
 	picoarch-snes9x2005 \
-	picoarch-stella2014
+	picoarch-stella2014 \
+	picoarch-mame2003-plus
 
 
 # -----------------------------------------------------------------------------
@@ -748,6 +752,47 @@ picoarch-clean-stella2014:
 	rm -f $(PICOARCH_BUILD)/stella2014_libretro.so
 
 # -----------------------------------------------------------------------------
+# MAME 2003-Plus
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-mame2003-plus
+picoarch-mame2003-plus: picoarch-clean-mame2003-plus
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(MAME2003_PLUS_REPO) \
+		$(PICOARCH_CORE_SOURCES)/mame2003_plus
+
+	git -C $(PICOARCH_CORE_SOURCES)/mame2003_plus \
+		checkout $(MAME2003_PLUS_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/mame2003_plus \
+		$(PICOARCH_BUILD)/mame2003_plus
+
+	cd $(PICOARCH_BUILD)/mame2003_plus && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/mame2003_plus/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD)/mame2003_plus \
+		platform=$(PICOARCH_PLATFORM) \
+		CROSS_COMPILE=$(PICOARCH_CROSS) \
+		CC=$(PICOARCH_CC) \
+		CXX=$(PICOARCH_CXX) \
+		-j$(JOBS)
+
+	cp \
+		$(PICOARCH_BUILD)/mame2003_plus/mame2003_plus_libretro.so \
+		$(PICOARCH_BUILD)/mame2003_plus_libretro.so
+
+
+.PHONY: picoarch-clean-mame2003-plus
+picoarch-clean-mame2003-plus:
+	rm -rf $(PICOARCH_BUILD)/mame2003_plus
+	rm -rf $(PICOARCH_CORE_SOURCES)/mame2003_plus
+	rm -f $(PICOARCH_BUILD)/mame2003_plus_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -770,4 +815,5 @@ picoarch-clean-validated: \
 	picoarch-clean-smsplus-gx \
 	picoarch-clean-snes9x2002 \
 	picoarch-clean-snes9x2005 \
-	picoarch-clean-stella2014
+	picoarch-clean-stella2014 \
+	picoarch-clean-mame2003-plus

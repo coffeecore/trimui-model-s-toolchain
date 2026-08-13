@@ -421,3 +421,37 @@ Notes:
 Status:
 
     validated
+
+### MAME 2003-Plus
+
+Commit:
+
+    e9cebbf19dec88d52469bfa1f4a0add4c82fd9df
+
+Patch:
+
+    external:
+    patches/picoarch/mame2003_plus/1000-trimui-build.patch
+
+Notes:
+
+    Trimui Model S port based on the historical PicoArch patch.
+
+    Additional adaptations:
+    - USE_CYCLONE := 1
+    - -fgnu89-inline
+
+    -fgnu89-inline is required by old MAME inline semantics
+    (notably fetchop() in the NEC CPU core).
+
+    Target:
+    - ARM926EJ-S
+    - ARMv5TEJ
+    - soft-float
+    - Cyclone 68000 core
+    - LTO
+    - no ARMv6/ARMv7/NEON
+
+Status:
+
+    validated
