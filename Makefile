@@ -25,6 +25,7 @@ include make/arnold.mk
 include make/stella.mk
 include make/gngeo.mk
 include make/retro8.mk
+include make/picoarch.mk
 
 .PHONY: help shell toolchain libs setup
 
