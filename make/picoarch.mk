@@ -34,6 +34,7 @@ MEDNAFEN_NGP_REV := a50d5ac288a81f2104ddf43195a4efdd15c72227
 MEDNAFEN_WSWAN_REV := 4b01295838ea89e3f1355bbe4cb5cf98aa6108cd
 POKEMINI_REV := 132111b76343559860532a1ccc094f93f1ed5650
 QUICKNES_REV := 26bb785c9deddb66a17717b21bb4e328f03ade32
+SMSPLUS_GX_REV := 8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f
 
 
 
@@ -55,6 +56,7 @@ MEDNAFEN_NGP_REPO := https://github.com/libretro/beetle-ngp-libretro.git
 MEDNAFEN_WSWAN_REPO := https://github.com/libretro/beetle-wswan-libretro.git
 POKEMINI_REPO := https://github.com/libretro/PokeMini.git
 QUICKNES_REPO := https://github.com/libretro/QuickNES_Core.git
+SMSPLUS_GX_REPO := https://github.com/libretro/smsplus-gx.git
 
 
 # -----------------------------------------------------------------------------
@@ -88,7 +90,8 @@ picoarch-validated: \
 	picoarch-mednafen-ngp \
 	picoarch-mednafen-wswan \
 	picoarch-pokemini \
-	picoarch-quicknes
+	picoarch-quicknes \
+	picoarch-smsplus-gx
 
 
 # -----------------------------------------------------------------------------
@@ -597,6 +600,41 @@ picoarch-clean-quicknes:
 	rm -f $(PICOARCH_BUILD)/quicknes_libretro.so
 
 # -----------------------------------------------------------------------------
+# SMS Plus GX
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-smsplus-gx
+picoarch-smsplus-gx: picoarch-clean-smsplus-gx
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(SMSPLUS_GX_REPO) \
+		$(PICOARCH_CORE_SOURCES)/smsplus-gx
+
+	git -C $(PICOARCH_CORE_SOURCES)/smsplus-gx \
+		checkout $(SMSPLUS_GX_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/smsplus-gx \
+		$(PICOARCH_BUILD)/smsplus-gx
+
+	cd $(PICOARCH_BUILD)/smsplus-gx && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/smsplus-gx/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		smsplus-gx_libretro.so
+
+
+.PHONY: picoarch-clean-smsplus-gx
+picoarch-clean-smsplus-gx:
+	rm -rf $(PICOARCH_BUILD)/smsplus-gx
+	rm -rf $(PICOARCH_CORE_SOURCES)/smsplus-gx
+	rm -f $(PICOARCH_BUILD)/smsplus-gx_libretro.so
+
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -615,4 +653,5 @@ picoarch-clean-validated: \
 	picoarch-clean-mednafen-ngp \
 	picoarch-clean-mednafen-wswan \
 	picoarch-clean-pokemini \
-	picoarch-clean-quicknes
+	picoarch-clean-quicknes \
+	picoarch-clean-smsplus-gx

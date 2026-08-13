@@ -323,3 +323,24 @@ Notes:
 Status:
 
     validated
+
+### SMS Plus GX
+
+Commit:
+
+    8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f
+
+Patch:
+
+    upstream PicoArch:
+    sources/picoarch/patches/smsplus-gx/1000-trimui-build.patch
+
+Notes:
+
+    Existing PicoArch Trimui patch applies cleanly to the current core.
+    Target flags include ARMv5TE, ARM926EJ-S tuning, soft-float toolchain,
+    no PIC and LTO.
+
+Status:
+
+    validated
