@@ -344,3 +344,24 @@ Notes:
 Status:
 
     validated
+
+### Snes9x 2002
+
+Commit:
+
+    5bd8bd6d449be8a2ef7909e1aeb2bd8c9c0da8cb
+
+Patches:
+
+    upstream PicoArch:
+    sources/picoarch/patches/snes9x2002/0001-frameskip-interval-max.patch
+    sources/picoarch/patches/snes9x2002/1000-trimui-support.patch
+
+Notes:
+
+    Both PicoArch patches still apply cleanly to the current core.
+    Trimui target uses ARM926EJ-S, soft-float, no PIC and LTO.
+
+Status:
+
+    validated

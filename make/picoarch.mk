@@ -35,7 +35,7 @@ MEDNAFEN_WSWAN_REV := 4b01295838ea89e3f1355bbe4cb5cf98aa6108cd
 POKEMINI_REV := 132111b76343559860532a1ccc094f93f1ed5650
 QUICKNES_REV := 26bb785c9deddb66a17717b21bb4e328f03ade32
 SMSPLUS_GX_REV := 8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f
-
+SNES9X2002_REV := 5bd8bd6d449be8a2ef7909e1aeb2bd8c9c0da8cb
 
 
 # -----------------------------------------------------------------------------
@@ -57,6 +57,7 @@ MEDNAFEN_WSWAN_REPO := https://github.com/libretro/beetle-wswan-libretro.git
 POKEMINI_REPO := https://github.com/libretro/PokeMini.git
 QUICKNES_REPO := https://github.com/libretro/QuickNES_Core.git
 SMSPLUS_GX_REPO := https://github.com/libretro/smsplus-gx.git
+SNES9X2002_REPO := https://github.com/libretro/snes9x2002.git
 
 
 # -----------------------------------------------------------------------------
@@ -91,7 +92,8 @@ picoarch-validated: \
 	picoarch-mednafen-wswan \
 	picoarch-pokemini \
 	picoarch-quicknes \
-	picoarch-smsplus-gx
+	picoarch-smsplus-gx \
+	picoarch-snes9x2002
 
 
 # -----------------------------------------------------------------------------
@@ -633,6 +635,43 @@ picoarch-clean-smsplus-gx:
 	rm -rf $(PICOARCH_CORE_SOURCES)/smsplus-gx
 	rm -f $(PICOARCH_BUILD)/smsplus-gx_libretro.so
 
+# -----------------------------------------------------------------------------
+# Snes9x 2002
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-snes9x2002
+picoarch-snes9x2002: picoarch-clean-snes9x2002
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(SNES9X2002_REPO) \
+		$(PICOARCH_CORE_SOURCES)/snes9x2002
+
+	git -C $(PICOARCH_CORE_SOURCES)/snes9x2002 \
+		checkout $(SNES9X2002_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/snes9x2002 \
+		$(PICOARCH_BUILD)/snes9x2002
+
+	cd $(PICOARCH_BUILD)/snes9x2002 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/snes9x2002/0001-frameskip-interval-max.patch
+
+	cd $(PICOARCH_BUILD)/snes9x2002 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/snes9x2002/1000-trimui-support.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		snes9x2002_libretro.so
+
+
+.PHONY: picoarch-clean-snes9x2002
+picoarch-clean-snes9x2002:
+	rm -rf $(PICOARCH_BUILD)/snes9x2002
+	rm -rf $(PICOARCH_CORE_SOURCES)/snes9x2002
+	rm -f $(PICOARCH_BUILD)/snes9x2002_libretro.so
 
 # -----------------------------------------------------------------------------
 # Clean all validated cores
@@ -654,4 +693,5 @@ picoarch-clean-validated: \
 	picoarch-clean-mednafen-wswan \
 	picoarch-clean-pokemini \
 	picoarch-clean-quicknes \
-	picoarch-clean-smsplus-gx
+	picoarch-clean-smsplus-gx \
+	picoarch-clean-snes9x2002
