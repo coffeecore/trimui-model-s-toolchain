@@ -37,7 +37,7 @@ QUICKNES_REV := 26bb785c9deddb66a17717b21bb4e328f03ade32
 SMSPLUS_GX_REV := 8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f
 SNES9X2002_REV := 5bd8bd6d449be8a2ef7909e1aeb2bd8c9c0da8cb
 SNES9X2005_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
-
+STELLA2014_REV := 4a7da82595d27b8df7af1ecb467a64b642a41bc9
 
 
 # -----------------------------------------------------------------------------
@@ -61,6 +61,7 @@ QUICKNES_REPO := https://github.com/libretro/QuickNES_Core.git
 SMSPLUS_GX_REPO := https://github.com/libretro/smsplus-gx.git
 SNES9X2002_REPO := https://github.com/libretro/snes9x2002.git
 SNES9X2005_REPO := https://github.com/libretro/snes9x2005.git
+STELLA2014_REPO := https://github.com/libretro/stella2014-libretro.git
 
 
 # -----------------------------------------------------------------------------
@@ -97,7 +98,8 @@ picoarch-validated: \
 	picoarch-quicknes \
 	picoarch-smsplus-gx \
 	picoarch-snes9x2002 \
-	picoarch-snes9x2005
+	picoarch-snes9x2005 \
+	picoarch-stella2014
 
 
 # -----------------------------------------------------------------------------
@@ -712,6 +714,40 @@ picoarch-clean-snes9x2005:
 	rm -f $(PICOARCH_BUILD)/snes9x2005_libretro.so
 
 # -----------------------------------------------------------------------------
+# Stella 2014
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-stella2014
+picoarch-stella2014: picoarch-clean-stella2014
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(STELLA2014_REPO) \
+		$(PICOARCH_CORE_SOURCES)/stella2014
+
+	git -C $(PICOARCH_CORE_SOURCES)/stella2014 \
+		checkout $(STELLA2014_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/stella2014 \
+		$(PICOARCH_BUILD)/stella2014
+
+	cd $(PICOARCH_BUILD)/stella2014 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/stella2014/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		stella2014_libretro.so
+
+
+.PHONY: picoarch-clean-stella2014
+picoarch-clean-stella2014:
+	rm -rf $(PICOARCH_BUILD)/stella2014
+	rm -rf $(PICOARCH_CORE_SOURCES)/stella2014
+	rm -f $(PICOARCH_BUILD)/stella2014_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -733,4 +769,5 @@ picoarch-clean-validated: \
 	picoarch-clean-quicknes \
 	picoarch-clean-smsplus-gx \
 	picoarch-clean-snes9x2002 \
-	picoarch-clean-snes9x2005
+	picoarch-clean-snes9x2005 \
+	picoarch-clean-stella2014

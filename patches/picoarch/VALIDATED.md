@@ -392,3 +392,32 @@ Notes:
 Status:
 
     validated
+
+### Stella 2014
+
+Commit:
+
+    4a7da82595d27b8df7af1ecb467a64b642a41bc9
+
+Patch:
+
+    external:
+    patches/picoarch/stella2014/1000-trimui-build.patch
+
+Notes:
+
+    Modern libretro stella2014 core.
+
+    Trimui target based on the existing Miyoo ARM926EJ-S target,
+    adapted to use CROSS_COMPILE.
+
+    Target:
+    - ARM926EJ-S
+    - ARMv5TEJ
+    - soft-float
+    - Thumb-1
+    - no ARMv6/ARMv7/NEON flags
+
+Status:
+
+    validated
