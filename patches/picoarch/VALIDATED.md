@@ -274,3 +274,24 @@ Notes:
 Status:
 
     validated
+
+### PokeMini
+
+Commit:
+
+    132111b76343559860532a1ccc094f93f1ed5650
+
+Patch:
+
+    external:
+    patches/picoarch/pokemini/1000-trimui-build.patch
+
+Notes:
+
+    Current upstream already provides a Miyoo ARMv5TE / ARM926EJ-S target.
+    The Trimui port reuses the same architecture assumptions but uses
+    CROSS_COMPILE and removes Dingux/RS90-specific defines.
+
+Status:
+
+    validated

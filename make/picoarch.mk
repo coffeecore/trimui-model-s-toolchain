@@ -32,6 +32,8 @@ FMSX_REV := f013e213458e06d9df718e4bc4b09d46f88aa899
 GME_REV := 1562f6207a066e9807243c89648d1cb44e411971
 MEDNAFEN_NGP_REV := a50d5ac288a81f2104ddf43195a4efdd15c72227
 MEDNAFEN_WSWAN_REV := 4b01295838ea89e3f1355bbe4cb5cf98aa6108cd
+POKEMINI_REV := 132111b76343559860532a1ccc094f93f1ed5650
+
 
 
 # -----------------------------------------------------------------------------
@@ -50,6 +52,7 @@ FMSX_REPO := https://github.com/libretro/fmsx-libretro.git
 GME_REPO := https://github.com/libretro/libretro-gme.git
 MEDNAFEN_NGP_REPO := https://github.com/libretro/beetle-ngp-libretro.git
 MEDNAFEN_WSWAN_REPO := https://github.com/libretro/beetle-wswan-libretro.git
+POKEMINI_REPO := https://github.com/libretro/PokeMini.git
 
 
 # -----------------------------------------------------------------------------
@@ -81,7 +84,8 @@ picoarch-validated: \
 	picoarch-fmsx \
 	picoarch-gme \
 	picoarch-mednafen-ngp \
-	picoarch-mednafen-wswan
+	picoarch-mednafen-wswan \
+	picoarch-pokemini
 
 
 # -----------------------------------------------------------------------------
@@ -521,6 +525,41 @@ picoarch-clean-mednafen-wswan:
 	rm -f $(PICOARCH_BUILD)/mednafen_wswan_libretro.so
 
 # -----------------------------------------------------------------------------
+# PokeMini
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-pokemini
+picoarch-pokemini: picoarch-clean-pokemini
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(POKEMINI_REPO) \
+		$(PICOARCH_CORE_SOURCES)/pokemini
+
+	git -C $(PICOARCH_CORE_SOURCES)/pokemini \
+		checkout $(POKEMINI_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/pokemini \
+		$(PICOARCH_BUILD)/pokemini
+
+	cd $(PICOARCH_BUILD)/pokemini && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/pokemini/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		pokemini_libretro.so
+
+
+.PHONY: picoarch-clean-pokemini
+picoarch-clean-pokemini:
+	rm -rf $(PICOARCH_BUILD)/pokemini
+	rm -rf $(PICOARCH_CORE_SOURCES)/pokemini
+	rm -f $(PICOARCH_BUILD)/pokemini_libretro.so
+
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -537,4 +576,5 @@ picoarch-clean-validated: \
 	picoarch-clean-fmsx \
 	picoarch-clean-gme \
 	picoarch-clean-mednafen-ngp \
-	picoarch-clean-mednafen-wswan
+	picoarch-clean-mednafen-wswan \
+	picoarch-clean-pokemini
