@@ -295,3 +295,31 @@ Notes:
 Status:
 
     validated
+
+### QuickNES
+
+Commit:
+
+    26bb785c9deddb66a17717b21bb4e328f03ade32
+
+Patch:
+
+    upstream PicoArch:
+    sources/picoarch/patches/quicknes/1000-trimui-build.patch
+
+Notes:
+
+    Existing PicoArch Trimui patch still applies cleanly to the current
+    QuickNES revision.
+
+    Target flags include:
+    - ARMv5TE
+    - ARM926EJ-S tuning
+    - soft-float toolchain
+    - no unaligned access
+    - no PIC
+    - LTO
+
+Status:
+
+    validated

@@ -33,6 +33,7 @@ GME_REV := 1562f6207a066e9807243c89648d1cb44e411971
 MEDNAFEN_NGP_REV := a50d5ac288a81f2104ddf43195a4efdd15c72227
 MEDNAFEN_WSWAN_REV := 4b01295838ea89e3f1355bbe4cb5cf98aa6108cd
 POKEMINI_REV := 132111b76343559860532a1ccc094f93f1ed5650
+QUICKNES_REV := 26bb785c9deddb66a17717b21bb4e328f03ade32
 
 
 
@@ -53,6 +54,7 @@ GME_REPO := https://github.com/libretro/libretro-gme.git
 MEDNAFEN_NGP_REPO := https://github.com/libretro/beetle-ngp-libretro.git
 MEDNAFEN_WSWAN_REPO := https://github.com/libretro/beetle-wswan-libretro.git
 POKEMINI_REPO := https://github.com/libretro/PokeMini.git
+QUICKNES_REPO := https://github.com/libretro/QuickNES_Core.git
 
 
 # -----------------------------------------------------------------------------
@@ -85,7 +87,8 @@ picoarch-validated: \
 	picoarch-gme \
 	picoarch-mednafen-ngp \
 	picoarch-mednafen-wswan \
-	picoarch-pokemini
+	picoarch-pokemini \
+	picoarch-quicknes
 
 
 # -----------------------------------------------------------------------------
@@ -560,6 +563,40 @@ picoarch-clean-pokemini:
 
 
 # -----------------------------------------------------------------------------
+# QuickNES
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-quicknes
+picoarch-quicknes: picoarch-clean-quicknes
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(QUICKNES_REPO) \
+		$(PICOARCH_CORE_SOURCES)/quicknes
+
+	git -C $(PICOARCH_CORE_SOURCES)/quicknes \
+		checkout $(QUICKNES_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/quicknes \
+		$(PICOARCH_BUILD)/quicknes
+
+	cd $(PICOARCH_BUILD)/quicknes && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/quicknes/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		quicknes_libretro.so
+
+
+.PHONY: picoarch-clean-quicknes
+picoarch-clean-quicknes:
+	rm -rf $(PICOARCH_BUILD)/quicknes
+	rm -rf $(PICOARCH_CORE_SOURCES)/quicknes
+	rm -f $(PICOARCH_BUILD)/quicknes_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -577,4 +614,5 @@ picoarch-clean-validated: \
 	picoarch-clean-gme \
 	picoarch-clean-mednafen-ngp \
 	picoarch-clean-mednafen-wswan \
-	picoarch-clean-pokemini
+	picoarch-clean-pokemini \
+	picoarch-clean-quicknes
