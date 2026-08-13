@@ -365,3 +365,30 @@ Notes:
 Status:
 
     validated
+
+### Snes9x 2005
+
+Commit:
+
+    deb49d80d1836e3e737480a326e31a54c46c04ae
+
+Patch:
+
+    external:
+    patches/picoarch/snes9x2005/1000-trimui-build.patch
+
+Notes:
+
+    Modern libretro snes9x2005 was used because the historical
+    crowdedwood "performance" repository is no longer available.
+
+    Trimui target uses:
+    - ARM926EJ-S
+    - ARMv5TEJ
+    - soft-float
+    - no NEON
+    - no ARMv6/ARMv7-specific flags
+
+Status:
+
+    validated

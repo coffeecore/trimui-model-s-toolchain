@@ -36,6 +36,8 @@ POKEMINI_REV := 132111b76343559860532a1ccc094f93f1ed5650
 QUICKNES_REV := 26bb785c9deddb66a17717b21bb4e328f03ade32
 SMSPLUS_GX_REV := 8a63f82d3c3bbf7215a31f86a4aaa13fb68a579f
 SNES9X2002_REV := 5bd8bd6d449be8a2ef7909e1aeb2bd8c9c0da8cb
+SNES9X2005_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
+
 
 
 # -----------------------------------------------------------------------------
@@ -58,6 +60,7 @@ POKEMINI_REPO := https://github.com/libretro/PokeMini.git
 QUICKNES_REPO := https://github.com/libretro/QuickNES_Core.git
 SMSPLUS_GX_REPO := https://github.com/libretro/smsplus-gx.git
 SNES9X2002_REPO := https://github.com/libretro/snes9x2002.git
+SNES9X2005_REPO := https://github.com/libretro/snes9x2005.git
 
 
 # -----------------------------------------------------------------------------
@@ -93,7 +96,8 @@ picoarch-validated: \
 	picoarch-pokemini \
 	picoarch-quicknes \
 	picoarch-smsplus-gx \
-	picoarch-snes9x2002
+	picoarch-snes9x2002 \
+	picoarch-snes9x2005
 
 
 # -----------------------------------------------------------------------------
@@ -674,6 +678,40 @@ picoarch-clean-snes9x2002:
 	rm -f $(PICOARCH_BUILD)/snes9x2002_libretro.so
 
 # -----------------------------------------------------------------------------
+# Snes9x 2005
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-snes9x2005
+picoarch-snes9x2005: picoarch-clean-snes9x2005
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(SNES9X2005_REPO) \
+		$(PICOARCH_CORE_SOURCES)/snes9x2005
+
+	git -C $(PICOARCH_CORE_SOURCES)/snes9x2005 \
+		checkout $(SNES9X2005_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/snes9x2005 \
+		$(PICOARCH_BUILD)/snes9x2005
+
+	cd $(PICOARCH_BUILD)/snes9x2005 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/snes9x2005/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		snes9x2005_libretro.so
+
+
+.PHONY: picoarch-clean-snes9x2005
+picoarch-clean-snes9x2005:
+	rm -rf $(PICOARCH_BUILD)/snes9x2005
+	rm -rf $(PICOARCH_CORE_SOURCES)/snes9x2005
+	rm -f $(PICOARCH_BUILD)/snes9x2005_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -694,4 +732,5 @@ picoarch-clean-validated: \
 	picoarch-clean-pokemini \
 	picoarch-clean-quicknes \
 	picoarch-clean-smsplus-gx \
-	picoarch-clean-snes9x2002
+	picoarch-clean-snes9x2002 \
+	picoarch-clean-snes9x2005
