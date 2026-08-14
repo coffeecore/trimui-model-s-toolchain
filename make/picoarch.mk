@@ -86,6 +86,78 @@ PICOARCH_MAKE_ARGS := \
 	CC_FOR_BUILD=gcc \
 	CXX_FOR_BUILD=g++
 
+# -----------------------------------------------------------------------------
+# PicoArch frontend (MinUI)
+# -----------------------------------------------------------------------------
+
+PICOARCH_FRONTEND_BUILD := /workspace/build/picoarch-frontend
+
+.PHONY: picoarch-frontend picoarch-clean-frontend
+
+picoarch-frontend:
+	rm -rf $(PICOARCH_FRONTEND_BUILD)
+
+	git clone \
+		--recursive \
+		https://github.com/coffeecore/picoarch.git \
+		$(PICOARCH_FRONTEND_BUILD)
+
+	git -C $(PICOARCH_FRONTEND_BUILD) \
+		checkout $(PICOARCH_REV)
+
+	git -C $(PICOARCH_FRONTEND_BUILD) \
+		submodule update --init --recursive
+
+	cp \
+		$(PICOARCH_PATCHES)/libpicofe/0001-key-combos.patch \
+		$(PICOARCH_FRONTEND_BUILD)/patches/libpicofe/0001-key-combos.patch
+
+	patch \
+		-l \
+		-d $(PICOARCH_FRONTEND_BUILD) \
+		-p1 \
+		< $(PICOARCH_PATCHES)/frontend/0001-fix-minui-directories.patch
+
+	$(MAKE) -C $(PICOARCH_FRONTEND_BUILD) \
+		platform=$(PICOARCH_PLATFORM) \
+		MINUI=1 \
+		CROSS_COMPILE=$(PICOARCH_CROSS) \
+		CC=$(PICOARCH_CC) \
+		CXX=$(PICOARCH_CXX) \
+		picoarch
+
+	cp \
+		$(PICOARCH_FRONTEND_BUILD)/picoarch \
+		$(PICOARCH_BUILD)/picoarch
+
+picoarch-clean-frontend:
+	rm -rf $(PICOARCH_FRONTEND_BUILD)
+	rm -f $(PICOARCH_BUILD)/picoarch
+
+# -----------------------------------------------------------------------------
+# PicoArch output
+# -----------------------------------------------------------------------------
+
+PICOARCH_OUTPUT := /workspace/output/picoarch
+PICOARCH_OUTPUT_CORES := $(PICOARCH_OUTPUT)/cores
+
+.PHONY: picoarch-output picoarch-clean-output
+
+picoarch-output:
+	rm -rf $(PICOARCH_OUTPUT)
+
+	mkdir -p $(PICOARCH_OUTPUT_CORES)
+
+	cp \
+		$(PICOARCH_BUILD)/picoarch \
+		$(PICOARCH_OUTPUT)/picoarch
+
+	cp \
+		$(PICOARCH_BUILD)/*_libretro.so \
+		$(PICOARCH_OUTPUT_CORES)/
+
+picoarch-clean-output:
+	rm -rf $(PICOARCH_OUTPUT)
 
 # -----------------------------------------------------------------------------
 # Groups
