@@ -455,3 +455,25 @@ Notes:
 Status:
 
     validated
+
+### Snes9x 2010
+
+Commit:
+
+    421a8d9449031245f1dfdb632b84548a9f19fddd
+
+Patch:
+
+    external:
+    patches/picoarch/snes9x2010/1000-trimui-build.patch
+
+Target:
+- ARM926EJ-S
+- ARMv5TEJ
+- soft-float
+- LTO
+- no ARMv6/ARMv7/NEON
+
+Status:
+
+    validated

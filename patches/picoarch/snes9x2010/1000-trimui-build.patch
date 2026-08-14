@@ -1,0 +1,23 @@
+diff --git a/Makefile.libretro b/Makefile.libretro
+index 1e0e2ae..26f6667 100644
+--- a/Makefile.libretro
++++ b/Makefile.libretro
+@@ -472,7 +472,17 @@ endif
+ else ifeq ($(platform), emscripten)
+ 	TARGET := $(TARGET_NAME)_libretro_emscripten.bc
+ 	STATIC_LINKING=1
+-
++# Trimui Model S
++else ifeq ($(platform), trimui)
++        TARGET := $(TARGET_NAME)_libretro.so
++        CC = $(CROSS_COMPILE)gcc
++        CXX = $(CROSS_COMPILE)g++
++        AR = $(CROSS_COMPILE)ar
++        SHARED := -shared -Wl,--version-script=libretro/link.T -Wl,--no-undefined
++        LTO := -flto
++        CFLAGS += -fomit-frame-pointer -ffast-math
++        CFLAGS += -mcpu=arm926ej-s -mtune=arm926ej-s -fno-PIC
++        LDFLAGS += -fno-PIC
+ # GCW0
+ else ifeq ($(platform), gcw0)
+ 	TARGET := $(TARGET_NAME)_libretro.so
