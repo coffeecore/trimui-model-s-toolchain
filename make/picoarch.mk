@@ -41,6 +41,8 @@ STELLA2014_REV := 4a7da82595d27b8df7af1ecb467a64b642a41bc9
 MAME2003_PLUS_REV := e9cebbf19dec88d52469bfa1f4a0add4c82fd9df
 SNES9X2010_REV := 421a8d9449031245f1dfdb632b84548a9f19fddd
 SNES9X2005_PLUS_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
+FAKE08_REV := 814991a2571ad3970e386cef48f3b148aa1c27b9
+PRBOOM_REV := c180d47a5f9f1b5f74be18bf74deb5eccf97057e
 
 # -----------------------------------------------------------------------------
 # Core repositories
@@ -67,7 +69,8 @@ STELLA2014_REPO := https://github.com/libretro/stella2014-libretro.git
 MAME2003_PLUS_REPO := https://github.com/libretro/mame2003-plus-libretro.git
 SNES9X2010_REPO := https://github.com/libretro/snes9x2010.git
 SNES9X2005_PLUS_REPO := https://github.com/libretro/snes9x2005.git
-
+FAKE08_REPO := https://github.com/jtothebell/fake-08.git
+PRBOOM_REPO := https://github.com/libretro/libretro-prboom.git
 
 
 # -----------------------------------------------------------------------------
@@ -108,7 +111,9 @@ picoarch-validated: \
 	picoarch-stella2014 \
 	picoarch-mame2003-plus \
 	picoarch-snes9x2010 \
-	picoarch-snes9x2005-plus
+	picoarch-snes9x2005-plus \
+	picoarch-fake08 \
+	picoarch-prboom
 
 
 # -----------------------------------------------------------------------------
@@ -882,6 +887,87 @@ picoarch-clean-snes9x2005-plus:
 	rm -f $(PICOARCH_BUILD)/snes9x2005_plus_libretro.so
 
 # -----------------------------------------------------------------------------
+# Fake-08
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-fake08
+picoarch-fake08: picoarch-clean-fake08
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone --recursive \
+		$(FAKE08_REPO) \
+		$(PICOARCH_CORE_SOURCES)/fake-08
+
+	git -C $(PICOARCH_CORE_SOURCES)/fake-08 \
+		checkout $(FAKE08_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/fake-08 \
+		$(PICOARCH_BUILD)/fake-08
+
+	cd $(PICOARCH_BUILD)/fake-08 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/fake-08/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD)/fake-08/platform/libretro \
+		platform=$(PICOARCH_PLATFORM) \
+		CROSS_COMPILE=$(PICOARCH_CROSS) \
+		CXX=$(PICOARCH_CXX) \
+		-j$(JOBS)
+
+	cp \
+		$(PICOARCH_BUILD)/fake-08/platform/libretro/fake08_libretro.so \
+		$(PICOARCH_BUILD)/fake08_libretro.so
+
+
+.PHONY: picoarch-clean-fake08
+picoarch-clean-fake08:
+	rm -rf $(PICOARCH_BUILD)/fake-08
+	rm -rf $(PICOARCH_CORE_SOURCES)/fake-08
+	rm -f $(PICOARCH_BUILD)/fake08_libretro.so
+
+# -----------------------------------------------------------------------------
+# PrBoom
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-prboom
+picoarch-prboom: picoarch-clean-prboom
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(PRBOOM_REPO) \
+		$(PICOARCH_CORE_SOURCES)/prboom
+
+	git -C $(PICOARCH_CORE_SOURCES)/prboom \
+		checkout $(PRBOOM_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/prboom \
+		$(PICOARCH_BUILD)/prboom
+
+	cd $(PICOARCH_BUILD)/prboom && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/prboom/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD)/prboom \
+		platform=$(PICOARCH_PLATFORM) \
+		CROSS_COMPILE=$(PICOARCH_CROSS) \
+		CC=$(PICOARCH_CC) \
+		CXX=$(PICOARCH_CXX) \
+		-j$(JOBS)
+
+	cp \
+		$(PICOARCH_BUILD)/prboom/prboom_libretro.so \
+		$(PICOARCH_BUILD)/prboom_libretro.so
+
+
+.PHONY: picoarch-clean-prboom
+picoarch-clean-prboom:
+	rm -rf $(PICOARCH_BUILD)/prboom
+	rm -rf $(PICOARCH_CORE_SOURCES)/prboom
+	rm -f $(PICOARCH_BUILD)/prboom_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -907,4 +993,6 @@ picoarch-clean-validated: \
 	picoarch-clean-stella2014 \
 	picoarch-clean-mame2003-plus \
 	picoarch-clean-snes9x2010 \
-	picoarch-clean-snes9x2005-plus
+	picoarch-clean-snes9x2005-plus \
+	picoarch-clean-fake08 \
+	picoarch-clean-prboom

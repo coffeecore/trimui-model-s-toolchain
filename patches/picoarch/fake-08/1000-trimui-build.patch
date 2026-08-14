@@ -1,0 +1,20 @@
+diff --git a/platform/libretro/Makefile b/platform/libretro/Makefile
+index 1033395..8481e0a 100644
+--- a/platform/libretro/Makefile
++++ b/platform/libretro/Makefile
+@@ -123,7 +123,14 @@ else ifeq ($(platform), miyoomini)
+    CXXFLAGS += -marm -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -march=armv7ve -D_NEED_FULL_PATH_
+    fpic := -fPIC
+    SHARED := -shared -Wl,--version-script=link.T
+-
++else ifeq ($(platform), trimui)
++   TARGET := $(TARGET_NAME)_libretro.so
++   CXX = $(CROSS_COMPILE)g++
++   AR = $(CROSS_COMPILE)ar
++   CFLAGS += -marm -mcpu=arm926ej-s -mtune=arm926ej-s
++   CFLAGS += -fomit-frame-pointer -ffast-math -fno-common
++   fpic :=
++   SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
+ else ifeq ($(platform), gcw0)
+    TARGET := $(TARGET_NAME)_libretro_gcw0.so
+    CC = /opt/gcw0-toolchain/usr/bin/mipsel-linux-gcc

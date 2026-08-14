@@ -1,0 +1,21 @@
+diff --git a/Makefile b/Makefile
+index 3ae9751..17853c9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -414,6 +414,16 @@ else ifeq ($(platform), retrofw)
+    fpic := -fPIC
+    SHARED := -shared -Wl,--version-script=libretro/link.T -Wl,-no-undefined
+    CFLAGS += -ffast-math -march=mips32 -mtune=mips32 -mhard-float -fomit-frame-pointer
++# TRIMUI MODEL S
++else ifeq ($(platform), trimui)
++   TARGET := $(TARGET_NAME)_libretro.so
++   CC = $(CROSS_COMPILE)gcc
++   CXX = $(CROSS_COMPILE)g++
++   AR = $(CROSS_COMPILE)ar
++   fpic := -fPIC
++   SHARED := -shared -Wl,--version-script=libretro/link.T -Wl,--no-undefined
++   CFLAGS += -ffast-math -mcpu=arm926ej-s -mtune=arm926ej-s -fomit-frame-pointer
++   HAVE_LOW_MEMORY = 1
+ else ifeq ($(platform), miyoo)
+    TARGET := $(TARGET_NAME)_libretro.so
+    CC = /opt/miyoo/usr/bin/arm-linux-gcc

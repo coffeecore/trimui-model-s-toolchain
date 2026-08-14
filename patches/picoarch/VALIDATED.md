@@ -504,3 +504,60 @@ Target:
 Status:
 
     validated
+
+### Fake-08
+
+Commit:
+
+    814991a2571ad3970e386cef48f3b148aa1c27b9
+
+Patch:
+
+    external:
+    patches/picoarch/fake-08/1000-trimui-build.patch
+
+Target:
+
+- ARM926EJ-S
+- ARMv5TEJ
+- soft-float
+- no ARMv6/ARMv7/NEON
+
+Notes:
+
+- libretro build is effectively C++17
+- Makefile compiles both .c and .cpp sources with CXX
+- ARM926 flags must therefore be present in CFLAGS
+
+Status:
+
+    validated
+
+### PrBoom
+
+Commit:
+
+    c180d47a5f9f1b5f74be18bf74deb5eccf97057e
+
+Patch:
+
+    external:
+    patches/picoarch/prboom/1000-trimui-build.patch
+
+Notes:
+
+- Historical PicoArch SKIP_ZCLOSE patch is no longer required.
+- Upstream Z_Close() teardown logic has been fixed.
+- -fPIC is required because libretro-common uses TLS objects that cannot be linked into a shared object with local-exec TLS relocations.
+- HAVE_LOW_MEMORY=1 is enabled.
+
+Target:
+
+- ARM926EJ-S
+- ARMv5TEJ
+- soft-float
+- no ARMv6/ARMv7/NEON
+
+Status:
+
+    validated
