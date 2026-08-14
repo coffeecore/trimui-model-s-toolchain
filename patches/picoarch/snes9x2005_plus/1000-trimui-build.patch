@@ -1,0 +1,24 @@
+diff --git a/Makefile b/Makefile
+index a8b6835..8a07040 100644
+--- a/Makefile
++++ b/Makefile
+@@ -279,7 +279,18 @@ else ifeq ($(platform), gcw0)
+ 	LIBM :=
+ 	FLAGS += -fomit-frame-pointer -ffast-math -march=mips32 -mtune=mips32r2 -mhard-float
+ 	FLAGS += -DFAST_LSB_WORD_ACCESS
+-
++# TRIMUI MODEL S
++else ifeq ($(platform), trimui)
++   TARGET := $(TARGET_NAME)_libretro.so
++   CC = $(CROSS_COMPILE)gcc
++   CXX = $(CROSS_COMPILE)g++
++   AR = $(CROSS_COMPILE)ar
++   fpic :=
++   SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
++   LIBM :=
++   FLAGS += -fomit-frame-pointer -ffast-math
++   FLAGS += -mcpu=arm926ej-s -mtune=arm926ej-s
++   FLAGS += -DFAST_ALIGNED_LSB_WORD_ACCESS -fno-unroll-loops
+ # MIYOO
+ else ifeq ($(platform), miyoo)
+ 	TARGET := $(TARGET_NAME)_libretro.so

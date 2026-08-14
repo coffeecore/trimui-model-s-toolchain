@@ -477,3 +477,30 @@ Target:
 Status:
 
     validated
+
+### Snes9x 2005 Plus
+
+Commit:
+
+    deb49d80d1836e3e737480a326e31a54c46c04ae
+
+Patch:
+
+    external:
+    patches/picoarch/snes9x2005_plus/1000-trimui-build.patch
+
+Build options:
+
+    USE_BLARGG_APU=1
+
+Target:
+
+- ARM926EJ-S
+- ARMv5TEJ
+- soft-float
+- no ARMv6/ARMv7/NEON
+- Blargg APU enabled
+
+Status:
+
+    validated

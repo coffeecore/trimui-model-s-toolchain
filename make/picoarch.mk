@@ -40,6 +40,7 @@ SNES9X2005_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
 STELLA2014_REV := 4a7da82595d27b8df7af1ecb467a64b642a41bc9
 MAME2003_PLUS_REV := e9cebbf19dec88d52469bfa1f4a0add4c82fd9df
 SNES9X2010_REV := 421a8d9449031245f1dfdb632b84548a9f19fddd
+SNES9X2005_PLUS_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
 
 # -----------------------------------------------------------------------------
 # Core repositories
@@ -65,6 +66,8 @@ SNES9X2005_REPO := https://github.com/libretro/snes9x2005.git
 STELLA2014_REPO := https://github.com/libretro/stella2014-libretro.git
 MAME2003_PLUS_REPO := https://github.com/libretro/mame2003-plus-libretro.git
 SNES9X2010_REPO := https://github.com/libretro/snes9x2010.git
+SNES9X2005_PLUS_REPO := https://github.com/libretro/snes9x2005.git
+
 
 
 # -----------------------------------------------------------------------------
@@ -104,7 +107,8 @@ picoarch-validated: \
 	picoarch-snes9x2005 \
 	picoarch-stella2014 \
 	picoarch-mame2003-plus \
-	picoarch-snes9x2010
+	picoarch-snes9x2010 \
+	picoarch-snes9x2005-plus
 
 
 # -----------------------------------------------------------------------------
@@ -836,6 +840,48 @@ picoarch-clean-snes9x2010:
 	rm -f $(PICOARCH_BUILD)/snes9x2010_libretro.so
 
 # -----------------------------------------------------------------------------
+# Snes9x 2005 Plus
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-snes9x2005-plus
+picoarch-snes9x2005-plus: picoarch-clean-snes9x2005-plus
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(SNES9X2005_PLUS_REPO) \
+		$(PICOARCH_CORE_SOURCES)/snes9x2005_plus
+
+	git -C $(PICOARCH_CORE_SOURCES)/snes9x2005_plus \
+		checkout $(SNES9X2005_PLUS_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/snes9x2005_plus \
+		$(PICOARCH_BUILD)/snes9x2005_plus
+
+	cd $(PICOARCH_BUILD)/snes9x2005_plus && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/snes9x2005_plus/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD)/snes9x2005_plus \
+		platform=$(PICOARCH_PLATFORM) \
+		USE_BLARGG_APU=1 \
+		CROSS_COMPILE=$(PICOARCH_CROSS) \
+		CC=$(PICOARCH_CC) \
+		CXX=$(PICOARCH_CXX) \
+		-j$(JOBS)
+
+	cp \
+		$(PICOARCH_BUILD)/snes9x2005_plus/snes9x2005_plus_libretro.so \
+		$(PICOARCH_BUILD)/snes9x2005_plus_libretro.so
+
+
+.PHONY: picoarch-clean-snes9x2005-plus
+picoarch-clean-snes9x2005-plus:
+	rm -rf $(PICOARCH_BUILD)/snes9x2005_plus
+	rm -rf $(PICOARCH_CORE_SOURCES)/snes9x2005_plus
+	rm -f $(PICOARCH_BUILD)/snes9x2005_plus_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -860,4 +906,5 @@ picoarch-clean-validated: \
 	picoarch-clean-snes9x2005 \
 	picoarch-clean-stella2014 \
 	picoarch-clean-mame2003-plus \
-	picoarch-clean-snes9x2010
+	picoarch-clean-snes9x2010 \
+	picoarch-clean-snes9x2005-plus
