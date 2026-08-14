@@ -43,6 +43,7 @@ SNES9X2010_REV := 421a8d9449031245f1dfdb632b84548a9f19fddd
 SNES9X2005_PLUS_REV := deb49d80d1836e3e737480a326e31a54c46c04ae
 FAKE08_REV := 814991a2571ad3970e386cef48f3b148aa1c27b9
 PRBOOM_REV := c180d47a5f9f1b5f74be18bf74deb5eccf97057e
+FBALPHA2012_REV := 0ce31536bef3162fe7e69ff5f555334ec4913cef
 
 # -----------------------------------------------------------------------------
 # Core repositories
@@ -71,6 +72,7 @@ SNES9X2010_REPO := https://github.com/libretro/snes9x2010.git
 SNES9X2005_PLUS_REPO := https://github.com/libretro/snes9x2005.git
 FAKE08_REPO := https://github.com/jtothebell/fake-08.git
 PRBOOM_REPO := https://github.com/libretro/libretro-prboom.git
+FBALPHA2012_REPO := https://github.com/libretro/fbalpha2012.git
 
 
 # -----------------------------------------------------------------------------
@@ -96,6 +98,7 @@ picoarch-validated: \
 	picoarch-gpsp \
 	picoarch-picodrive \
 	picoarch-mame2000 \
+	picoarch-fbalpha2012 \
 	picoarch-pcsx-rearmed \
 	picoarch-beetle-pce-fast \
 	picoarch-bluemsx \
@@ -968,6 +971,56 @@ picoarch-clean-prboom:
 	rm -f $(PICOARCH_BUILD)/prboom_libretro.so
 
 # -----------------------------------------------------------------------------
+# FinalBurn Alpha 2012
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-fbalpha2012
+picoarch-fbalpha2012: picoarch-clean-fbalpha2012
+	mkdir -p $(PICOARCH_CORE_SOURCES)
+
+	git clone \
+		$(FBALPHA2012_REPO) \
+		$(PICOARCH_CORE_SOURCES)/fbalpha2012
+
+	git -C $(PICOARCH_CORE_SOURCES)/fbalpha2012 \
+		checkout $(FBALPHA2012_REV)
+
+	cp -a \
+		$(PICOARCH_CORE_SOURCES)/fbalpha2012 \
+		$(PICOARCH_BUILD)/fbalpha2012
+
+	cd $(PICOARCH_BUILD)/fbalpha2012 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/fbalpha2012/0001-update-libretro-h.patch
+
+	cd $(PICOARCH_BUILD)/fbalpha2012 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/fbalpha2012/0002-add-auto-frameskip.patch
+
+	cd $(PICOARCH_BUILD)/fbalpha2012 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_SOURCE)/patches/fbalpha2012/1000-trimui-build.patch
+
+	$(MAKE) -C $(PICOARCH_BUILD)/fbalpha2012/svn-current/trunk \
+		-f makefile.libretro \
+		platform=$(PICOARCH_PLATFORM) \
+		CROSS_COMPILE=$(PICOARCH_CROSS) \
+		CC=$(PICOARCH_CC) \
+		CXX=$(PICOARCH_CXX) \
+		-j$(JOBS)
+
+	cp \
+		$(PICOARCH_BUILD)/fbalpha2012/svn-current/trunk/fbalpha2012_libretro.so \
+		$(PICOARCH_BUILD)/fbalpha2012_libretro.so
+
+
+.PHONY: picoarch-clean-fbalpha2012
+picoarch-clean-fbalpha2012:
+	rm -rf $(PICOARCH_BUILD)/fbalpha2012
+	rm -rf $(PICOARCH_CORE_SOURCES)/fbalpha2012
+	rm -f $(PICOARCH_BUILD)/fbalpha2012_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -978,6 +1031,7 @@ picoarch-clean-validated: \
 	picoarch-clean-gpsp \
 	picoarch-clean-picodrive \
 	picoarch-clean-mame2000 \
+	picoarch-clean-fbalpha2012 \
 	picoarch-clean-pcsx-rearmed \
 	picoarch-clean-beetle-pce-fast \
 	picoarch-clean-bluemsx \

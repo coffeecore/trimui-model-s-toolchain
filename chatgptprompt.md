@@ -75,3 +75,162 @@ Est-ce qu on peut :
 - possible d'avoir une commande make toolchain pour supprimer, build, installer la toolchain ? (dans le makefile global) et de meme pour libs ? pour éviter d'avoir à taper des commandes à la suite lors du premier lancement du projet
 - tu peux voir que je commente les lignes avec $$(nproc) pour remplacer par 4. Possible d'en faire une variable avec par defaut $$(nproc) et que je viens surcharger par 4 sur la ligne du dessous
 - ajoute des commentaires pour comprendre tout ce qui est fait
+
+# 3
+Oui. Avant de toucher à quoi que ce soit, voilà l’ordre que je suivrais maintenant.
+
+1. **Consolider `make/picoarch.mk`**
+
+   * vérifier que tous les cores validés ont bien :
+
+     * leur repo ;
+     * leur commit figé ;
+     * leur patch externe si nécessaire ;
+     * une cible de build ;
+     * une cible de clean ;
+   * vérifier aussi que `picoarch-validated` et `picoarch-clean-validated` contiennent bien tous les cores.
+   * À ce stade, on corrige uniquement notre infrastructure externe, pas les sources upstream.
+
+2. **Consolider `patches/picoarch/VALIDATED.md`**
+
+   * vérifier que chaque core validé y apparaît ;
+   * noter le commit exact, les patches, les particularités de build et les warnings acceptés ;
+   * notamment les cas spéciaux :
+
+     * `fbalpha2012` ;
+     * `mame2003_plus` + Cyclone + `-fgnu89-inline` ;
+     * `fake-08` compilé via C++ ;
+     * `prboom` avec `-fPIC`.
+
+3. **Faire un clean complet des cores PicoArch**
+
+   * utiliser uniquement nos cibles `clean`;
+   * le but est de supprimer toute possibilité qu’un ancien `.o` ou `.so` manuel masque un problème de reproductibilité.
+
+4. **Recompiler tous les cores validés d’un seul coup**
+
+   * lancer `picoarch-validated`;
+   * ce sera le vrai test de reproductibilité global ;
+   * si un core échoue, on corrige sa recette avant d’aller plus loin.
+
+5. **Valider automatiquement tous les `.so` produits**
+
+   * vérifier pour chacun :
+
+     * ELF32 ;
+     * ARM ;
+     * EABI5 ;
+     * soft-float ;
+     * ARM926EJ-S / v5TEJ ;
+   * vérifier aussi qu’aucun core n’a accidentellement été produit en ARMv6/7, NEON ou hard-float.
+   * À ce moment-là, on aura notre liste définitive de cores réellement utilisables pour le Model S.
+
+6. **Recompiler/valider le frontend PicoArch avec les mêmes conditions**
+
+   * s’assurer que le frontend validé est toujours reproductible avec les patches externes ;
+   * vérifier son ELF et ses dépendances ;
+   * vérifier surtout son chargement dynamique de `libmmenu.so` et des cores `.so`.
+
+7. **Construire un arbre de sortie PicoArch propre**
+   Quelque chose du genre :
+
+   ```text
+   output/picoarch/
+   ├── picoarch
+   ├── cores/
+   │   ├── fceumm_libretro.so
+   │   ├── gambatte_libretro.so
+   │   ├── ...
+   │   ├── mame2003_plus_libretro.so
+   │   ├── fake08_libretro.so
+   │   └── prboom_libretro.so
+   └── ...
+   ```
+
+   On ne doit plus dépendre des fichiers qui traînent dans `/workspace/build`.
+
+8. **Déterminer les PAKs MinUI à créer**
+   Là, on fera le mapping propre :
+
+   * nom du PAK ;
+   * core utilisé ;
+   * dossier ROM ;
+   * extensions acceptées ;
+   * BIOS éventuels ;
+   * paramètres particuliers.
+
+   Par exemple, il faudra décider comment présenter les différents cores SNES et Arcade sans créer un menu illisible.
+
+9. **Créer les launchers/PAKs PicoArch**
+
+   * utiliser le frontend PicoArch ;
+   * pointer vers le bon `.so` ;
+   * respecter la structure MinUI Legacy ;
+   * aucune modification à MinUI upstream ;
+   * intégrer les chemins BIOS/ROM nécessaires.
+
+10. **Traiter les cas particuliers**
+    Notamment :
+
+* Arcade :
+
+  * `mame2000`
+  * `fbalpha2012`
+  * `mame2003_plus`
+* SNES :
+
+  * `snes9x2002`
+  * `snes9x2005`
+  * `snes9x2005_plus`
+  * `snes9x2010`
+* PICO-8 :
+
+  * `fake-08`
+  * et notre standalone `Retro8`
+* Doom/PrBoom :
+
+  * déterminer où mettre les WADs et le WAD de base nécessaire.
+
+11. **Assembler avec les standalones déjà construits**
+    On réunira ensuite :
+
+* MinUI Legacy ;
+* PicoArch + cores ;
+* Arnold ;
+* Stella standalone ;
+* GnGeo ;
+* Retro8 ;
+* leurs PAKs respectifs.
+
+12. **Créer le package de test Model S**
+    Pas encore la release définitive : d’abord une arborescence installable sur SD pour tester sur la vraie console.
+
+13. **Tests réels sur le Trimui Model S**
+    Pour chaque famille importante :
+
+* lancement depuis MinUI ;
+* chargement d’une ROM ;
+* son ;
+* contrôles ;
+* sortie vers MinUI sans reboot ;
+* menu `mmenu` ;
+* save/load state ;
+* changement de jeu ;
+* retour au menu ;
+* éventuellement performances/frameskip.
+
+C’est particulièrement important pour les extras qu’on a seulement validés à la compilation.
+
+14. **Corriger uniquement les problèmes réellement observés sur hardware**
+    À ce stade seulement, on ajustera launchers, options de cores ou patches si nécessaire.
+
+15. **Créer la release finale**
+    Quand tout fonctionne :
+
+* build depuis zéro ;
+* collecte automatique dans `output/`;
+* structure propre ;
+* version/commit de chaque composant documenté ;
+* archive finale MinUI/Model S.
+
+Je pense qu’on doit **commencer maintenant par les étapes 1 à 5** : audit du `make/picoarch.mk`, clean complet, rebuild de tous les cores, puis validation globale. On ne commence les PAKs qu’une fois cette base totalement reproductible.
