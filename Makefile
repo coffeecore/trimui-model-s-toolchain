@@ -4,13 +4,6 @@
 # This root Makefile intentionally stays small. Implementation details live in
 # make/*.mk so each component can evolve independently.
 #
-# Main commands:
-#   make toolchain          Rebuild + install the cross-toolchain
-#   make libs               Rebuild + install all common libraries
-#   make setup              Run toolchain then libs
-#   make build-minui        Build and package MinUI Legacy
-#   make clean-build-minui  Remove MinUI build artifacts
-#
 # Parallelism defaults to all available CPUs. Override without editing files:
 #   make libs JOBS=4
 #   make build-minui JOBS=4
