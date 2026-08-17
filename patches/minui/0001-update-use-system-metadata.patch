@@ -1,0 +1,42 @@
+--- a/paks/System.pak/update.sh
++++ b/paks/System.pak/update.sh
+@@ -54,16 +54,22 @@
+ 	fi
+ 
+ 	if [ "$ACTION" = "install" ]; then
+-		if [ "$SRC" != ${SRC/.\/Emus\//} ]; then
+-			ROM_DIR=${DST/.pak/}
+-			ROM_DIR=${ROM_DIR/Emus/Roms}
+-			if [ ! -d "$ROM_DIR" ]; then
+-				notify $PERCENT "add Roms/$PAK_NAME"
+-				mkdir -p "$ROM_DIR"
+-				sync
+-			fi
+-		fi
+-	fi
++                if [ "$SRC" != ${SRC/.\/Emus\//} ]; then
++                        if [ -f "$DST/system" ]; then
++                                SYSTEM_NAME=$(cat "$DST/system")
++                                ROM_DIR="$SD/Roms/$SYSTEM_NAME"
++                        else
++                                ROM_DIR=${DST/.pak/}
++                                ROM_DIR=${ROM_DIR/Emus/Roms}
++                        fi
++
++                        if [ ! -d "$ROM_DIR" ]; then
++                                notify $PERCENT "add Roms/$(basename "$ROM_DIR")"
++                                mkdir -p "$ROM_DIR"
++                                sync
++                        fi
++                fi
++        fi
+ done
+ 
+ sync
+@@ -74,4 +80,4 @@
+ rm -rf ./Emus
+ rm -rf ./Tools
+ 
+-IFS=$SAVEIFS
+\ No newline at end of file
++IFS=$SAVEIFS

@@ -1,0 +1,536 @@
+===== SUPERGRAFX / BEETLE PCE FAST =====
+/workspace/build/picoarch-sources/beetle-pce-fast/libretro.c:614:uint8 BaseRAM[32768 + 8192]; // 8KB for PCE, 32KB for Super Grafx // + 8192 for PC-as-pointer safety padding
+/workspace/build/picoarch-sources/beetle-pce-fast/README.md:6:Beetle PC Engine Fast is a port/fork of Mednafen's PC Engine Fast "pce_fast" module to the libretro API. This libretro core contains CD-ROM<sup>2</sup> support but unlike Mednafen's PCE Fast module, lacks SuperGrafx support. SuperGrafx support is available in the [Beetle SuperGrafx core](https://github.com/libretro/beetle-supergrafx-libretro) or the [Beetle PC Engine "pce" core](https://github.com/libretro/beetle-pce-libretro).
+/workspace/build/picoarch-sources/beetle-pce-fast/README.md:20:Beetle SuperGrafx: https://github.com/libretro/beetle-supergrafx-libretro
+/workspace/build/picoarch-sources/beetle-pce-fast/mednafen/pce_fast/psg.c:382:                  /* According to my tests (on SuperGrafx), writing to this channel
+
+===== HERETIC / PRBOOM =====
+/workspace/build/picoarch-sources/prboom/src/d_items.c:159: * Heretic weapon table (level-1 / no-tome forms).
+/workspace/build/picoarch-sources/prboom/src/d_items.c:161: * Heretic reuses the player weapon slots (wp_fist..wp_supershotgun) for its
+/workspace/build/picoarch-sources/prboom/src/d_items.c:163: * mace, gauntlets and the chicken beak. The frame numbers are Heretic state
+/workspace/build/picoarch-sources/prboom/src/d_items.c:164: * indices, so this table must be selected when running Heretic -- otherwise
+/workspace/build/picoarch-sources/prboom/src/d_items.c:166: * Heretic state table as garbage and crash on the first tic.
+/workspace/build/picoarch-sources/prboom/src/d_items.c:168: * Each weapon draws from its own heretic ammo pool (am_goldwand..am_mace);
+/workspace/build/picoarch-sources/prboom/src/d_items.c:171: * level-2 forms live in heretic_wpnlev2info below; the firing and raise
+/workspace/build/picoarch-sources/prboom/src/d_items.c:174:weaponinfo_t    heretic_weaponinfo[NUMWEAPONS] =
+/workspace/build/picoarch-sources/prboom/src/d_items.c:176:  { /* staff      */ AM_NOAMMO, HERETIC_S_STAFFUP,    HERETIC_S_STAFFDOWN,    HERETIC_S_STAFFREADY,    HERETIC_S_STAFFATK1_1,    S_NULL, 0, -1, HERETIC_S_STAFFATK1_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:177:  { /* gold wand  */ am_goldwand,   HERETIC_S_GOLDWANDUP, HERETIC_S_GOLDWANDDOWN, HERETIC_S_GOLDWANDREADY, HERETIC_S_GOLDWANDATK1_1, S_NULL, 0, USE_GWND_AMMO_1, HERETIC_S_GOLDWANDATK1_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:178:  { /* crossbow   */ am_crossbow,   HERETIC_S_CRBOWUP,    HERETIC_S_CRBOWDOWN,    HERETIC_S_CRBOW1,        HERETIC_S_CRBOWATK1_1,    S_NULL, 0, USE_CBOW_AMMO_1, HERETIC_S_CRBOWATK1_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:179:  { /* blaster    */ am_blaster,    HERETIC_S_BLASTERUP,  HERETIC_S_BLASTERDOWN,  HERETIC_S_BLASTERREADY,  HERETIC_S_BLASTERATK1_1,  S_NULL, 0, USE_BLSR_AMMO_1, HERETIC_S_BLASTERATK1_3 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:180:  { /* skull rod  */ am_skullrod,   HERETIC_S_HORNRODUP,  HERETIC_S_HORNRODDOWN,  HERETIC_S_HORNRODREADY,  HERETIC_S_HORNRODATK1_1,  S_NULL, 0, USE_SKRD_AMMO_1, HERETIC_S_HORNRODATK1_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:181:  { /* phoenix    */ am_phoenixrod, HERETIC_S_PHOENIXUP,  HERETIC_S_PHOENIXDOWN,  HERETIC_S_PHOENIXREADY,  HERETIC_S_PHOENIXATK1_1,  S_NULL, WPF_NOAUTOFIRE, USE_PHRD_AMMO_1, HERETIC_S_PHOENIXATK1_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:182:  { /* mace       */ am_mace,       HERETIC_S_MACEUP,     HERETIC_S_MACEDOWN,     HERETIC_S_MACEREADY,     HERETIC_S_MACEATK1_1,     S_NULL, 0, USE_MACE_AMMO_1, HERETIC_S_MACEATK1_2 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:183:  { /* gauntlets  */ AM_NOAMMO, HERETIC_S_GAUNTLETUP, HERETIC_S_GAUNTLETDOWN, HERETIC_S_GAUNTLETREADY, HERETIC_S_GAUNTLETATK1_1, S_NULL, 0, -1, HERETIC_S_GAUNTLETATK1_3 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:184:  { /* beak       */ AM_NOAMMO, HERETIC_S_BEAKUP,     HERETIC_S_BEAKDOWN,     HERETIC_S_BEAKREADY,     HERETIC_S_BEAKATK1_1,     S_NULL, 0, -1, HERETIC_S_BEAKATK1_1 }
+/workspace/build/picoarch-sources/prboom/src/d_items.c:187:/* Tome-of-Power forms of the Heretic arsenal (vanilla wpnlev2info).  Ammo,
+/workspace/build/picoarch-sources/prboom/src/d_items.c:193:weaponinfo_t    heretic_wpnlev2info[NUMWEAPONS] =
+/workspace/build/picoarch-sources/prboom/src/d_items.c:195:  { /* staff      */ AM_NOAMMO, HERETIC_S_STAFFUP2,   HERETIC_S_STAFFDOWN2,   HERETIC_S_STAFFREADY2_1, HERETIC_S_STAFFATK2_1,    S_NULL, 0, -1, HERETIC_S_STAFFATK2_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:196:  { /* gold wand  */ am_goldwand,   HERETIC_S_GOLDWANDUP, HERETIC_S_GOLDWANDDOWN, HERETIC_S_GOLDWANDREADY, HERETIC_S_GOLDWANDATK2_1, S_NULL, 0, USE_GWND_AMMO_2, HERETIC_S_GOLDWANDATK2_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:197:  { /* crossbow   */ am_crossbow,   HERETIC_S_CRBOWUP,    HERETIC_S_CRBOWDOWN,    HERETIC_S_CRBOW1,        HERETIC_S_CRBOWATK2_1,    S_NULL, 0, USE_CBOW_AMMO_2, HERETIC_S_CRBOWATK2_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:198:  { /* blaster    */ am_blaster,    HERETIC_S_BLASTERUP,  HERETIC_S_BLASTERDOWN,  HERETIC_S_BLASTERREADY,  HERETIC_S_BLASTERATK2_1,  S_NULL, 0, USE_BLSR_AMMO_2, HERETIC_S_BLASTERATK2_3 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:199:  { /* skull rod  */ am_skullrod,   HERETIC_S_HORNRODUP,  HERETIC_S_HORNRODDOWN,  HERETIC_S_HORNRODREADY,  HERETIC_S_HORNRODATK2_1,  S_NULL, 0, USE_SKRD_AMMO_2, HERETIC_S_HORNRODATK2_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:200:  { /* phoenix    */ am_phoenixrod, HERETIC_S_PHOENIXUP,  HERETIC_S_PHOENIXDOWN,  HERETIC_S_PHOENIXREADY,  HERETIC_S_PHOENIXATK2_1,  S_NULL, WPF_NOAUTOFIRE, USE_PHRD_AMMO_2, HERETIC_S_PHOENIXATK2_2 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:201:  { /* mace       */ am_mace,       HERETIC_S_MACEUP,     HERETIC_S_MACEDOWN,     HERETIC_S_MACEREADY,     HERETIC_S_MACEATK2_1,     S_NULL, 0, USE_MACE_AMMO_2, HERETIC_S_MACEATK2_1 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:202:  { /* gauntlets  */ AM_NOAMMO, HERETIC_S_GAUNTLETUP2,HERETIC_S_GAUNTLETDOWN2,HERETIC_S_GAUNTLETREADY2_1, HERETIC_S_GAUNTLETATK2_1, S_NULL, 0, -1, HERETIC_S_GAUNTLETATK2_3 },
+/workspace/build/picoarch-sources/prboom/src/d_items.c:203:  { /* beak       */ AM_NOAMMO, HERETIC_S_BEAKUP,     HERETIC_S_BEAKDOWN,     HERETIC_S_BEAKREADY,     HERETIC_S_BEAKATK2_1,     S_NULL, 0, -1, HERETIC_S_BEAKATK2_1 }
+/workspace/build/picoarch-sources/prboom/src/d_items.c:207: * Heretic table by D_InitWeaponInfo once the game type is known. All weapon
+/workspace/build/picoarch-sources/prboom/src/d_items.c:214: * unused Doom/Heretic slot. */
+/workspace/build/picoarch-sources/prboom/src/d_items.c:281:    weaponinfo = heretic ? heretic_weaponinfo : doom_weaponinfo;
+/workspace/build/picoarch-sources/prboom/src/am_map.c:1609:       * red in Heretic's, so filling the background with the raw 247 paints
+/workspace/build/picoarch-sources/prboom/src/am_map.c:1610:       * the whole automap red under Heretic.  Apply the same 247 -> 0
+/workspace/build/picoarch-sources/prboom/src/am_map.c:1612:       * no-op for Doom and fixes the red Heretic automap. */
+/workspace/build/picoarch-sources/prboom/src/d_items.h:63:  /* Heretic: attack state while the trigger is held (refire).  Trailing
+/workspace/build/picoarch-sources/prboom/src/d_items.h:65:   * under Heretic. */
+/workspace/build/picoarch-sources/prboom/src/d_items.h:69:/* Heretic per-shot ammo costs (level 1 / Tome of Power level 2); used by
+/workspace/build/picoarch-sources/prboom/src/d_items.h:86:extern  weaponinfo_t   heretic_wpnlev2info[];  /* Tome-of-Power forms */
+/workspace/build/picoarch-sources/prboom/src/d_items.h:88:extern  weaponinfo_t    heretic_weaponinfo[NUMWEAPONS];
+/workspace/build/picoarch-sources/prboom/src/d_items.h:110:/* Select the weapon table for the current game (Doom or Heretic). Call once
+/workspace/build/picoarch-sources/prboom/src/hexen/p_anim.c:249:                 + P_Random(pr_heretic) % ((ad->tics & 0xff00) >> 8);
+/workspace/build/picoarch-sources/prboom/src/hexen/in_lude.c:5: * fork's heretic interlude, the menu text helpers are local since the fork
+/workspace/build/picoarch-sources/prboom/src/hexen/sounds.c:8: *  remaining fields follow the Heretic table's defaults (this core's reduced
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:7: *  space, like the Heretic table).  Each entry is the 4-character sprite
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:25:#include "heretic/p_action.h"
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:69: * stubbed here too.  31 codepointers genuinely link (shared Doom/Heretic
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:70: * actions plus the Heretic minotaur/artifact ones Hexen reuses) and are
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:2926: * to the trailing Heretic crashstate slot, and the Doom/MBF21-only
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:2930: * exactly as heretic_mobjinfo was converted.  Sized as a slice
+/workspace/build/picoarch-sources/prboom/src/hexen/info.c:3338: * Doom/Heretic "no Hexen class" slot and points at HEXEN_S_NULL.  The Pig
+/workspace/build/picoarch-sources/prboom/src/hexen/p_spec_hexen.c:55:#include "heretic/p_action.h"
+/workspace/build/picoarch-sources/prboom/src/hexen/p_spec_hexen.c:797:        light->count = (P_Random(pr_heretic) & 7) + 1;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_spec_hexen.c:802:        light->count = (P_Random(pr_heretic) & 31) + 1;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_spec_hexen.c:883:        light->count = (P_Random(pr_heretic) & 64) + 1;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_spec_hexen.c:1112:      plat->status = (P_Random(pr_heretic) & 1) ? PLAT_UP : PLAT_DOWN;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_spec_hexen.c:2044:  count = 1 + (P_Random(pr_heretic) % count);
+/workspace/build/picoarch-sources/prboom/src/hexen/p_acs.c:662:  Push(low + (P_Random(pr_heretic) % (high - low + 1)));
+/workspace/build/picoarch-sources/prboom/src/hexen/p_acs.c:669:  Push(low + (P_Random(pr_heretic) % (high - low + 1)));
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:92:  LightningFlash = (P_Random(pr_heretic) & 7) + 8;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:93:  flashLight = 200 + (P_Random(pr_heretic) & 31);
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:135:    if (P_Random(pr_heretic) < 50)
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:136:      NextLightningFlash = (P_Random(pr_heretic) & 15) + 16;   /* quick double */
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:139:      if (P_Random(pr_heretic) < 128 && !(leveltime & 32))
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:140:        NextLightningFlash = ((P_Random(pr_heretic) & 7) + 2) * 35;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:142:        NextLightningFlash = ((P_Random(pr_heretic) & 15) + 5) * 35;
+/workspace/build/picoarch-sources/prboom/src/hexen/p_lightning.c:183:  NextLightningFlash = ((P_Random(pr_heretic) & 15) + 5) * 35; /* no flash at start */
+/workspace/build/picoarch-sources/prboom/src/r_sky.c:104:    /* Heretic skies are declared 128 tall but their single patch is really
+/workspace/build/picoarch-sources/prboom/src/r_sky.c:108:    if (heretic && textures[skytexture]->patchcount == 1)
+/workspace/build/picoarch-sources/prboom/src/r_defs.h:216:  /* Hexen line special arguments (args[0..4]).  Zero for Doom/Heretic maps;
+/workspace/build/picoarch-sources/prboom/src/g_game.c:134:/* Hexen: per-player chosen class (PCLASS_*); PCLASS_NULL for Doom/Heretic.
+/workspace/build/picoarch-sources/prboom/src/g_game.c:171:int     pending_artifact = 0;  /* Heretic: artifact staged for use this tic */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:172:int     inventory = 0;         /* Heretic: inventory bar currently displayed */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:173:int     inventoryTics = 0;     /* Heretic: tics until the bar auto-closes */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:237:/* Heretic keyboard-look: signed per-tic look step staged by the gamepad
+/workspace/build/picoarch-sources/prboom/src/g_game.c:385:   * action there comes from E (and the mouse); Heretic and Doom keep the
+/workspace/build/picoarch-sources/prboom/src/g_game.c:399:  /* Heretic/Hexen inventory input: cycle the ready artifact with the inv keys
+/workspace/build/picoarch-sources/prboom/src/g_game.c:451:       * matching Heretic. Otherwise it uses the ready artifact. */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:605:     /* Heretic keyboard look without mouselook: encode the staged look step
+/workspace/build/picoarch-sources/prboom/src/g_game.c:618:  /* Heretic/Hexen flight: the fly up/down keys stage a vertical step into the
+/workspace/build/picoarch-sources/prboom/src/g_game.c:695: * Heretic/Hexen keyboard- and gamepad-look path (mouselook off) the
+/workspace/build/picoarch-sources/prboom/src/g_game.c:772:  /* Hexen's sky-flat lump is "F_SKY" (Doom and Heretic use "F_SKY1"); a
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1215:  /* Heretic end-of-level housekeeping (vanilla G_PlayerFinishLevel):
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1221:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1387:  /* Heretic reuses the WP_FIST / WP_PISTOL slots for the staff and gold
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1388:   * wand (see heretic_weaponinfo). The gold wand uses am_goldwand ammo and
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1390:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1396:    p->maxammo[i] = heretic ? heretic_maxammo[i] : maxammo[i];
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1813:            if (heretic)
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1815:                /* vanilla heretic afterSecret: E1M9 returns to E1M7, the
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1845:   * maps only, and Heretic reaches episode 6 (no par times exist for it
+/workspace/build/picoarch-sources/prboom/src/g_game.c:1853:  else if (!heretic && gameepisode >= 1 && gameepisode <= 4
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2166:   * an older build whose Heretic/Hexen struct layout differs, rather than
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2177:     * RVN5 (heretic only): the ambient sound cursor rides in the save. */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2282:  P_UnArchiveAmbientSound ();  /* heretic ambient cursor (no-op otherwise) */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2427:  /* Raven (Heretic/Hexen) layout tag.  The shared PrBoom version header only
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2429:   * fork has grown mobj_t / player_t with Heretic/Hexen fields.  A savegame
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2479:   * numeric episode/map is sufficient (ordinary Doom/Heretic maps). */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2535:  P_ArchiveAmbientSound();   /* heretic ambient cursor (no-op otherwise) */
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2819:  /* Raven: the heretic and hexen sim predates and ignores the
+/workspace/build/picoarch-sources/prboom/src/g_game.c:2821:   * break it outright (heretic players take no damage, hexen monsters
+/workspace/build/picoarch-sources/prboom/src/g_game.c:3027:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/g_game.c:3029:      /* Heretic is mapped onto the Doom 'registered' gamemode, but it has
+/workspace/build/picoarch-sources/prboom/src/g_game.c:3396:    * each of MAXPLAYERS a presence byte and a class byte.  The vvHeretic
+/workspace/build/picoarch-sources/prboom/src/g_game.c:3650:      /* Heretic demos share the doom 1.2 header layout; the vvHeretic
+/workspace/build/picoarch-sources/prboom/src/g_game.c:3654:      if (heretic)
+/workspace/build/picoarch-sources/prboom/src/d_player.h:92:/* Raven (Heretic/Hexen) inventory model.  Defined unconditionally -- the
+/workspace/build/picoarch-sources/prboom/src/d_player.h:95: * stays reachable; Heretic uses only arti_none..NUMARTIFACTS. */
+/workspace/build/picoarch-sources/prboom/src/d_player.h:192:   * Doom/Heretic use the scalar armorpoints/armortype above instead. */
+/workspace/build/picoarch-sources/prboom/src/d_player.h:270:  /* Raven (Heretic/Hexen) inventory + flight.  Inert in a Doom session
+/workspace/build/picoarch-sources/prboom/src/d_player.h:271:   * (heretic == false); added here so the shared player code can compile
+/workspace/build/picoarch-sources/prboom/src/d_player.h:278:  /* Heretic player extras (inert for Doom). */
+/workspace/build/picoarch-sources/prboom/src/d_player.h:286:  int         pclass;         /* player class (Heretic: single class) */
+/workspace/build/picoarch-sources/prboom/src/d_player.h:288:                               * for Doom/Heretic.  Used by the Hexen player
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:155:/* Heretic's animated flats and textures. istexture: FALSE = flat. */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:156:static const animdef_t heretic_animdefs[] =
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:205:  // Heretic uses its own built-in animation table. The ANIMATED lump carried
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:206:  // by prboom.wad holds Doom flat/texture names absent from a Heretic IWAD, so
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:209:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:210:    animdefs = heretic_animdefs;
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:263: * Raven floor terrain types (Hexen/Heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:280:  { /* Heretic */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:509:   * If there are no higher neighbouring sectors, Heretic just returned
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:1239:/* Raven: Heretic walk-over (cross) line specials.  Heretic renumbered a
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:1243: * door that releases an ambush monster).  This mirrors Heretic's own table. */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:1244:static void P_CrossHereticSpecialLine(line_t *line, int side, mobj_t *thing)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:1332:  /* Raven: Heretic has its own walk-over special table. */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:1333:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:1335:    P_CrossHereticSpecialLine(line, side, thing);
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2403:/* Heretic terrain splash hook (stubbed to a solid-floor no-op in this
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2404: * core's heretic/p_action.c); declared locally as p_mobj.c does. */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2420:  LavaInflictor.type = hexen ? HEXEN_MT_CIRCLEFLAME : HERETIC_MT_PHOENIXFX2;
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2444:/* Raven: Heretic uses its own sector-special numbering.  Several values
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2446: * friction" in Heretic (and vice-versa), so running the Doom handler on a
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2447: * Heretic map makes harmless current sectors -- e.g. the water past the
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2449: * P_HitFloor terrain stub (a no-op here) and dsda-doom's Heretic table.
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2453:static void P_PlayerInHereticSector(player_t *player, sector_t *sector)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2455:  /* Heretic wind/scroll push magnitudes (sector special - base index). */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2502:    case 11:                           /* Exit_SuperDamage (unused in Heretic) */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2554:  /* Raven: Heretic has its own sector-special table. */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2555:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2557:    P_PlayerInHereticSector(player, sector);
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2720:  /* Heretic: advance the ambient-sound sequencer once per tic. */
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:2721:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3878:// Heretic ambient sound sequences
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3883:// -- to produce Heretic's environmental audio (drips, screams, bells, etc).
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3910:  afxcmd_play, heretic_sfx_amb1, afxcmd_end };
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3912:  afxcmd_play, heretic_sfx_amb2, afxcmd_end };
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3914:  afxcmd_play, heretic_sfx_amb3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3916:  afxcmd_play, heretic_sfx_amb7,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3918:  afxcmd_play, heretic_sfx_amb3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3920:  afxcmd_play, heretic_sfx_amb7,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3922:  afxcmd_play, heretic_sfx_amb3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3924:  afxcmd_play, heretic_sfx_amb7,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3928:  afxcmd_play, heretic_sfx_amb4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3929:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3930:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb4, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3931:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3932:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb4, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3933:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3934:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb4, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3935:  afxcmd_delay, 15, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3938:  afxcmd_play, heretic_sfx_amb5, afxcmd_delay, 35,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3939:  afxcmd_play, heretic_sfx_amb5, afxcmd_delay, 35,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3940:  afxcmd_play, heretic_sfx_amb5, afxcmd_delay, 35,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3941:  afxcmd_play, heretic_sfx_amb5, afxcmd_end };
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3943:  afxcmd_play, heretic_sfx_amb6,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3944:  afxcmd_delay, 17, afxcmd_playrelvol, heretic_sfx_amb6, -8,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3945:  afxcmd_delay, 17, afxcmd_playrelvol, heretic_sfx_amb6, -8,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3946:  afxcmd_delay, 17, afxcmd_playrelvol, heretic_sfx_amb6, -8,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3949:  afxcmd_play, heretic_sfx_bstsit, afxcmd_end };
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3951:  afxcmd_play, heretic_sfx_amb8, afxcmd_end };
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3953:  afxcmd_play, heretic_sfx_amb9,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3954:  afxcmd_delay, 16, afxcmd_playrelvol, heretic_sfx_amb9, -4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3955:  afxcmd_delay, 16, afxcmd_playrelvol, heretic_sfx_amb9, -4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3956:  afxcmd_delay, 16, afxcmd_playrelvol, heretic_sfx_amb10, -4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3957:  afxcmd_delay, 16, afxcmd_playrelvol, heretic_sfx_amb10, -4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3958:  afxcmd_delay, 16, afxcmd_playrelvol, heretic_sfx_amb10, -4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3961:  afxcmd_play, heretic_sfx_amb4,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3962:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3963:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb4, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3964:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3965:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb4, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3966:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3967:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb4, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3968:  afxcmd_delay, 8, afxcmd_playrelvol, heretic_sfx_amb11, -3,
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:3995:/* Heretic savegame support: the ambient walker consumes pr_heretic randoms
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:4008:  if (!heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:4027:  if (!heretic)
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:4068:        AmbSfxVolume = P_Random(pr_heretic) >> 2;
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:4090:        AmbSfxTics = P_Random(pr_heretic) & (*AmbSfxPtr++);
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:4094:        AmbSfxTics     = 6 * TICRATE + P_Random(pr_heretic);
+/workspace/build/picoarch-sources/prboom/src/p_spec.c:4095:        AmbSfxPtrIndex = P_Random(pr_heretic) % AmbSfxCount;
+/workspace/build/picoarch-sources/prboom/src/v_video.c:348:   * catches gamma changes and mid-finale palette swaps (e.g. Heretic's
+/workspace/build/picoarch-sources/prboom/src/v_video.c:376:   * IWAD -- e.g. the menu background flat under shareware Heretic, which
+/workspace/build/picoarch-sources/prboom/src/v_video.c:434: * destination 200-space row dst_row.  Used by the Heretic E3 finale, which
+/workspace/build/picoarch-sources/prboom/src/v_video.c:503: * Heretic (and other Raven) full-screen images such as TITLE, CREDIT,
+/workspace/build/picoarch-sources/prboom/src/v_video.c:1375:// (768-byte) palette lump, e.g. Heretic's E2PAL for the episode-2 finale.
+/workspace/build/picoarch-sources/prboom/src/u_zanimdefs.c:73:  if (hexen || heretic)
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:101:/* Heretic has only two switch textures. */
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:102:const switchlist_t heretic_alphSwitchList[] =
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:109:/* Hexen's switches.  Unlike Doom/Heretic, Hexen reuses the episode field as
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:155:  // Heretic uses its own built-in switch list; the SWITCHES lump (carried by
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:157:  // that do not exist in a Heretic IWAD, so it must not be consulted here.
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:160:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:161:    alphSwitchList = heretic_alphSwitchList;
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:338: * Heretic_P_UseSpecialLine
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:340: * Heretic's use-activated linedef specials differ from Doom's. This
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:341: * dispatches the Heretic special numbers (doors, switches, buttons,
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:343: * provides. Without it, Heretic switches and hidden/secret doors do not
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:346:dbool Heretic_P_UseSpecialLine(mobj_t *thing, line_t *line, int side)
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:348:  /* Heretic only triggers use-specials from the front side. */
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:533:  if (heretic)
+/workspace/build/picoarch-sources/prboom/src/p_switch.c:534:    return Heretic_P_UseSpecialLine(thing, line, side);
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:1:/* Heretic finale entry points (see heretic/f_finale.c). */
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:2:#ifndef HERETIC_F_FINALE_H
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:3:#define HERETIC_F_FINALE_H
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:7:void  Heretic_F_StartFinale(void);
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:8:dbool Heretic_F_Responder(event_t *event);
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:9:void  Heretic_F_Ticker(void);
+/workspace/build/picoarch-sources/prboom/src/heretic/f_finale.h:10:void  Heretic_F_Drawer(void);
+
+===== PRBOOM IWAD DETECTION =====
+/workspace/build/picoarch-sources/prboom/src/d_main.c:139://jff 4/19/98 list of standard IWAD names
+/workspace/build/picoarch-sources/prboom/src/d_main.c:140:const char *const standard_iwads[]=
+/workspace/build/picoarch-sources/prboom/src/d_main.c:153:static const int nstandard_iwads = sizeof standard_iwads/sizeof*standard_iwads;
+/workspace/build/picoarch-sources/prboom/src/d_main.c:819:// CheckIWAD
+/workspace/build/picoarch-sources/prboom/src/d_main.c:825:// The filename to check is passed in iwadname, the gamemode detected is
+/workspace/build/picoarch-sources/prboom/src/d_main.c:830:// CPhipps - const char* for iwadname, made static
+/workspace/build/picoarch-sources/prboom/src/d_main.c:831:static bool CheckIWAD(const char *iwadname,GameMode_t *gmode,dbool *hassec)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:835:  if ((fp = filestream_open(iwadname, 
+/workspace/build/picoarch-sources/prboom/src/d_main.c:850:     * The rest of the CheckIWAD logic -- scanning the lump table for
+/workspace/build/picoarch-sources/prboom/src/d_main.c:867:      I_Error("CheckIWAD: failed to read directory %s",iwadname);
+/workspace/build/picoarch-sources/prboom/src/d_main.c:899:           * Heretic IWAD from Doom even though both use ExMy level names.
+/workspace/build/picoarch-sources/prboom/src/d_main.c:919:        return I_Error("CheckIWAD: IWAD tag %s not present", iwadname);
+/workspace/build/picoarch-sources/prboom/src/d_main.c:981:    return I_Error("CheckIWAD: IWAD %s not readable", iwadname);
+/workspace/build/picoarch-sources/prboom/src/d_main.c:989: * FindIWADFIle
+/workspace/build/picoarch-sources/prboom/src/d_main.c:995:static char *FindIWADFile(void)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1007:    iwad = I_FindFile(myargv[i], NULL);
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1009:    for (i=0; !iwad && i<nstandard_iwads; i++)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1010:      iwad = I_FindFile(standard_iwads[i], NULL);
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1016:// IdentifyVersion
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1019:// Locate and validate an IWAD file
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1022:// supports IWADs with custom names. Also allows the -iwad parameter to
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1036:static bool IdentifyVersion (void)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1044:  lprintf(LO_INFO, "IdentifyVersion: basesavegame: %s\n", basesavegame);
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1048:  iwad = FindIWADFile();
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1055:    if (!CheckIWAD(iwad,&gamemode,&haswolflevels))
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1063:      /* CheckIWAD already recognised a Heretic or Hexen IWAD and set
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1099:    return I_Error("IdentifyVersion: IWAD not found\n");
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1399:  if (!IdentifyVersion())
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1412:   * was known (it runs before IdentifyVersion), so they were seeded as
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1413:   * Doom. Now that IdentifyVersion has set heretic/gamemission, re-seed so
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1470:      /* The Doom gamemode slots are reused for Heretic (see IdentifyVersion):
+/workspace/build/picoarch-sources/prboom/src/w_wad.c:331:         I_Error("W_AddFile: Wad file %s doesn't have IWAD or PWAD id", wadfile->name);
+/workspace/build/picoarch-sources/prboom/src/w_wad.h:67:  source_iwad=0,    // iwad file load 
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:188: * `prboom -iwad <path> -file <p1> <p2> ... -deh <d1> ... -baseconfig <c>`,
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:658: * IWADs ship the file as DOOM.WAD / DOOM2.WAD / etc., while the
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:659: * engine consistently asks lowercase -- standard_iwads[] entries are
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1866: * IdentifyVersion runs and errors out with "IWAD not found" because
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1910: * FindIWADFile pick an IWAD by iterating standard_iwads[] in d_main.c.
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2013: * Candidate order within each kind mirrors d_main.c's standard_iwads[]
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2024:   /* Heretic IWAD filenames: the full "Shadow of the Serpent Riders"
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2124: * the correct argv chunk (-iwad / -file / -deh).  Same rules the
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2340:         int j, iwad_idx = -1, file_emitted = 0, deh_emitted = 0;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2357:          * engine doesn't fall through to standard_iwads[]; the
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2458:                      "matching IWAD=%s\n", g_basename,
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2491:                         "IWAD '%s'\n", g_basename, iwad_match);
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2493:               argv[argc++] = iwad_match;  /* already heap from FindFileInDir */
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2501:                * magic (chex.wad and friends).  CheckIWAD accepts PWAD
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2507:                         "IWAD\n", g_basename);
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2514:                * FindIWADFile auto-detect try; warn for the Doom 1 case. */
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2555:                         "IWAD '%s'\n", g_basename, iwad_match);
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2557:               argv[argc++] = iwad_match;  /* heap from FindFileInDir */
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2763:    * failing.  Critically: if IdentifyVersion ran (D_AddFile
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2782:    * strdups -- "prboom" plus -iwad/-file/-playdemo plus their
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2820:    * (prboom, -iwad/-file, the path, optionally -deh/-baseconfig
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:4052:    * the engine via -iwad / -file, and the engine's FindIWADFile
+
+===== SATELLAVIEW / BS-X : SNES9X2002 =====
+/workspace/build/picoarch-sources/snes9x2002/src/snes9x.h:355:   bool8  BS; // Japanese Satellite System games.
+/workspace/build/picoarch-sources/snes9x2002/libretro/libretro-common/include/libretro.h:5608:/* Broadcast client_id for retro_netpacket_send_t */
+/workspace/build/picoarch-sources/snes9x2002/libretro/libretro-common/include/libretro.h:5609:#define RETRO_NETPACKET_BROADCAST 0xFFFF
+/workspace/build/picoarch-sources/snes9x2002/libretro/libretro-common/include/libretro.h:5614: * The client_id RETRO_NETPACKET_BROADCAST sends the packet as a broadcast to
+/workspace/build/picoarch-sources/snes9x2002/libretro/libretro.c:249:   info->valid_extensions = "smc|fig|sfc|gd3|gd7|dx2|bsx|swc";
+
+===== SATELLAVIEW / BS-X : SNES9X2005 =====
+/workspace/build/picoarch-sources/snes9x2005/libretro.c:793:   info->valid_extensions = "smc|fig|sfc|gd3|gd7|dx2|bsx|swc";
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:46:static bool is_bsx(uint8_t*);
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:1138:      Settings.BS = is_bsx(Memory.ROM + 0x7FC0);
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:1147:         Settings.BS = is_bsx(Memory.ROM + 0xFFC0);
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:1237:      /* BS-X BIOS */
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:2925:/* FFD9h        : Satellaview ROM Type */
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:2929:static bool is_bsx(uint8_t *p) /* p == "0xFFC0" or "0x7FC0" ROM offset pointer */
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:2936:   /* Satellaview ROM Type */
+/workspace/build/picoarch-sources/snes9x2005/source/snes9x.h:211:   bool     BS; /* Japanese Satellite System games. */
+
+===== SATELLAVIEW / BS-X : SNES9X2005 PLUS =====
+/workspace/build/picoarch-sources/snes9x2005_plus/libretro.c:793:   info->valid_extensions = "smc|fig|sfc|gd3|gd7|dx2|bsx|swc";
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:46:static bool is_bsx(uint8_t*);
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:1138:      Settings.BS = is_bsx(Memory.ROM + 0x7FC0);
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:1147:         Settings.BS = is_bsx(Memory.ROM + 0xFFC0);
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:1237:      /* BS-X BIOS */
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:2925:/* FFD9h        : Satellaview ROM Type */
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:2929:static bool is_bsx(uint8_t *p) /* p == "0xFFC0" or "0x7FC0" ROM offset pointer */
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:2936:   /* Satellaview ROM Type */
+/workspace/build/picoarch-sources/snes9x2005_plus/source/snes9x.h:211:   bool     BS; /* Japanese Satellite System games. */
+
+===== SATELLAVIEW / BS-X : SNES9X2010 =====
+/workspace/build/picoarch-sources/snes9x2010/src/dsp.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/cheats.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:188:#include "bsx.h"
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:288:      case MAP_BSX:
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:289:         byte = S9xGetBSX(Address);
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:418:		case MAP_BSX:
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:419:			word  = S9xGetBSX(Address);
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:421:			word |= S9xGetBSX(Address + 1) << 8;
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:518:		case MAP_BSX:
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:519:			S9xSetBSX(Byte, Address);
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:646:		case MAP_BSX:
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:647:			S9xSetBSX((uint8_t) Word, Address);
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:649:			S9xSetBSX(Word >> 8, Address + 1);
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:776:		case MAP_BSX:
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:777:			S9xSetBSX(Word >> 8, Address + 1);
+/workspace/build/picoarch-sources/snes9x2010/src/hwregisters.c:779:			S9xSetBSX((uint8_t) Word, Address);
+/workspace/build/picoarch-sources/snes9x2010/src/cpumacro.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/cpuops_.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/crosshairs.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/pixform.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/fxemu.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.h:27:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.h:174:#define MAP_BSX			17
+/workspace/build/picoarch-sources/snes9x2010/src/obc1.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/controls.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/fxinst.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/sdd1.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/apu.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/srtc.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/controls.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/port.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/cpuexec.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/dma.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/spc7110.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/dsp.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/seta.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1974:	S9xInitBSX(); /* Set BS header before parsing */
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1978:	bs = Settings.BS & !Settings.BSXItself;
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1999:	Memory.SRAMSize  = bs ? 5 /* BS-X */    : RomHeader[0x28];
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2001:	Memory.ROMType   = bs ? 0xE5 /* BS-X */ : RomHeader[0x26];
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2031:		 * BS path's computation, and give it the BS-X-style 5 (32KB) SRAM the
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2292:	if (Settings.BS && !Settings.BSXItself)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2320:	if (!Settings.BS || Settings.BSXItself) /* Not BS Dump */
+/workspace/build/picoarch-sources/snes9x2010/src/seta.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/cpuops.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/display.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:7:#ifndef _BSX_H_
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:8:#define _BSX_H_
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:18:/* Bridges to the C++ side (defined in bsx.c, wired in memmap.cpp). */
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:19:extern uint8_t **BSXMemMap;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:20:extern uint8_t  *BSXBlockIsRAM;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:21:extern uint8_t  *BSXBlockIsROM;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:22:extern uint8_t  *BSXRAMBase;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:23:extern uint8_t  *BSXSRAMBase;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:24:extern uint8_t  *BSXPSRAMBase;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:25:extern uint8_t  *BSXBIOSROMBase;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:26:extern uint8_t  *BSXROMBase;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:29:struct SBSX
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:64:extern struct SBSX	BSX;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:66:uint8_t S9xGetBSX (uint32_t);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:67:void S9xSetBSX (uint8_t, uint32_t);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:68:uint8_t S9xGetBSXPPU (uint16_t);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:69:void S9xSetBSXPPU (uint8_t, uint16_t);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:70:uint8_t * S9xGetBasePointerBSX (uint32_t);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:71:void S9xInitBSX (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:72:void S9xResetBSX (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:73:void S9xBSXPostLoadState (void);
+/workspace/build/picoarch-sources/snes9x2010/src/cpuexec.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/srtc.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/bsflash.c:4:  BS Memory (Satellaview memory pack) flash-chip emulation.
+/workspace/build/picoarch-sources/snes9x2010/src/spc7110.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/ppu.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/ppu.c:3868:			S9xSetBSXPPU(Byte, Address);
+/workspace/build/picoarch-sources/snes9x2010/src/ppu.c:4160:					return (S9xGetBSXPPU(Address));
+/workspace/build/picoarch-sources/snes9x2010/src/ppu.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/sdd1emu.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/fxemu.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/sdd1.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:342: * 8-byte SubZBuffer load broadcast into the low half of an __m128i. */
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:358: * Used to broadcast a "per source pixel" lookup (SubScreen, SubZBuffer
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:360:static INLINE __m128i tile_broadcast_even_u16_sse2(__m128i v)
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:396: * The previous landed version used tile_broadcast_even_u16_sse2 on
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:397: * the masked SDB load. That helper broadcasts even-INDEXED u16 lanes
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:401: * 0x00FF mask. Broadcasting at u16-lane granularity then dropped
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:541: * [v0, v0, v2, v2, v4, v4, v6, v6] for SubScreen broadcast. */
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:542:static INLINE uint16x8_t tile_broadcast_even_u16_neon(uint16x8_t v)
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12016: * also at even positions only, broadcast to both halves via
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12017: * tile_broadcast_even_u16_sse2. */
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12114:                __m128i vSubBcast  = tile_broadcast_even_u16_sse2(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12153:                uint16x8_t vSubBcast  = tile_broadcast_even_u16_neon(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12308:                __m128i vSubBcast  = tile_broadcast_even_u16_sse2(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12359:                uint16x8_t vSubBcast  = tile_broadcast_even_u16_neon(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12442:                __m128i vSubBcast  = tile_broadcast_even_u16_sse2(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12481:                uint16x8_t vSubBcast  = tile_broadcast_even_u16_neon(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12622:                __m128i vSubBcast  = tile_broadcast_even_u16_sse2(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/tile.c:12673:                uint16x8_t vSubBcast  = tile_broadcast_even_u16_neon(sub_loaded);
+/workspace/build/picoarch-sources/snes9x2010/src/apu.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/obc1.h:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/c4emu.c:28:  BS-X C emulator code
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:21:#include "bsx.h"
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:34:static int bsx_stream_get (RFILE *f)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:43:/*#define BSX_DEBUG */
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:59:#define BSXPPUBASE	0x2180
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:61:struct SBSX_RTC
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:73:static struct SBSX_RTC	BSX_RTC;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:88:	/* Layout follows the MiSTer BSX RTL channel-0 data stream: */
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:106:static void BSX_Map_SNES (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:107:static void BSX_Map_LoROM (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:108:static void BSX_Map_HiROM (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:109:static void BSX_Map_MMC (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:110:static void BSX_Map_FlashIO (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:111:static void BSX_Map_SRAM (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:112:static void BSX_Map_PSRAM (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:113:static void BSX_Map_BIOS (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:114:static void BSX_Map_RAM (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:115:static void BSX_Map (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:116:static void S9xBSXSetStream1 (uint8_t count);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:117:static void S9xBSXSetStream2 (uint8_t count);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:118:static uint8_t S9xBSXGetRTC (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:119:static uint8_t BSX_LoadBIOS (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:121:static int is_bsx (unsigned char *);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:124:static void BSX_Map_SNES (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:147:static void BSX_Map_LoROM (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:159:			BlockIsRAM[i] = BlockIsRAM[i + 0x800] = BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:160:			BlockIsROM[i] = BlockIsROM[i + 0x800] = !BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:175:			BlockIsRAM[i + 0x400] = BlockIsRAM[i + 0xC00] = BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:176:			BlockIsROM[i + 0x400] = BlockIsROM[i + 0xC00] = !BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:181:static void BSX_Map_HiROM (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:193:			BlockIsRAM[i] = BlockIsRAM[i + 0x800] = BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:194:			BlockIsROM[i] = BlockIsROM[i + 0x800] = !BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:204:			BlockIsRAM[i + 0x400] = BlockIsRAM[i + 0xC00] = BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:205:			BlockIsROM[i + 0x400] = BlockIsROM[i + 0xC00] = !BSX.write_enable;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:210:static void BSX_Map_MMC (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:217:		Map[c + 5] = (uint8_t *) MAP_BSX;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:222:static void BSX_Map_FlashIO (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:226:	if (BSX.prevMMC[0x0C])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:233:				Map[i] = Map[i + 0x800] = (uint8_t *)MAP_BSX;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:244:				Map[i + 0x400] = Map[i + 0xC00] = (uint8_t *)MAP_BSX;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:252:static void BSX_Map_SRAM (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:271:	if (BSX.prevMMC[0x02])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:321:static void BSX_Map_PSRAM(void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:325:	if (!BSX.prevMMC[0x02])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:328:		if (!BSX.prevMMC[0x05] && !BSX.prevMMC[0x06])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:331:			if (BSX.prevMMC[0x03])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:334:			if (BSX.prevMMC[0x04])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:337:		else if (BSX.prevMMC[0x05] && !BSX.prevMMC[0x06])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:340:			if (BSX.prevMMC[0x03])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:343:			if (BSX.prevMMC[0x04])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:346:		else if (!BSX.prevMMC[0x05] && BSX.prevMMC[0x06])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:349:			if (BSX.prevMMC[0x03])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:352:			if (BSX.prevMMC[0x04])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:358:			if (BSX.prevMMC[0x03])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:361:			if (BSX.prevMMC[0x04])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:366:		if (BSX.prevMMC[0x03])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:369:		if (BSX.prevMMC[0x04])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:375:		if (!BSX.prevMMC[0x05] && !BSX.prevMMC[0x06])
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:378:			if (BSX.prevMMC[0x03])
+
+===== SUFAMI TURBO : SNES9X2002 =====
+/workspace/build/picoarch-sources/snes9x2002/src/memmap.h:98:void SufamiTurboLoROMMap(void);
+/workspace/build/picoarch-sources/snes9x2002/src/memmap.c:786:                           SufamiTurboLoROMMap(); 
+/workspace/build/picoarch-sources/snes9x2002/src/memmap.c:1536:void SufamiTurboLoROMMap ()
+
+===== SUFAMI TURBO : SNES9X2005 =====
+/workspace/build/picoarch-sources/snes9x2005/libretro-common/include/libretro.h:862:                                            * have special needs, e.g. Super Nintendo's Super GameBoy, Sufami Turbo.
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.h:57:void SufamiTurboLoROMMap(void);
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:1327:         SufamiTurboLoROMMap();
+/workspace/build/picoarch-sources/snes9x2005/source/memmap.c:2190:void SufamiTurboLoROMMap(void)
+
+===== SUFAMI TURBO : SNES9X2005 PLUS =====
+/workspace/build/picoarch-sources/snes9x2005_plus/libretro-common/include/libretro.h:862:                                            * have special needs, e.g. Super Nintendo's Super GameBoy, Sufami Turbo.
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.h:57:void SufamiTurboLoROMMap(void);
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:1327:         SufamiTurboLoROMMap();
+/workspace/build/picoarch-sources/snes9x2005_plus/source/memmap.c:2190:void SufamiTurboLoROMMap(void)
+
+===== SUFAMI TURBO : SNES9X2010 =====
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.h:252:uint8_t LoadSufamiTurbo (const char *cartA, const char *cartB);
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:627:static uint8_t is_SufamiTurbo_BIOS (uint8_t *data, uint32_t size)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:635:static uint8_t is_SufamiTurbo_Cart (uint8_t *data, uint32_t size)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1076:		if (is_SufamiTurbo_Cart(Memory.ROM, Multi.cartSizeA))
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1085:		if (is_SufamiTurbo_Cart(Memory.ROM, Multi.cartSizeB))
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1094:			r = LoadSufamiTurbo(cartA, cartB);
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1125:uint8_t LoadSufamiTurbo (const char *cartA, const char *cartB)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1152:			if (!is_SufamiTurbo_Cart(Memory.ROM, Multi.cartSizeB))
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1168:	strcat(path, "STBIOS.bin");
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1178:		if ((size <= 0) || !is_SufamiTurbo_BIOS(Memory.ROM, (size_t)size))
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1663:static void Map_SufamiTurboLoROMMap (void)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1665:	S9xMessage(S9X_MSG_INFO, S9X_CATEGORY_MAP, "Map_SufamiTurboLoROMMap");
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1692:static void Map_SufamiTurboPseudoLoROMMap (void)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1695:	S9xMessage(S9X_MSG_INFO, S9X_CATEGORY_MAP, "Map_SufamiTurboPseudoLoROMMap");
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1916:/* A "combined" Sufami Turbo image is the base-cassette BIOS (starts with
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1922: * the layout Map_SufamiTurboPseudoLoROMMap consumes. Defined outside the
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1925:static uint8_t is_SufamiTurbo_Combined (uint8_t *data, uint32_t size)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2022:	/* Sufami Turbo combined image: the base-cassette BIOS header declares
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2025:	 * substitute the values the Sufami Turbo pseudo-LoROM map needs, so the
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2026:	 * image survives validation and is routed to Map_SufamiTurboPseudoLoROMMap
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2028:	if (is_SufamiTurbo_Combined(Memory.ROM, Memory.CalculatedSize))
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2275:				Map_SufamiTurboLoROMMap();
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2280:				Map_SufamiTurboPseudoLoROMMap();
+/workspace/build/picoarch-sources/snes9x2010/README.md:61:- **Sufami Turbo** — the Bandai base cassette plus one or two minicarts,
+/workspace/build/picoarch-sources/snes9x2010/README.md:63:  two-slot subsystem (base cassette + minicart file). Requires the Sufami
+/workspace/build/picoarch-sources/snes9x2010/README.md:64:  Turbo base-cassette BIOS (`STBIOS.bin`), matching every other emulator.
+/workspace/build/picoarch-sources/snes9x2010/README.md:127:### Sufami Turbo
+/workspace/build/picoarch-sources/snes9x2010/README.md:129:- Load Sufami Turbo **combined images** (base-cassette BIOS with the minicart
+/workspace/build/picoarch-sources/snes9x2010/README.md:131:- Added a **Sufami Turbo** two-slot subsystem so a base cassette and a bare
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:225:#define RETRO_GAME_TYPE_SUFAMI_TURBO		0x0102
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:870:			{ "Sufami Turbo Cartridge (Slot 1)", "st|sfc|smc|bin", false, false, true,  NULL, 0 },
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:871:			{ "Sufami Turbo Cartridge (Slot 2)", "st|sfc|smc|bin", false, false, false, NULL, 0 },
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:875:			{ "Sufami Turbo",                     "st",  st_roms,  2, RETRO_GAME_TYPE_SUFAMI_TURBO },
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:2170:	if (game_type == RETRO_GAME_TYPE_SUFAMI_TURBO)
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:2172:		/* Sufami Turbo: assemble the base-cassette BIOS + one or two minicart
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:2173:		 * dumps into the "combined image" layout that the existing Sufami Turbo
+
+===== SNES LIBRETRO CONTENT TYPES =====
+104:snes9x2002_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+108:snes9x2005_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+113:snes9x2005_plus_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+115:snes9x2010_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip

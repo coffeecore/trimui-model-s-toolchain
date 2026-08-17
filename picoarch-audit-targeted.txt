@@ -1,0 +1,911 @@
+===== GPSP =====
+/workspace/build/picoarch-sources/gpsp/libretro/libretro-common/include/libretro.h:554:#define RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY 9
+/workspace/build/picoarch-sources/gpsp/libretro/libretro-common/include/libretro.h:3396:    *    - RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+/workspace/build/picoarch-sources/gpsp/libretro/libretro_core_options.h:62:         { "builtin",   "Builtin BIOS" },
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:957:           selected_bios = official_bios;
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1200:   if (selected_bios == auto_detect || selected_bios == official_bios)
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1202:     /* Build '<dir>/gba_bios.bin'.  strlcpy returns the source length,
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1208:      * built-in BIOS - the right outcome for a pathological frontend
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1210:     const char *base_dir = (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir)
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1214:        strlcpy(filename_bios + len, "/gba_bios.bin", sizeof(filename_bios) - len);
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1220:        if (selected_bios == official_bios)
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1221:          show_warning_message("Could not load BIOS image file, using built-in BIOS", 2500);
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1227:        if (selected_bios == official_bios)
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1228:          show_warning_message("BIOS image seems incorrect, using built-in BIOS", 2500);
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1234:     /* Load the built-in BIOS */
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1247:      show_warning_message("Non-standard ROM header detected, using built-in BIOS", 2500);
+/workspace/build/picoarch-sources/gpsp/libretro/libretro.c:1255:      show_warning_message("Pokemon ROM Hack (M1) detected, forcing built-in BIOS", 2500);
+
+===== PCSX_REARMED =====
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:1799:   if (Config.HLE)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3485:static bool get_bios_config_hle(void);
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3486:static void prepare_bios(bool use_hle);
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3494:      prepare_bios(get_bios_config_hle());
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3496:      if (Config.HLE)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3653:         SysPrintf("found %s BIOS file, crc32 %08x: %s\n", guessed_region_name, crc, path);
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3664: * Finds a given bios by using libretro-common's readdir().
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3666:static void find_any_bios(const char *dirpath, char *path, size_t path_size)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3692:static void find_any_bios(const char *dirpath, char *path, size_t path_size)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3715:#define find_any_bios(...)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3798:static bool get_bios_config_hle(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3801:   bool use_hle = false;
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3806:      if (!strcmp(var.value, "HLE"))
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3807:         use_hle = true;
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3811:   if (!use_hle)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3823:   return use_hle;
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3826:static void prepare_bios(bool use_hle)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3832:      if (bios_saved[i] && !use_hle) {
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3849:      "scph5500", "scph5501", "scph5502",
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3850:      "psxonpsp660", "scph101", "scph7001", "scph1001",
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3852:   bool use_hle = get_bios_config_hle();
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3855:   if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3858:      snprintf(Config.BiosDir, sizeof(Config.BiosDir), "%s", dir);
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3869:         find_any_bios(dir, path, sizeof(path));
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3872:   prepare_bios(use_hle);
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3874:   if (use_hle)
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3876:      msg_str = "BIOS set to \'hle\'";
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3877:      SysPrintf("Using HLE BIOS.\n");
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3878:      // shorter as the user probably intentionally wants to use HLE
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3883:      msg_str = "No PlayStation BIOS file found - add for better compatibility";
+/workspace/build/picoarch-sources/pcsx_rearmed/frontend/libretro.c:3884:      SysPrintf("No BIOS files found.\n");
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/plugins.c:31:static char IsoFile[MAXPATHLEN] = "";
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/plugins.c:309:	char Plugin[MAXPATHLEN * 2];
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/plugins.c:371:	strncpy(IsoFile, filename, MAXPATHLEN - 1);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:28: * Internal simulated HLE BIOS.
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:40:#include "psxhle.h"
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:272:// fixed RAM offsets, SCPH1001 compatible
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:288:#define A_PADCRD_CHN_E  0x74a8  // pad/card irq chain entry, see hleExcPadCard1()
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:331:#define HLEOP(n) SWAPu32((0x3bu << 26) | (n));
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:446:		psxCpu->ExecuteBlock(&psxRegs, EXEC_CALLER_HLE);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:472:		psxCpu->ExecuteBlock(&psxRegs, EXEC_CALLER_HLE);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:1702:static void psxBios_SystemErrorUnresolvedException() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:2153:static void psxBios_GetSystemInfo() { // b4
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:2390:	// retrigger this hlecall after the next emulation event
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:2923:static void psxBios_firstfile() { // 42
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:2953:void psxBios_nextfile() { // 43
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3561:	ptr[0xb0/4] = HLEOP(hleop_exception);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3566:	enum hle_op op;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3568:	{ 0xbfc050a4, hleop_exc0_0_1 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3569:	{ 0xbfc04fbc, hleop_exc0_0_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3570:	{ 0xbfc0506c, hleop_exc0_1_1 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3571:	{ 0xbfc04dec, hleop_exc0_1_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3572:	{     0x1a00, hleop_exc0_2_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3573:	{     0x19c8, hleop_exc1_0_1 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3574:	{     0x18bc, hleop_exc1_0_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3575:	{     0x1990, hleop_exc1_1_1 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3576:	{     0x1858, hleop_exc1_1_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3577:	{     0x1958, hleop_exc1_2_1 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3578:	{     0x17f4, hleop_exc1_2_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3579:	{     0x1920, hleop_exc1_3_1 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3580:	{     0x1794, hleop_exc1_3_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3581:	{     0x2458, hleop_exc3_0_2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3582:	{     0x49bc, hleop_exc_padcard1 }, // hleExcPadCard1
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3583:	{     0x4a4c, hleop_exc_padcard2 },
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3586:static int chain_hle_op(u32 handler)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3593:	return hleop_dummy;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3602:	// install the hle traps
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3603:	if (handler1) PSXMu32ref(handler1) = HLEOP(chain_hle_op(handler1));
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3604:	if (handler2) PSXMu32ref(handler2) = HLEOP(chain_hle_op(handler2));
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3705:	boolean hle = Config.HLE;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3710:	if (hle) {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3745:	if (hle) {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3775:static void hleExc0_0_1();
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3776:static void hleExc0_0_2();
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3777:static void hleExc0_1_1();
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3778:static void hleExc0_1_2();
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3805:	if (!Config.HLE) {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3885:	biosA0[0x40] = psxBios_SystemErrorUnresolvedException;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3919:	//biosA0[0x62] = psxBios_dev_cd_firstfile;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3920:	//biosA0[0x63] = psxBios_dev_cd_nextfile;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3926:	//biosA0[0x69] = psxBios_dev_card_firstfile;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3927:	//biosA0[0x6a] = psxBios_dev_card_nextfile;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3965:	biosA0[0x90] = hleExc0_1_2;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3966:	biosA0[0x91] = hleExc0_0_2;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3967:	biosA0[0x92] = hleExc0_1_1;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3968:	biosA0[0x93] = hleExc0_0_1;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:3982:	//biosA0[0xa1] = psxBios_SystemError;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4001:	biosA0[0xb4] = psxBios_GetSystemInfo;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4069:	biosB0[0x42] = psxBios_firstfile;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4070:	biosB0[0x43] = psxBios_nextfile;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4109:	//biosC0[0x0b] = psxBios_SystemError;
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4134:	// somewhat pretend to be a SCPH1001 BIOS
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4141:	strcpy(romc + 0x12c, "CEX-3000 PCSX HLE"); // see psxBios_GetSystemInfo
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4152:	rom32[0x00000/4] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4153:	rom32[0x00180/4] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4154:	rom32[0x3fffc/4] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4155:	rom32[0x65ffc/4] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4156:	rom32[0x7ff2c/4] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4179:	ram32[0x00a0/4] = HLEOP(hleop_a0);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4180:	ram32[0x00b0/4] = HLEOP(hleop_b0);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4181:	ram32[0x00c0/4] = HLEOP(hleop_c0);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4209:		ram32[A_A0_TRAPS/4 + i] = HLEOP(hleop_a0t);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4214:		ram32[A_B0_TRAPS/4 + i] = HLEOP(hleop_b0t);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4221:	ram32[A_B0_5B_TRAP/4] = HLEOP(hleop_b0t);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4235:		ram32[A_C0_TRAPS/4 + i] = HLEOP(hleop_c0t);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4239:	// more HLE traps
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4240:	ram32[A_A0_TRAPS/4 - 1] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4241:	ram32[A_B0_TRAPS/4 - 1] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4242:	ram32[A_C0_TRAPS/4 - 1] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4243:	ram32[0x7ffc/4] = HLEOP(hleop_dummy);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4244:	ram32[0x8000/4] = HLEOP(hleop_execret);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4254:	SysPrintf("HLE BIOS initialized.\n");
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4293:// hleExc0_{0,1}* are usually removed by A(56)/A(72) on the game's startup,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4295:static void hleExc0_0_1() // A(93h) - CdromDmaIrqFunc2
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4301:static void hleExc0_0_2() // A(91h) - CdromDmaIrqFunc1
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4316:static void hleExc0_1_1() // A(92h) - CdromIoIrqFunc2
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4322:static void hleExc0_1_2() // A(90h) - CdromIoIrqFunc1
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4332:static void hleExc0_2_2_syscall() // not in any A/B/C table
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4341:			//psxBios_SystemErrorUnresolvedException();
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4376:static void hleExc1_0_1(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4392:static void hleExc1_0_2(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4397:static void hleExc1_1_1(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4403:static void hleExc1_1_2(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4408:static void hleExc1_2_1(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4414:static void hleExc1_2_2(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4419:static void hleExc1_3_1(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4425:static void hleExc1_3_2(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4430:static void hleExc3_0_2_defint(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4458:static void hleExcPadCard1(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4478:static void hleExcPadCard2(void)
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4546:/* HLE */
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4547:static void hleDummy() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4548:	log_unhandled("hleDummy called @%08x ra=%08x\n", psxRegs.pc - 4, ra);
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4555:static void hleA0() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4574:static void hleB0() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4598:static void hleC0() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4617:static void hleA0t() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4630:static void hleB0t() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4645:static void hleC0t() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4659:static void hleBootstrap() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4664:static void hleExecRet() {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4679:void (* const psxHLEt[hleop_count_])() = {
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4680:	hleDummy, hleA0, hleB0, hleC0,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4681:	hleBootstrap, hleExecRet, psxBiosException, hleDummy,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4682:	hleExc0_0_1, hleExc0_0_2,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4683:	hleExc0_1_1, hleExc0_1_2, hleExc0_2_2_syscall,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4684:	hleExc1_0_1, hleExc1_0_2,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4685:	hleExc1_1_1, hleExc1_1_2,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4686:	hleExc1_2_1, hleExc1_2_2,
+/workspace/build/picoarch-sources/pcsx_rearmed/libpcsxcore/psxbios.c:4687:	hleExc1_3_1, hleExc1_3_2,
+
+===== PICODRIVE LIBRETRO BIOS =====
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:169:static const char * const biosfiles_us[] = {
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:170:	"us_scd2_9306", "SegaCDBIOS9303", "us_scd1_9210", "bios_CD_U"
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:172:static const char * const biosfiles_eu[] = {
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:173:	"eu_mcd2_9306", "eu_mcd2_9303", "eu_mcd1_9210", "bios_CD_E"
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:175:static const char * const biosfiles_jp[] = {
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:176:	"jp_mcd2_921222", "jp_mcd1_9112", "jp_mcd1_9111", "bios_CD_J"
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:198:		files = biosfiles_us;
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:199:		count = sizeof(biosfiles_us) / sizeof(char *);
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:201:		files = biosfiles_eu;
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:202:		count = sizeof(biosfiles_eu) / sizeof(char *);
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:204:		files = biosfiles_jp;
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:205:		count = sizeof(biosfiles_jp) / sizeof(char *);
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:270:	for (i = 0; i < sizeof(biosfiles_us)/sizeof(biosfiles_us[0]); i++)
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:271:		if (strstr(name, biosfiles_us[i]) != NULL) return 1;
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:272:	for (i = 0; i < sizeof(biosfiles_eu)/sizeof(biosfiles_eu[0]); i++)
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:273:		if (strstr(name, biosfiles_eu[i]) != NULL) return 1;
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:274:	for (i = 0; i < sizeof(biosfiles_jp)/sizeof(biosfiles_jp[0]); i++)
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:275:		if (strstr(name, biosfiles_jp[i]) != NULL) return 1;
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:1532:	f = fopen("32X_M_BIOS.BIN", "rb");
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:1533:	p32x_bios_m = malloc(2048);
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:1534:	fread(p32x_bios_m, 1, 2048, f);
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:1536:	f = fopen("32X_S_BIOS.BIN", "rb");
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:1537:	p32x_bios_s = malloc(1024);
+/workspace/build/picoarch-sources/picodrive/platform/common/emu.c:1538:	fread(p32x_bios_s, 1, 1024, f);
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:501: * the SAVE_DIRECTORY (preferably) or SYSTEM_DIRECTORY environment
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:844:#define RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY 9
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:1309: * @note Early libretro cores used \c RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY for save data.
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:1312: * \c RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY should be used for game-agnostic data
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:1318: * @see RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:1420: * Use \c RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:6003:    *    - RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro-common/include/libretro.h:6433:    *     (e.g. \ref RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY "the system directory"
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1265:static const char * const biosfiles_us[] = {
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1266:   "us_scd2_9306", "SegaCDBIOS9303", "us_scd1_9210", "bios_CD_U"
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1268:static const char * const biosfiles_eu[] = {
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1269:   "eu_mcd2_9306", "eu_mcd2_9303", "eu_mcd1_9210", "bios_CD_E"
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1271:static const char * const biosfiles_jp[] = {
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1272:   "jp_mcd2_921222", "jp_mcd1_9112", "jp_mcd1_9111", "bios_CD_J"
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1280:   if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir) {
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1296:      files = biosfiles_us;
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1297:      count = sizeof(biosfiles_us) / sizeof(char *);
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1299:      files = biosfiles_eu;
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1300:      count = sizeof(biosfiles_eu) / sizeof(char *);
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1302:      files = biosfiles_jp;
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1303:      count = sizeof(biosfiles_jp) / sizeof(char *);
+/workspace/build/picoarch-sources/picodrive/platform/libretro/libretro.c:1323:         log_cb(RETRO_LOG_INFO, "using bios: %s\n", path);
+/workspace/build/picoarch-sources/picodrive/pico/pico.h:53:// optional 32X BIOS, should be left NULL if not used
+/workspace/build/picoarch-sources/picodrive/pico/pico.h:55:extern void *p32x_bios_g, *p32x_bios_m, *p32x_bios_s;
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:50:void *p32x_bios_g, *p32x_bios_m, *p32x_bios_s;
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2207:  if (p32x_bios_g != NULL) {
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2208:    elprintf(EL_STATUS|EL_32X, "32x: using supplied 68k BIOS");
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2209:    Byteswap(Pico32xMem->m68k_rom, p32x_bios_g, sizeof(Pico32xMem->m68k_rom));
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2250:  if (p32x_bios_m != NULL) {
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2251:    elprintf(EL_STATUS|EL_32X, "32x: using supplied master SH2 BIOS");
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2252:    Byteswap(&Pico32xMem->sh2_rom_m, p32x_bios_m, sizeof(Pico32xMem->sh2_rom_m));
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2280:  if (p32x_bios_s != NULL) {
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2281:    elprintf(EL_STATUS|EL_32X, "32x: using supplied slave SH2 BIOS");
+/workspace/build/picoarch-sources/picodrive/pico/32x/memory.c:2282:    Byteswap(&Pico32xMem->sh2_rom_s, p32x_bios_s, sizeof(Pico32xMem->sh2_rom_s));
+/workspace/build/picoarch-sources/picodrive/pico/32x/32x.c:172:  if (p32x_bios_m == NULL) {
+/workspace/build/picoarch-sources/picodrive/pico/32x/32x.c:201:  if (p32x_bios_s == NULL) {
+
+===== BLUE MSX =====
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:54:         { "SEGA - SG-1000",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:60:         { "ColecoVision", NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:61:         { "Coleco (Spectravideo SVI-603)", NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:186:      "use_keyboard_for_coleco",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:187:      "Colecovision Keyboard Mapping",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:189:      "Additionally, use the keyboard for the Colecovision 0-9, #, and * buttons. Player 1: 0-9, # is -, and * is =; Player 2: Keypad 0-9, # is /, and * is *. Gamepad mappings also work.",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:217:      "When a ROM game or application is in the database, the emulator uses the databases to apply the correct mapper. If the sha1 value of a dump is not yet in the databases, it uses an automatic mapper detection system, but it can fail in some cases. In this situation, you can manually select the correct mapper.",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:242:         { "SG1000",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:243:         { "SG1000Castle",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:244:         { "SG1000RamA",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:245:         { "SG1000RamB",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:254:      "patch_coleco_rom",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:255:      "Patch Colecovision ROM Fast Boot (Close Content)",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:257:      "Patch the NTSC Colecovision ROM for fast booting (3.3s)",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:288:         { "SEGA - SG-1000",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:294:         { "ColecoVision", NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:295:         { "Coleco (Spectravideo SVI-603)", NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:360:      "When a ROM game or application is in the database, the emulator uses the databases to apply the correct mapper. If the sha1 value of a dump is not yet in the databases, it uses an automatic mapper detection system, but it can fail in some cases. In this situation, you can manually select the correct mapper.",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:383:         { "SG1000",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:384:         { "SG1000Castle",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:385:         { "SG1000RamA",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:386:         { "SG1000RamB",   NULL },
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:444:      "use_keyboard_for_coleco",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:445:      "Colecovision Keyboard Mapping",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:446:      "Additionally, use the keyboard for the Colecovision 0-9, #, and * buttons. Player 1: 0-9, # is -, and * is =; Player 2: Keypad 0-9, # is /, and * is *. Gamepad mappings also work.",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:455:      "patch_coleco_rom",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:456:      "Patch Colecovision ROM Fast Boot (Close Content)",
+/workspace/build/picoarch-sources/bluemsx/libretro_core_options.h:457:      "Patch the NTSC Colecovision ROM for fast booting (3.3s)",
+/workspace/build/picoarch-sources/bluemsx/libretro.c:76:bool is_coleco, is_sega, is_sega_kb, is_spectra, is_auto, auto_rewind_cas;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:83:bool use_keyboard_for_coleco;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:84:int patch_coleco_rom = 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:189:         is_coleco = true;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:190:         strcpy(msx_type, "COL - ColecoVision");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:197:         strcpy(msx_type, "SEGA - SG-1000");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:651:   RETROK_UNKNOWN,                  //EC_COLECO1_0    120
+/workspace/build/picoarch-sources/bluemsx/libretro.c:652:   RETROK_UNKNOWN,                  //EC_COLECO1_1    121
+/workspace/build/picoarch-sources/bluemsx/libretro.c:653:   RETROK_UNKNOWN,                  //EC_COLECO1_2    122
+/workspace/build/picoarch-sources/bluemsx/libretro.c:654:   RETROK_UNKNOWN,                  //EC_COLECO1_3    123
+/workspace/build/picoarch-sources/bluemsx/libretro.c:655:   RETROK_UNKNOWN,                  //EC_COLECO1_4    124
+/workspace/build/picoarch-sources/bluemsx/libretro.c:656:   RETROK_UNKNOWN,                  //EC_COLECO1_5    125
+/workspace/build/picoarch-sources/bluemsx/libretro.c:657:   RETROK_UNKNOWN,                  //EC_COLECO1_6    126
+/workspace/build/picoarch-sources/bluemsx/libretro.c:658:   RETROK_UNKNOWN,                  //EC_COLECO1_7    127
+/workspace/build/picoarch-sources/bluemsx/libretro.c:659:   RETROK_UNKNOWN,                  //EC_COLECO1_8    128
+/workspace/build/picoarch-sources/bluemsx/libretro.c:660:   RETROK_UNKNOWN,                  //EC_COLECO1_9    129
+/workspace/build/picoarch-sources/bluemsx/libretro.c:661:   RETROK_UNKNOWN,                  //EC_COLECO1_STAR 130
+/workspace/build/picoarch-sources/bluemsx/libretro.c:662:   RETROK_UNKNOWN,                  //EC_COLECO1_HASH 131
+/workspace/build/picoarch-sources/bluemsx/libretro.c:664:   RETROK_UNKNOWN,                  //EC_COLECO2_0    140
+/workspace/build/picoarch-sources/bluemsx/libretro.c:665:   RETROK_UNKNOWN,                  //EC_COLECO2_1    141
+/workspace/build/picoarch-sources/bluemsx/libretro.c:666:   RETROK_UNKNOWN,                  //EC_COLECO2_2    142
+/workspace/build/picoarch-sources/bluemsx/libretro.c:667:   RETROK_UNKNOWN,                  //EC_COLECO2_3    143
+/workspace/build/picoarch-sources/bluemsx/libretro.c:668:   RETROK_UNKNOWN,                  //EC_COLECO2_4    144
+/workspace/build/picoarch-sources/bluemsx/libretro.c:669:   RETROK_UNKNOWN,                  //EC_COLECO2_5    145
+/workspace/build/picoarch-sources/bluemsx/libretro.c:670:   RETROK_UNKNOWN,                  //EC_COLECO2_6    146
+/workspace/build/picoarch-sources/bluemsx/libretro.c:671:   RETROK_UNKNOWN,                  //EC_COLECO2_7    147
+/workspace/build/picoarch-sources/bluemsx/libretro.c:672:   RETROK_UNKNOWN,                  //EC_COLECO2_8    148
+/workspace/build/picoarch-sources/bluemsx/libretro.c:673:   RETROK_UNKNOWN,                  //EC_COLECO2_9    149
+/workspace/build/picoarch-sources/bluemsx/libretro.c:674:   RETROK_UNKNOWN,                  //EC_COLECO2_STAR 150
+/workspace/build/picoarch-sources/bluemsx/libretro.c:675:   RETROK_UNKNOWN,                  //EC_COLECO2_HASH 151
+/workspace/build/picoarch-sources/bluemsx/libretro.c:714:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A,     "1 / Coleco but.1" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:715:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B,     "2 / Coleco but.2" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:716:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y,     "3 / Coleco 2" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:717:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X,     "4 / Coleco 1" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:718:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START, "Coleco #" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:719:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT,"Coleco *" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:720:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L,     "5 / Coleco 4" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:721:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R,     "6 / Coleco 3" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:722:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2,    "Coleco 6" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:723:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2,    "Coleco 5" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:724:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3,    "Coleco 8" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:725:      { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3,    "Coleco 7" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:726:      { 0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y, "Coleco SAC but.3(-)/but.4(+)" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:727:      { 0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X, "Coleco 9(-)/0(+)" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:734:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A,     "1 / Coleco but.1" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:735:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B,     "2 / Coleco but.2" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:736:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y,     "3 / Coleco 2" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:737:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X,     "4 / Coleco 1" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:738:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START, "Coleco #" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:739:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT,"Coleco *" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:740:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L,     "5 / Coleco 4" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:741:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R,     "6 / Coleco 3" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:742:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2,    "Coleco 6" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:743:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2,    "Coleco 5" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:744:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3,    "Coleco 8" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:745:      { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3,    "Coleco 7" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:746:      { 1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y, "Coleco SAC but.3(-)/but.4(+)" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:747:      { 1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X, "Coleco 8(-)/0(+)" },
+/workspace/build/picoarch-sources/bluemsx/libretro.c:904:      is_coleco = false;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:911:         if (!strcmp(var.value, "ColecoVision"))
+/workspace/build/picoarch-sources/bluemsx/libretro.c:913:            is_coleco = true;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:914:            strcpy(msx_type, "COL - ColecoVision");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:916:         else if (!strcmp(var.value, "Coleco (Spectravideo SVI-603)"))
+/workspace/build/picoarch-sources/bluemsx/libretro.c:918:            is_coleco = true;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:919:            strcpy(msx_type, "COL - Spectravideo SVI-603 Coleco");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:943:         // Sega machines don't work if not set right from the start
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1068:   var.key = "use_keyboard_for_coleco";
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1074:         use_keyboard_for_coleco = false;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1076:         use_keyboard_for_coleco = true;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1079:      use_keyboard_for_coleco = false;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1081:   var.key = "patch_coleco_rom";
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1087:         patch_coleco_rom = 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1089:         patch_coleco_rom = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1092:      patch_coleco_rom = 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1158:   char properties_dir[256], machines_dir[256], mediadb_dir[256];
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1190:   if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir) && dir)
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1195:   snprintf(machines_dir, sizeof(machines_dir), "%s%c%s", properties_dir, SLASH, "Machines");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1196:   snprintf(mediadb_dir, sizeof(mediadb_dir), "%s%c%s", properties_dir, SLASH, "Databases");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1198:   machineSetDirectory(machines_dir);
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1224:   if (is_coleco)
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1226:      strcpy(properties->joy1.type, "coleco joystick");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1227:      properties->joy1.typeId            = JOYSTICK_PORT_COLECOJOYSTICK;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1230:      strcpy(properties->joy2.type, "coleco joystick");
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1231:      properties->joy2.typeId            = JOYSTICK_PORT_COLECOJOYSTICK;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1472:   /* OSK toggle via SELECT (only for machines with keyboard: MSX, SVI, SC-3000, SF-7000) */
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1473:   if (!is_coleco && (!is_sega || is_sega_kb)) {
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1495:    * SG-1000 (pause button): https://segaretro.org/Sega_Game_1000_(SG-1000)_Information_(Draft)
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1503:    * MAME uses F10 for NMI: https://github.com/mamedev/mame/blob/442a9852bc24e47893795194b45c7f01e31153d1/src/mame/sega/sg1000.cpp#L484
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1516:   if (is_coleco)
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1518:      /* ColecoVision Input Part */
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1542:      eventMap[EC_COLECO1_1]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_X)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1543:      eventMap[EC_COLECO1_2]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_Y)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1544:      eventMap[EC_COLECO1_3]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_R)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1545:      eventMap[EC_COLECO1_4]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_L)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1546:      eventMap[EC_COLECO1_5]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_R2)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1547:      eventMap[EC_COLECO1_6]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_L2)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1548:      eventMap[EC_COLECO1_7]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_R3)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1549:      eventMap[EC_COLECO1_8]     = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_L3)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1550:      eventMap[EC_COLECO1_STAR]  = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_SELECT) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1551:      eventMap[EC_COLECO1_HASH]  = joypad_bits[0] & (1 << RETRO_DEVICE_ID_JOYPAD_START)  ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1554:      eventMap[EC_COLECO1_9]    = (analog_axis < -input_analog_deadzone);
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1555:      eventMap[EC_COLECO1_0]    = (analog_axis > input_analog_deadzone);
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1559:         eventMap[EC_COLECO1_0]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1560:         eventMap[EC_COLECO1_1]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1564:         eventMap[EC_COLECO1_2]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1565:         eventMap[EC_COLECO1_3]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1571:      eventMap[EC_COLECO2_1]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_X)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1572:      eventMap[EC_COLECO2_2]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_Y)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1573:      eventMap[EC_COLECO2_3]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_R)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1574:      eventMap[EC_COLECO2_4]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_L)      ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1575:      eventMap[EC_COLECO2_5]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_R2)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1576:      eventMap[EC_COLECO2_6]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_L2)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1577:      eventMap[EC_COLECO2_7]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_R3)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1578:      eventMap[EC_COLECO2_8]     = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_L3)     ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1579:      eventMap[EC_COLECO2_STAR]  = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_SELECT) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1580:      eventMap[EC_COLECO2_HASH]  = joypad_bits[1] & (1 << RETRO_DEVICE_ID_JOYPAD_START)  ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1583:      eventMap[EC_COLECO2_9]     = (analog_axis < -input_analog_deadzone);
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1584:      eventMap[EC_COLECO2_0]     = (analog_axis > input_analog_deadzone);
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1588:         eventMap[EC_COLECO2_0]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1589:         eventMap[EC_COLECO2_1]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1593:         eventMap[EC_COLECO2_2]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1594:         eventMap[EC_COLECO2_3]  = 1;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1597:      if (use_keyboard_for_coleco)
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1599:         eventMap[EC_COLECO1_0]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_0) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1600:         eventMap[EC_COLECO1_1]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_1) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1601:         eventMap[EC_COLECO1_2]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_2) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1602:         eventMap[EC_COLECO1_3]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_3) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1603:         eventMap[EC_COLECO1_4]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_4) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1604:         eventMap[EC_COLECO1_5]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_5) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1605:         eventMap[EC_COLECO1_6]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_6) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1606:         eventMap[EC_COLECO1_7]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_7) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1607:         eventMap[EC_COLECO1_8]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_8) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1608:         eventMap[EC_COLECO1_9]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_9) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1609:         eventMap[EC_COLECO1_STAR] |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_MINUS)  ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1610:         eventMap[EC_COLECO1_HASH] |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_EQUALS) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1612:         eventMap[EC_COLECO2_0]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP0) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1613:         eventMap[EC_COLECO2_1]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP1) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1614:         eventMap[EC_COLECO2_2]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP2) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1615:         eventMap[EC_COLECO2_3]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP3) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1616:         eventMap[EC_COLECO2_4]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP4) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1617:         eventMap[EC_COLECO2_5]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP5) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1618:         eventMap[EC_COLECO2_6]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP6) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1619:         eventMap[EC_COLECO2_7]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP7) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1620:         eventMap[EC_COLECO2_8]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP8) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1621:         eventMap[EC_COLECO2_9]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP9) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1622:         eventMap[EC_COLECO2_STAR] |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP_MULTIPLY) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1623:         eventMap[EC_COLECO2_HASH] |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_KP_DIVIDE)    ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1627:         eventMap[EC_COLECO1_0]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_1) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1628:         eventMap[EC_COLECO1_9]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_2) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1629:         eventMap[EC_COLECO2_0]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_3) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1630:         eventMap[EC_COLECO2_9]    |= input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_4) ? 1 : 0;
+/workspace/build/picoarch-sources/bluemsx/libretro.c:1695:   if (vkbd_active && !is_coleco && (!is_sega || is_sega_kb)) {
+
+===== FMSX =====
+/workspace/build/picoarch-sources/fmsx/libretro.c:739:      else if (strcmp(var.value, "MSX2") == 0)
+/workspace/build/picoarch-sources/fmsx/libretro.c:741:         Mode |= MSX_MSX2;
+/workspace/build/picoarch-sources/fmsx/libretro.c:745:      else if (strcmp(var.value, "MSX2+") == 0)
+/workspace/build/picoarch-sources/fmsx/libretro.c:747:         Mode |= MSX_MSX2P;
+/workspace/build/picoarch-sources/fmsx/libretro.c:754:      Mode |= MSX_MSX2P;
+/workspace/build/picoarch-sources/fmsx/libretro.c:771:         if (MODEL(MSX_MSX2))
+/workspace/build/picoarch-sources/fmsx/libretro.c:1016:      if(MODEL(MSX_MSX2P))
+/workspace/build/picoarch-sources/fmsx/libretro.c:1022:      if(MODEL(MSX_MSX2P))
+/workspace/build/picoarch-sources/fmsx/libretro.c:1185:   environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &ProgDir);
+/workspace/build/picoarch-sources/fmsx/libretro.c:1522:      { "fmsx_mode", "MSX Mode; MSX2+|MSX1|MSX2" },
+/workspace/build/picoarch-sources/fmsx/README.md:109:Note: this .cht format is specific to fMSX and differs from [RetroArch's CHT files](https://github.com/libretro/libretro-database/blob/master/cht/Microsoft%20-%20MSX%20-%20MSX2%20-%20MSX2P%20-%20MSX%20Turbo%20R/)!
+/workspace/build/picoarch-sources/fmsx/README.md:111:A BlueMSX MCF named `Game.mcf` will also be loaded automatically. Press F7 repeatedly to active cheats one by one, or disable cheats. The bios (msx.rom, etc) from the fmsx standalone distributions ([fMSX site](https://fms.komkon.org/fMSX) must be in Retroarch system directory. A different bios will not allow the cheat to load.  
+/workspace/build/picoarch-sources/fmsx/README.md:144:|[Aleste](https://retroachievements.org/game/7578)|[Topic](https://retroachievements.org/viewtopic.php?t=12082) [GenMSX](https://www.generation-msx.nl/software/compile/aleste/release/1055/)|✓ *|Aleste (Japan).rom|ROM|MSX2|7087b51f3ccfdf314ce60d5d8aaf644a|12f6f31f495bfb384c9ca9067bfbf8f98af6adf9|
+/workspace/build/picoarch-sources/fmsx/README.md:148:|[SD-Snatcher (Melancholia English Translation)](https://retroachievements.org/game/10505)|[Topic](https://retroachievements.org/viewtopic.php?t=13309) [GenMSX](https://www.generation-msx.nl/software/konami/sd-snatcher/release/1267/)|n/a|Super Deform Snatcher (1990)(Konami)(ja)(Disk 1 of 3)\[a]\[SCC+].dsk|original|MSX2 SCC+| |4cef12ae13334ed4f3f890311b641c1ad2bdc408|74DF1878|filename variant 1|
+/workspace/build/picoarch-sources/fmsx/README.md:160:|[Metal Gear](https://retroachievements.org/game/10501)|[Topic](https://retroachievements.org/viewtopic.php?t=10641) [GenMSX](https://www.generation-msx.nl/software/konami/metal-gear/release/1028/)|✓ *|Metal Gear (J).mx2|ROM|MSX2|12e302954fa9b23c11ce7c8f5770b82a|a52021f1b257c7c35d626d5d642134091c45e4f4|
+/workspace/build/picoarch-sources/fmsx/README.md:166:|[Metal Gear 2: Solid Snake](https://retroachievements.org/game/10504)|[Topic](https://retroachievements.org/viewtopic.php?t=10642) [GenMSX](https://www.generation-msx.nl/software/konami/metal-gear-2---solid-snake/release/1248/)|✓ *|Metal Gear 2 - Solid Snake (J).mx2|ROM|MSX2 SCC|9f50d92d35e19d5de37d75a36a410588|af567ea6e27912d6d5bf1c8e9bc18e9b393fd1ab|
+/workspace/build/picoarch-sources/fmsx/README.md:181:|[The Treasure of Usas](https://retroachievements.org/game/17872)|[Topic](https://retroachievements.org/viewtopic.php?t=13620) [GenMSX](https://www.generation-msx.nl/software/konami/usas/release/895/)|✓ *|Treasure of Usas, The (Japan, Europe).rom|ROM|MSX2|9aab75984b06c21ed8e6214474d3a68e|4ff2aad8371e382e203c7f29b665612a8c9d937c|30396650|
+/workspace/build/picoarch-sources/fmsx/README.md:182:|[Vampire Killer](https://retroachievements.org/game/3289)|[Topic](https://retroachievements.org/viewtopic.php?t=11050) [GenMSX](https://www.generation-msx.nl/software/konami/vampire-killer/release/696/)|✓ *|Vampire Killer (Japan, Europe).rom|ROM|MSX2|92ba9dab3c7a4ac6c8a130f6ccbac91c|5ef7d03b138a2023f6def241b671c666f97ed83b|5953D084|
+/workspace/build/picoarch-sources/fmsx/README.md:183:|[~Homebrew~ ~Prototype~ Super Mario World](https://retroachievements.org/game/17024)|[Topic](https://retroachievements.org/viewtopic.php?t=11658) [MSX games world](https://msxgamesworld.com/software.php?id=4519)|✓|Super Mario World - Daemos et al. (2016)\[Advanced Prototype]\[original] \[3392].rom|ROM|MSX2(+)|da28da0bb524bd0072e10b2799a88a75|77b37d7028d5f657239eb24f0c16097a6e183f8d|9d90c0a6|
+/workspace/build/picoarch-sources/fmsx/README.md:188:| | |✓❗|Penguin-kun Wars 2 (Japan) + [English Patch](https://www.romhacking.net/translations/1463/) .rom|ROM|MSX2|d4f8d8a7e052a0d6246ac2b5afdc729e|9f476f544d1cd5f87d4ca19665ccdbf6ac0f68a0|
+/workspace/build/picoarch-sources/fmsx/README.md:190:|[Space Manbow](https://retroachievements.org/game/4023)|[Topic](https://retroachievements.org/viewtopic.php?t=13687) [GenMSX](https://www.generation-msx.nl/software/konami/space-manbow/release/1238/)|✓ *|Space Manbow (1989) (Konami) (J)|ROM|MSX2(+) SCC|f78b9f4ea885cf072e5b41dce9f15436|f6199f48ff994fc9a8e33a8581bb3bb16dd301ab|
+/workspace/build/picoarch-sources/fmsx/README.md:200:| `fmsx_mode`                                                                                                                        | MSX model                                                                                  | MSX2+*&vert;MSX1&vert;MSX2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+/workspace/build/picoarch-sources/fmsx/README.md:214:| `fmsx_font`                                                                                                                        | load a fixed text font from  RetroArch's `system_directory`                                | standard*&vert;DEFAULT.FNT&vert;ITALIC.FNT&vert;INTERNAT.FNT&vert;CYRILLIC.FNT&vert;KOREAN.FNT&vert;JAPANESE.FNT                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+/workspace/build/picoarch-sources/fmsx/README.md:228:To synchronize that, select 'Dynamic'. Models MSX1 and MSX2+ will then start up at 60Hz and adapt when a game switches to 50Hz.
+/workspace/build/picoarch-sources/fmsx/README.md:229:MSX2 by default starts up at 50Hz and likewise will switch to 60Hz.
+/workspace/build/picoarch-sources/fmsx/README.md:237:## BIOS
+/workspace/build/picoarch-sources/fmsx/README.md:238:BIOS ROMs are loaded from RetroArch's `system_directory`. The screen will remain black if required ROMs are missing.
+/workspace/build/picoarch-sources/fmsx/README.md:240:These BIOS ROMs are required for execution:
+/workspace/build/picoarch-sources/fmsx/README.md:241:* MSX1: MSX.ROM
+/workspace/build/picoarch-sources/fmsx/README.md:242:* MSX2: MSX2.ROM, MSX2EXT.ROM
+/workspace/build/picoarch-sources/fmsx/README.md:243:* MSX2+: MSX2P.ROM, MSX2PEXT.ROM
+/workspace/build/picoarch-sources/fmsx/README.md:249:* KANJI.ROM
+/workspace/build/picoarch-sources/fmsx/README.md:250:* MSXDOS2.ROM (MSX2/2+) - requires DISK.ROM too. When present, activates Disk BASIC 2.01.
+/workspace/build/picoarch-sources/fmsx/README.md:251:* PAINTER.ROM (MSX2/2+) - press space during boot to start
+/workspace/build/picoarch-sources/fmsx/README.md:314:  * MSX2+: Japanese JIS keyboard map - see below
+/workspace/build/picoarch-sources/fmsx/README.md:340:### MSX2+ Japanese keyboard map
+/workspace/build/picoarch-sources/fmsx/README.md:341:This is a typical MSX2+ with Japanese (JIS) keyboard layout:
+/workspace/build/picoarch-sources/fmsx/README.md:342:![Japanese keyboard](Japanese-MSX2+-keyboard.jpg)
+/workspace/build/picoarch-sources/fmsx/README.md:414:* .. and anything that requires accurate timing, like the MSX2+ boot screen.
+/workspace/build/picoarch-sources/fmsx/README.md:419:Video: 16bpp RGB565 (PSP: BGR565, PS2: BGR555) 272x228 (544x228 in 512px MSX2 screen modes). 
+/workspace/build/picoarch-sources/fmsx/README.md:426:The MSX2 supports interlacing, which is used by some software. Combined with showing two alternating pages, this increases
+/workspace/build/picoarch-sources/fmsx/README.md:440:In theory, [an MSX2 can show 512x512 pixels](https://www.msx.org/forum/development/msx-development/here-you-can-see-all-msx2-vram-your-screen) 
+/workspace/build/picoarch-sources/fmsx/README.md:453:The memory and [slot](https://www.msx.org/wiki/Slots) layout of this 'derivative' MSX model differs for model MSX1 vs. MSX2/2+.
+/workspace/build/picoarch-sources/fmsx/README.md:462:| page         | 0   | BIOS ^  | ROM content or empty                          | same |         |             | RAM mapper   |          | 0x0000-0x3FFF |
+/workspace/build/picoarch-sources/fmsx/README.md:479:#### MSX2/2+
+/workspace/build/picoarch-sources/fmsx/README.md:488:| page         |0  | BIOS ^  |b  |   |   | ROM content or empty                          | same | a              | extended BIOS * | RAM mapper   |          | 0x0000-0x3FFF |
+/workspace/build/picoarch-sources/fmsx/README.md:498:- \[0-1] PAINTER.ROM (64k, all 4 pages)
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:58:int  Mode        = MSX_MSX2|MSX_NTSC|MSX_MSXDOS2|MSX_GUESSA|MSX_GUESSB;
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:124:/** Kanji font ROM *******************************************/
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:125:uint8_t *Kanji;                       /* Kanji ROM 4096x32      */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:190:/** Places in BIOS to be patched with ED FE C9 ***************/
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:191:static const uint16_t BIOSPatches[] =
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:462:  Kanji       = 0;
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:529:  /* Try loading Kanji alphabet ROM */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:530:  if((Kanji = LoadROM("KANJI.ROM",0x20000,0))) { }
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:542:  /* If MSX2 or better and DiskROM present...  */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:548:  /* If MSX2 or better, load PAINTER cartridge */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:552:    if((J<MAXSLOTS)&&LoadCart("PAINTER.ROM",J,0)) ++J;
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:693:        P1=LoadROM("MSX.ROM",0x8000,0);
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:708:      case MSX_MSX2:
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:709:        P1=LoadROM("MSX2.ROM",0x8000,0);
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:710:        P2=LoadROM("MSX2EXT.ROM",0x4000,0);
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:730:      case MSX_MSX2P:
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:731:        P1=LoadROM("MSX2P.ROM",0x8000,0);
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:732:        P2=LoadROM("MSX2PEXT.ROM",0x4000,0);
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:762:  /* If hardware model changed ok, patch freshly loaded BIOS */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:765:    /* Apply patches to BIOS */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:766:    for(J=0;BIOSPatches[J];++J)
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:768:      P1=MemMap[0][0][0]+BIOSPatches[J];
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:827:    NewRAMPages=MODEL(MSX_MSX1)? 4:8; // MSX1 min&default: 64KiB, MSX2(+) min&default: 128KiB. Max 4MiB
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:829:    NewVRAMPages=MODEL(MSX_MSX1)? 2:8; // MSX1 min&default: 32KiB, MSX2(+) min&default: 128KiB. Max 192KiB (nonstandard)
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:932:  KanCount=0;KanLetter=0;               /* Kanji extension  */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:945:  /* Set "V9958" VDP version for MSX2+ */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:946:  if(MODEL(MSX_MSX2P)) VDPStatus[1]|=0x04;
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:1074:case 0xD9: /* Kanji support */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:1075:  Port=Kanji? Kanji[KanLetter+KanCount]:NORAM;
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:1218:case 0xD8: /* Upper bits of Kanji ROM address */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:1223:case 0xD9: /* Lower bits of Kanji ROM address */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.c:2312:  /* Add up cartridge ROMs, BIOS, BASIC, ExtBIOS, and DiskBIOS uint8_ts */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.h:131:#define MSX_MSX2      0x00000001 /* MSX2 computer (V9938)    */
+/workspace/build/picoarch-sources/fmsx/fMSX/MSX.h:132:#define MSX_MSX2P     0x00000002 /* MSX2+ computer (V9958)   */
+/workspace/build/picoarch-sources/fmsx/fMSX/Patch.c:83:/** Emulate BIOS calls. This function is called on an ED FE **/
+/workspace/build/picoarch-sources/fmsx/Z80/Z80.h:137:/** For example, it can be called to emulate BIOS calls,    **/
+/workspace/build/picoarch-sources/fmsx/Z80/CodesED.h:14:/** This is a special patch for emulating BIOS calls: ********/
+/workspace/build/picoarch-sources/fmsx/libretro.h:296: * the SAVE_DIRECTORY (preferably) or SYSTEM_DIRECTORY environment
+/workspace/build/picoarch-sources/fmsx/libretro.h:540:#define RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY 9
+/workspace/build/picoarch-sources/fmsx/libretro.h:544:                                            * content such as BIOSes, configuration data, etc.
+/workspace/build/picoarch-sources/fmsx/libretro.h:802:                                            * GET_SYSTEM_DIRECTORY.
+/workspace/build/picoarch-sources/fmsx/libretro.h:1711:   /* Describes what the content is (SGB BIOS, GB ROM, etc). */
+/workspace/build/picoarch-sources/fmsx/libretro.h:2441:    *    - RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY
+
+===== SMSPLUS GX =====
+/workspace/build/picoarch-sources/smsplus-gx/docs/contributors.txt:17:This fork also has code for Colecovision but Colecovision support seems to be a bit spotty and requires a BIOS.
+/workspace/build/picoarch-sources/smsplus-gx/docs/contributors.txt:69:See PocketSprite's patches. This CPU core is much less accurate and is unable to run games like Dizzy and some SG-1000 games.
+/workspace/build/picoarch-sources/smsplus-gx/docs/history.txt:15:- fixed Korean BIOS support
+/workspace/build/picoarch-sources/smsplus-gx/docs/history.txt:20:- added SG-1000 emulation
+/workspace/build/picoarch-sources/smsplus-gx/docs/history.txt:21:- added Colecovision emulation
+/workspace/build/picoarch-sources/smsplus-gx/docs/history.txt:76:- fixed SMS BIOS detection (place the BIOS rom on SDCARD in /smsplus/SMS_BIOS.sms)
+/workspace/build/picoarch-sources/smsplus-gx/docs/history.txt:108: - added port $3E emulation and full SMS BIOS support (see user notes)
+/workspace/build/picoarch-sources/smsplus-gx/docs/history.txt:150: - fixed VDP & Z80 SP registers initialization (usually done by BIOS): fixe games not working without BIOS (Ace of Aces, Shadow Dancer)
+/workspace/build/picoarch-sources/smsplus-gx/docs/PROBLEM_GAMES.txt:24:Relies on VDP register 1 being set by the BIOS.
+/workspace/build/picoarch-sources/smsplus-gx/docs/PROBLEM_GAMES.txt:25:I looked at what the BIOS outputs to that register and it's 0xE except for one BIOS setting it to 0xC.
+/workspace/build/picoarch-sources/smsplus-gx/docs/PROBLEM_GAMES.txt:50:(I believe this is partly the reason why games just use one chip at a time, except for the Japanese SMS bios)
+/workspace/build/picoarch-sources/smsplus-gx/docs/PROBLEM_GAMES.txt:72:Both rely on the BIOS setting the Z80's SP register to 0xDFF0.
+/workspace/build/picoarch-sources/smsplus-gx/docs/PROBLEM_GAMES.txt:79:On Consoles without a BIOS (Megadrive, Game Gear, Mark 3), area will most likely be random thus the game will lock up
+/workspace/build/picoarch-sources/smsplus-gx/docs/SordM5.txt:1:Sord M5 shares a lot in common with the SC-3000/SG-1000.
+/workspace/build/picoarch-sources/smsplus-gx/docs/SordM5.txt:6:Sord M5 also uses a stock PSG soundchip, which is the same as the SG-1000/SC-3000.
+/workspace/build/picoarch-sources/smsplus-gx/docs/WISHLIST.md:20:Shares a lot of similarities with the SG-1000/SC-3000 :
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:51:	/* detect CARTRIDGE/BIOS enabled/disabled */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:54:		/* autodetect loaded BIOS ROM */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:55:		if (!(bios.enabled & 2) && ((data & 0xE8) == 0xE8))
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:57:			bios.enabled = option.use_bios | 2;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:58:			memcpy(bios.rom, cart.rom, cart.size);
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:59:			memcpy(bios.fcr, cart.fcr, 4);
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:60:			bios.pages = cart.pages;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:64:		/* disables CART & BIOS by default */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:70:			case 0x00:  /* BIOS & CART enabled */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:71:			case 0x08:  /* BIOS disabled, CART enabled */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:80:			case 0x40:  /* BIOS enabled, CART disabled */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:81:			slot.rom    = bios.rom;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:82:			slot.pages  = bios.pages;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:84:			slot.fcr    = &bios.fcr[0];
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:367:/* SG1000,SC3000,SF7000 port handlers                                       */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:399:/* Colecovision port handlers                                               */
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:401:void coleco_port_w(uint16_t port, uint8_t data)
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:408:			coleco.pio_mode = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:414:			coleco.pio_mode = 1;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:424:uint8_t  coleco_port_r(uint16_t port)
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.c:433:			return coleco_pio_r((port>>1)&1);
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:31:	SLOT_BIOS   = 0,
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:63:	CONSOLE_COLECO  = 0x10,
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:64:	CONSOLE_SG1000  = 0x11,
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:87:#define HWTYPE_TMS  CONSOLE_COLECO
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:130:/* BIOS ROM */
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:138:} bios_t;
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:151:	uint8_t rom[0x2000];  /* BIOS ROM */
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:154:} t_coleco;
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:158:extern bios_t bios;
+/workspace/build/picoarch-sources/smsplus-gx/source/sms.h:160:extern t_coleco coleco;
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.h:46:extern void coleco_port_w(uint16_t port, uint8_t data);
+/workspace/build/picoarch-sources/smsplus-gx/source/memz80.h:47:extern uint8_t coleco_port_r(uint16_t port);
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3451:	* For Colecovision, we need to check for the Z80 registers.
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3452:	* Unfortunately, there are not a lot of test ROMs for the Colecovision.
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3456:		/* For SG-1000, Colecovision, it should be 0. */
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3464:	/* Because this is only affecting systems with an actual BIOS, we need to make sure it only sets it in such cases.
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3465:	 * This code should not affect the SG-1000, Mark3 either.
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3466:	 * TODO : Watch Colecovision BIOS */
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3467:	if (sms.territory == TERRITORY_EXPORT && IS_SMS && bios.enabled == 0)
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3469:		/* Fix Shadow Dancer & Ace of Aces (normally set by BIOS)
+/workspace/build/picoarch-sources/smsplus-gx/source/cpu_cores/z80/z80.c:3579:		// Unused for now. Might be useful for Colecovision later. Breaks Pitfall 2 apparently
+/workspace/build/picoarch-sources/smsplus-gx/source/pio.c:461:/* Colecovision I/O chip support */
+/workspace/build/picoarch-sources/smsplus-gx/source/pio.c:478:uint8_t coleco_pio_r(int32_t port)
+/workspace/build/picoarch-sources/smsplus-gx/source/pio.c:481:	if (coleco.pio_mode)
+/workspace/build/picoarch-sources/smsplus-gx/source/pio.c:494:		if (coleco.keypad[port] < 12)
+/workspace/build/picoarch-sources/smsplus-gx/source/pio.c:495:		temp = keymask[coleco.keypad[port]];
+/workspace/build/picoarch-sources/smsplus-gx/source/state.c:119:	if ((sms.console != CONSOLE_COLECO) && (sms.console != CONSOLE_SG1000) && (sms.console != CONSOLE_SORDM5))
+/workspace/build/picoarch-sources/smsplus-gx/source/pio.h:68:extern uint8_t coleco_pio_r(int32_t port);
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:28: * June 6th 2019 : Correctly set the PSG parameters for SG-1000 and Colecovision.
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:161:		case CONSOLE_COLECO:
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:164:		case CONSOLE_SG1000:
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:176:	(sms.console < CONSOLE_SMS) ? SN76489_NOISE_BITS_SG1000 : SN76489_NOISE_BITS_SMS, 
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:177:	(sms.console < CONSOLE_SMS) ? SN76489_NOISE_TAPPED_SG1000 : SN76489_NOISE_TAPPED_SMS);
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:257:	(sms.console < CONSOLE_SMS) ? SN76489_NOISE_BITS_SG1000 : SN76489_NOISE_BITS_SMS, 
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/sound.c:258:	(sms.console < CONSOLE_SMS) ? SN76489_NOISE_TAPPED_SG1000 : SN76489_NOISE_TAPPED_SMS);
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/mame_sn76489/sn76489.c:214:		/* Colecovision, SN76489 */
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/mame_sn76489/sn76489.c:224:		/* SG-1000, SN76489A */
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/crabemu_sn76489/sn76489.h:80:#define SN76489_NOISE_TAPPED_SG1000 SN76489_NOISE_TAPPED_NORMAL
+/workspace/build/picoarch-sources/smsplus-gx/source/sound/crabemu_sn76489/sn76489.h:81:#define SN76489_NOISE_BITS_SG1000   SN76489_NOISE_BITS_NORMAL
+/workspace/build/picoarch-sources/smsplus-gx/source/vdp.c:31: * March 9th 2019 : Set VDP register to 0xE0 after multiple testings against BIOSes. Fixes Sonic's Edusoft and i think California Games 2.
+/workspace/build/picoarch-sources/smsplus-gx/source/vdp.c:93:	/* VDP registers default values (usually set by BIOS) */
+/workspace/build/picoarch-sources/smsplus-gx/source/vdp.c:95:	if (IS_SMS && (bios.enabled != 3))
+/workspace/build/picoarch-sources/smsplus-gx/source/vdp.c:108:	if (sms.console == CONSOLE_COLECO)
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:27: * June 6th 2019 : Add Blockhole & Alibaba to the list as they rely on the Japanese BIOS and its uninitiliazed memory.
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:191:	/* Games requiring uninitialized work RAM due to Japanese BIOS not clearing memory. */
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:227:	"Missile Defense 3D [BIOS]"},
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:239:	"Hang-On / Safari Hunt [BIOS]"},
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:379:	/* enable BIOS on SMS only */
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:380:	bios.enabled &= 2;
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:398:			sms.console = CONSOLE_SG1000;
+/workspace/build/picoarch-sources/smsplus-gx/source/loadrom.c:402:			sms.console = CONSOLE_COLECO;
+/workspace/build/picoarch-sources/smsplus-gx/source/config.h:21:	uint8_t use_bios;
+/workspace/build/picoarch-sources/smsplus-gx/source/render.c:100:/* original TMS palette for SG-1000 & Colecovision */
+/workspace/build/picoarch-sources/smsplus-gx/source/render.c:120:  /* from Omar Cornut (http://www.smspower.org/dev/docs/sg1000.txt) */
+/workspace/build/picoarch-sources/smsplus-gx/source/render.c:137:  /* from Richard F. Drushel (http://users.stargate.net/~drushel/pub/coleco/twwmca/wk961118.html) */
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:149:	if (sms.console == CONSOLE_COLECO)
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:151:		coleco.keypad[0] = 0xff;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:152:		coleco.keypad[1] = 0xff;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:160:			coleco.keypad[0] = 1;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:163:			coleco.keypad[0] = 2;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:223:	if (sms.console == CONSOLE_COLECO) input.system = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:229:static void bios_init()
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:232:	char bios_path[256];
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:234:	bios.rom = malloc(0x100000);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:235:	bios.enabled = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:237:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS.sms");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:239:	fd = fopen(bios_path, "rb");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:247:		fread(bios.rom, size, 1, fd);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:248:		bios.enabled = 2;  
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:249:		bios.pages = size / 0x4000;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:253:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS.col");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:255:	fd = fopen(bios_path, "rb");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:259:		fread(coleco.rom, 0x2000, 1, fd);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:307:	snprintf(gdata.biosdir, sizeof(gdata.biosdir), "%sbios/", home_path);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:308:	if (mkdir(gdata.biosdir, 0755) && errno != EEXIST) {
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:560:	if (bios.rom) free(bios.rom);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:602:	// Force Colecovision mode if extension is .col
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.c:643:	bios_init();
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/zipit/smsplus.h:25:	char biosdir[256];
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:174:	if (sms.console == CONSOLE_COLECO)
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:176:		coleco.keypad[0] = 0xff;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:177:		coleco.keypad[1] = 0xff;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:184:			coleco.keypad[0] = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:188:			coleco.keypad[0] = 1;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:192:			coleco.keypad[0] = 2;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:196:			coleco.keypad[0] = 3;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:200:			coleco.keypad[0] = 4;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:204:			coleco.keypad[0] = 5;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:208:			coleco.keypad[0] = 6;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:212:			coleco.keypad[0] = 7;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:216:			coleco.keypad[0] = 8;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:220:			coleco.keypad[0] = 9;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:224:			coleco.keypad[0] = 10;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:228:			coleco.keypad[0] = 11;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:282:	if (sms.console == CONSOLE_COLECO) input.system = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:287:static void bios_init()
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:290:	char bios_path[256];
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:292:	bios.rom = malloc(0x100000);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:293:	bios.enabled = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:295:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS.sms");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:297:	fd = fopen(bios_path, "rb");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:305:		fread(bios.rom, size, 1, fd);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:306:		bios.enabled = 2;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:307:		bios.pages = size / 0x4000;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:311:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS.col");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:313:	fd = fopen(bios_path, "rb");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:317:		fread(coleco.rom, 0x2000, 1, fd);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:321:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS_sordm5.bin");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:323:	fd = fopen(bios_path, "rb");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:327:		fread(coleco.rom, 0x2000, 1, fd);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:375:	snprintf(gdata.biosdir, sizeof(gdata.biosdir), "%sbios/", home_path);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:376:	if (mkdir(gdata.biosdir, 0755) && errno != EEXIST) {
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:631:	if (bios.rom) free(bios.rom);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:632:	bios.rom = NULL;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:674:	// Force Colecovision mode if extension is .col
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.c:727:	bios_init();
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/sdl/smsplus.h:27:	char biosdir[256];
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:198:	if (sms.console == CONSOLE_COLECO)
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:200:		coleco.keypad[0] = 0xff;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:201:		coleco.keypad[1] = 0xff;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:203:		if (k == option.config_buttons[CONFIG_BUTTON_ONE]) coleco.keypad[0] = 1;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:204:		else if (k == option.config_buttons[CONFIG_BUTTON_TWO]) coleco.keypad[0] = 2;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:205:		else if (k == option.config_buttons[CONFIG_BUTTON_THREE]) coleco.keypad[0] = 3;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:206:		else if (k == option.config_buttons[CONFIG_BUTTON_FOUR]) coleco.keypad[0] = 4;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:207:		else if (k == option.config_buttons[CONFIG_BUTTON_FIVE]) coleco.keypad[0] = 5;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:208:		else if (k == option.config_buttons[CONFIG_BUTTON_SIX]) coleco.keypad[0] = 6;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:209:		else if (k == option.config_buttons[CONFIG_BUTTON_SEVEN]) coleco.keypad[0] = 7;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:210:		else if (k == option.config_buttons[CONFIG_BUTTON_EIGHT]) coleco.keypad[0] = 8;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:211:		else if (k == option.config_buttons[CONFIG_BUTTON_NINE]) coleco.keypad[0] = 9;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:212:		else if (k == option.config_buttons[CONFIG_BUTTON_DOLLARS]) coleco.keypad[0] = 10;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:213:		else if (k == option.config_buttons[CONFIG_BUTTON_ASTERISK]) coleco.keypad[0] = 11;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:290:	if (sms.console == CONSOLE_COLECO) input.system = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:296:static void bios_init()
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:299:	char bios_path[256];
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:301:	bios.rom = malloc(0x100000);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:302:	bios.enabled = 0;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:304:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS.sms");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:306:	fd = fopen(bios_path, "rb");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:314:		fread(bios.rom, size, 1, fd);
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:315:		bios.enabled = 2;  
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:316:		bios.pages = (uint16_t)size / 0x4000;
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:320:	snprintf(bios_path, sizeof(bios_path), "%s%s", gdata.biosdir, "BIOS.col");
+/workspace/build/picoarch-sources/smsplus-gx/source/ports/350h/smsplus.c:322:	fd = fopen(bios_path, "rb");
+
+===== PRBOOM =====
+188: * `prboom -iwad <path> -file <p1> <p2> ... -deh <d1> ... -baseconfig <c>`,
+210:/* Whether to search for IWADs on parent folders recursively */
+658: * IWADs ship the file as DOOM.WAD / DOOM2.WAD / etc., while the
+659: * engine consistently asks lowercase -- standard_iwads[] entries are
+661: * lowercase, and the basename copied to -iwad from the libretro
+664: * #188 ("Doom1.wad megawads don't work" -- same root cause, exposed
+665: * via the IWAD-not-found path when a Doom 1 PWAD is loaded next to
+725: * a user typed into an m3u playlist (`doom2.wad`) when the on-disk
+726: * file is `DOOM2.WAD`: filestream_open won't tolerate the mismatch
+882: * largest PWADs, some of which exceed 600 MB -- and never drop below a
+1008:   info->valid_extensions = "wad|iwad|pwad|lmp|m3u|pk3|ipk3|zip";
+1861: * PWAD-headered file is a strong signal that the file is intended as
+1863: * PWAD magic but contains its own complete lump set (palette,
+1866: * IdentifyVersion runs and errors out with "IWAD not found" because
+1907:/* PWAD "map kind": which IWAD generation the PWAD's maps target.
+1909: * For a genuine add-on PWAD we emit -file <path> and let the engine's
+1910: * FindIWADFile pick an IWAD by iterating standard_iwads[] in d_main.c.
+1911: * That list probes doom2.wad / doom2f.wad / plutonia.wad / tnt.wad /
+1912: * freedoom2.wad BEFORE doom.wad / doomu.wad / freedoom1.wad / ..., so
+1913: * a directory with both DOOM 1 and DOOM 2 IWADs side-by-side always
+1915: * like SIGIL.WAD with a doom2.wad next to it, the engine boots in
+1920: * Peek at the PWAD's lump directory: ExMy markers (E1..E5 maps) mean
+1928:   PWAD_MAP_NONE,        /* no map markers (graphics / sound / DEH-only PWAD) */
+1929:   PWAD_MAP_DOOM1,       /* ExMy markers found */
+1930:   PWAD_MAP_DOOM2,       /* MAPxx markers found */
+1931:   PWAD_MAP_HERETIC      /* ExMy markers + a Heretic signature (see below) */
+1932:} pwad_map_kind_t;
+1934:static pwad_map_kind_t scan_pwad_map_kind(const char *path,
+1947:      return PWAD_MAP_NONE;
+1952:      return PWAD_MAP_NONE;
+1956:      return PWAD_MAP_NONE;
+1984:       * Heretic-targeted PWAD, even a pure map-replacement pack that
+1997:    * otherwise MAPxx (Hexen/DOOM 2) PWAD must not be mis-routed here. */
+1999:      return PWAD_MAP_HERETIC;
+2001:      return PWAD_MAP_DOOM2;
+2003:      return PWAD_MAP_DOOM1;
+2004:   return PWAD_MAP_NONE;
+2008: * IWAD that matches the requested map kind.  Returns a heap-allocated
+2013: * Candidate order within each kind mirrors d_main.c's standard_iwads[]
+2014: * preference: official releases before freedoom fallbacks, common
+2016:static char *find_iwad_for_kind(pwad_map_kind_t kind)
+2019:      "doom.wad", "doomu.wad", "freedoom1.wad", "freedoom.wad", "doom1.wad"
+2022:      "doom2.wad", "doom2f.wad", "plutonia.wad", "tnt.wad", "freedoom2.wad"
+2024:   /* Heretic IWAD filenames: the full "Shadow of the Serpent Riders"
+2025:    * / registered release is heretic.wad; the E1-only shareware IWAD
+2026:    * ships as heretic1.wad.  blasphem.wad is the Freedoom-style free
+2027:    * Heretic-compatible IWAD. */
+2034:   char *system_dir = NULL;
+2035:   char *prboom_subdir = NULL;
+2038:   if (kind == PWAD_MAP_DOOM1)
+2043:   else if (kind == PWAD_MAP_DOOM2)
+2048:   else if (kind == PWAD_MAP_HERETIC)
+2056:   environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &system_dir);
+2057:   if (system_dir && *system_dir)
+2059:      prboom_subdir = malloc(strlen(system_dir) + 8);
+2060:      if (prboom_subdir)
+2061:         sprintf(prboom_subdir, "%s%c%s", system_dir, DIR_SLASH, "prboom");
+2069:      /* system_dir/prboom -- the canonical libretro IWAD stash */
+2070:      if (prboom_subdir && (hit = FindFileInDir(prboom_subdir, list[i], NULL)))
+2072:      /* system_dir directly -- some users drop IWADs here */
+2073:      if (system_dir && *system_dir && (hit = FindFileInDir(system_dir, list[i], NULL)))
+2078:   free(prboom_subdir);
+2083: * the same places find_iwad_for_kind searches: next to the loaded content,
+2084: * then system_dir/prboom, then system_dir.  ZDoom-targeted pk3s name stock
+2092:   char *system_dir = NULL;
+2093:   char *prboom_subdir = NULL;
+2096:   environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &system_dir);
+2097:   if (system_dir && *system_dir)
+2099:      prboom_subdir = malloc(strlen(system_dir) + 8);
+2100:      if (prboom_subdir)
+2101:         sprintf(prboom_subdir, "%s%c%s", system_dir, DIR_SLASH, "prboom");
+2108:      if (prboom_subdir &&
+2109:          (hit = FindFileInDir(prboom_subdir, candidates[i], NULL)))
+2111:      if (system_dir && *system_dir &&
+2112:          (hit = FindFileInDir(system_dir, candidates[i], NULL)))
+2117:   free(prboom_subdir);
+2124: * the correct argv chunk (-iwad / -file / -deh).  Same rules the
+2129:   ENTRY_IWAD,    /* primary IWAD: header == "IWAD", or "PWAD" + PLAYPAL */
+2130:   ENTRY_PWAD,    /* genuine add-on PWAD */
+2153:   if (!strncmp(header.identification, "IWAD", 4))
+2154:      return ENTRY_IWAD;
+2155:   if (!strncmp(header.identification, "PWAD", 4))
+2158:         return ENTRY_IWAD;
+2159:      return ENTRY_PWAD;
+2230:       * IWAD distributions ship DOOM.WAD / DOOM2.WAD uppercase, but
+2231:       * a user's m3u line might say `doom2.wad` -- on case-sensitive
+2332:          * load order.  Parse them, find the IWAD, and stage the
+2340:         int j, iwad_idx = -1, file_emitted = 0, deh_emitted = 0;
+2348:            if (kinds[j] == ENTRY_IWAD) { iwad_idx = j; break; }
+2349:         if (iwad_idx < 0)
+2352:            I_Error("retro_load_game: m3u '%s' has no IWAD entry",
+2356:         /* -iwad goes first.  Pass the full resolved path so the
+2357:          * engine doesn't fall through to standard_iwads[]; the
+2360:         argv[argc++] = strdup("-iwad");
+2361:         argv[argc++] = strdup(paths[iwad_idx]);
+2362:         /* Then -file with every PWAD, PK3/ZIP archive (and any extra
+2363:          * IWAD-shape entries beyond the first) in playlist order.  Before
+2371:               if (j == iwad_idx) continue;
+2372:               if (kinds[j] == ENTRY_PWAD || kinds[j] == ENTRY_IWAD ||
+2425:         if(!strncmp(header.identification, "IWAD", 4))
+2427:            argv[argc++] = strdup("-iwad");
+2430:         else if(!strncmp(header.identification, "PWAD", 4))
+2432:            /* Decide whether this PWAD is a genuine add-on (needs an
+2433:             * external IWAD) or a standalone game shipped with PWAD magic
+2437:             * standalone IWAD: many add-on PWADs (notably DSDHacked total
+2439:             * while still depending on a real IWAD for the status bar,
+2441:             * -iwad, the engine never loads doom2.wad and dies later on a
+2442:             * missing IWAD lump (STKEYS*, STF*, MFLR8_4, ...).
+2444:             * So: if the PWAD carries map markers AND we can actually find
+2445:             * an IWAD of the matching generation nearby, treat it as an
+2446:             * add-on and steer it onto that IWAD -- this takes priority
+2447:             * over the PLAYPAL heuristic.  Only when no suitable IWAD can
+2448:             * be found do we fall back to treating a PLAYPAL-bearing PWAD
+2449:             * as a standalone IWAD (preserving the chex.wad-with-no-doom
+2451:            pwad_map_kind_t kind = scan_pwad_map_kind(info->path, &header);
+2452:            char *iwad_match = (kind != PWAD_MAP_NONE)
+2453:                               ? find_iwad_for_kind(kind) : NULL;
+2457:                      "retro_load_game: PWAD '%s' map kind=%s, "
+2458:                      "matching IWAD=%s\n", g_basename,
+2459:                      kind == PWAD_MAP_DOOM1   ? "ExMy(DOOM1)"   :
+2460:                      kind == PWAD_MAP_DOOM2   ? "MAPxx(DOOM2)"  :
+2461:                      kind == PWAD_MAP_HERETIC ? "ExMy(HERETIC)" : "none",
+2462:                      iwad_match ? iwad_match : "(none found)");
+2466:             * IWAD is present and vice versa, and a kind==none scan (some
+2468:             * still needs a real IWAD if one exists.  Only fall back to the
+2469:             * PLAYPAL standalone-IWAD path when NO standard IWAD is findable
+2472:             * A confirmed Heretic PWAD is excluded from this cross-probe:
+2474:             * pairing it with a DOOM IWAD boots the wrong game and crashes
+2478:            if (!iwad_match && kind != PWAD_MAP_HERETIC)
+2480:               iwad_match = find_iwad_for_kind(PWAD_MAP_DOOM2);
+2481:               if (!iwad_match)
+2482:                  iwad_match = find_iwad_for_kind(PWAD_MAP_DOOM1);
+2485:            if (iwad_match)
+2487:               /* Add-on PWAD with a real IWAD available: pair them. */
+2490:                         "retro_load_game: steering PWAD '%s' toward "
+2491:                         "IWAD '%s'\n", g_basename, iwad_match);
+2492:               argv[argc++] = strdup("-iwad");
+2493:               argv[argc++] = iwad_match;  /* already heap from FindFileInDir */
+2499:               /* No standard IWAD found anywhere, but the PWAD carries its
+2500:                * own palette: a genuine standalone game shipped with PWAD
+2501:                * magic (chex.wad and friends).  CheckIWAD accepts PWAD
+2502:                * magic, so -iwad routing works. */
+2505:                         "retro_load_game: no external IWAD found for '%s'; "
+2507:                         "IWAD\n", g_basename);
+2508:               argv[argc++] = strdup("-iwad");
+2513:               /* No IWAD found and no own palette.  Let the engine's
+2514:                * FindIWADFile auto-detect try; warn for the Doom 1 case. */
+2515:               if (kind == PWAD_MAP_HERETIC && log_cb)
+2517:                         "retro_load_game: PWAD '%s' is a Heretic add-on "
+2520:                         "near the PWAD or in the system directory.  Place "
+2521:                         "the Heretic IWAD next to '%s' or use an m3u "
+2524:               else if (kind == PWAD_MAP_DOOM1 && log_cb)
+2526:                         "retro_load_game: PWAD '%s' has DOOM 1 (ExMy) "
+2527:                         "maps but no doom.wad / doomu.wad / freedoom1.wad / "
+2528:                         "freedoom.wad / doom1.wad found near the PWAD "
+2530:                         "IWAD next to '%s' or use an m3u playlist to "
+2531:                         "name the IWAD explicitly.\n",
+2544:             * core does not support yet), so pair them with whatever IWAD
+2546:             * doom2.wad, so prefer the DOOM2 generation. */
+2547:            char *iwad_match = find_iwad_for_kind(PWAD_MAP_DOOM2);
+
+===== FCEUMM FDS =====
+/workspace/build/picoarch-sources/fceumm/src/general.c:67:               "disksys.rom", sizeof(tmp));
+/workspace/build/picoarch-sources/fceumm/src/drivers/libretro/libretro.c:3988:            environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &hd_sys_dir) &&
+/workspace/build/picoarch-sources/fceumm/src/drivers/libretro/libretro.c:4068:   if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &system_dir) && system_dir)
+/workspace/build/picoarch-sources/fceumm/src/nsf.c:375:				BWrite[0x4017](0x4017, 0xC0);	/* FDS BIOS writes $C0 */
+/workspace/build/picoarch-sources/fceumm/src/fds_apu.c:462:	/* BIOS-style register reset.  Matches what the FDS BIOS does on
+/workspace/build/picoarch-sources/fceumm/src/fds_apu.c:486: * the standard FDS BIOS layout.  Same signature as before the backport. */
+/workspace/build/picoarch-sources/fceumm/src/fds.c:67:static uint8_t *FDSBIOS = NULL;
+/workspace/build/picoarch-sources/fceumm/src/fds.c:68:static uint32_t FDSBIOSsize;
+/workspace/build/picoarch-sources/fceumm/src/fds.c:594:	if (FDSBIOS)
+/workspace/build/picoarch-sources/fceumm/src/fds.c:595:		free(FDSBIOS);
+/workspace/build/picoarch-sources/fceumm/src/fds.c:596:	FDSBIOS = NULL;
+/workspace/build/picoarch-sources/fceumm/src/fds.c:687:		FCEU_PrintError("FDS BIOS ROM image missing!\n");
+/workspace/build/picoarch-sources/fceumm/src/fds.c:688:		FCEUD_DispMessage(RETRO_LOG_ERROR, 3000, "FDS BIOS image (disksys.rom) missing");
+/workspace/build/picoarch-sources/fceumm/src/fds.c:699:	FDSBIOSsize = 8192;
+/workspace/build/picoarch-sources/fceumm/src/fds.c:700:	FDSBIOS = (uint8_t*)FCEU_gmalloc(FDSBIOSsize);
+/workspace/build/picoarch-sources/fceumm/src/fds.c:701:	if (!FDSBIOS) {
+/workspace/build/picoarch-sources/fceumm/src/fds.c:705:	SetupCartPRGMapping(0, FDSBIOS, FDSBIOSsize, 0);
+/workspace/build/picoarch-sources/fceumm/src/fds.c:707:	if (FCEU_fread(FDSBIOS, 1, FDSBIOSsize, zp) != FDSBIOSsize) {
+/workspace/build/picoarch-sources/fceumm/src/fds.c:708:		if (FDSBIOS)
+/workspace/build/picoarch-sources/fceumm/src/fds.c:709:			free(FDSBIOS);
+/workspace/build/picoarch-sources/fceumm/src/fds.c:710:		FDSBIOS = NULL;
+/workspace/build/picoarch-sources/fceumm/src/fds.c:712:		FCEU_PrintError("Error reading FDS BIOS ROM image.\n");
+/workspace/build/picoarch-sources/fceumm/src/fds.c:713:		FCEUD_DispMessage(RETRO_LOG_ERROR, 3000, "Error reading FDS BIOS image (disksys.rom)");
+/workspace/build/picoarch-sources/fceumm/src/fds.c:722:		if (FDSBIOS)
+/workspace/build/picoarch-sources/fceumm/src/fds.c:723:			free(FDSBIOS);
+/workspace/build/picoarch-sources/fceumm/src/fds.c:724:		FDSBIOS = NULL;
+/workspace/build/picoarch-sources/fceumm/src/fds.c:736:			if (FDSBIOS)
+/workspace/build/picoarch-sources/fceumm/src/fds.c:737:				free(FDSBIOS);
+/workspace/build/picoarch-sources/fceumm/src/fds.c:738:			FDSBIOS = NULL;
+/workspace/build/picoarch-sources/fceumm/README.md:16:| `.fds` | Famicom Disk System images (requires BIOS, see below) |
+/workspace/build/picoarch-sources/fceumm/README.md:26:| `disksys.rom` | Famicom Disk System BIOS (8 KB), placed in the frontend's system directory | For FDS content only |
+
+===== PICOARCH CORE TYPES =====
+34:beetle-pce-fast_TYPES = pce,cue,ccd,chd,toc,m3u
+37:bluemsx_TYPES = rom,ri,mx1,mx2,dsk,col,sg,sc,cas,m3u
+41:dosbox-pure_TYPES = zip,dosz,exe,com,bat,iso,cue,ins,img,ima,vhd,jrc,tc,m3u,m3u8,conf
+52:fake-08_TYPES = p8,png
+56:fbalpha2012_TYPES = zip
+60:fceumm_TYPES = fds,nes,unf,unif
+63:fmsx_TYPES = rom,mx1,mx2,dsk,cas
+66:gambatte_TYPES = gb,gbc,dmg,zip
+70:gpsp_TYPES = gba,bin,zip
+73:mame2000_TYPES = zip
+76:mame2003_plus_TYPES = zip
+79:mednafen_ngp_TYPES = ngp,ngc,ngpc,npc
+82:mednafen_wswan_TYPES = ws,wsc,pc2
+85:pcsx_rearmed_TYPES = bin,cue,img,mdf,pbp,toc,cbn,m3u,chd
+88:picodrive_TYPES = bin,gen,smd,md,32x,cue,iso,chd,sms,gg,m3u,68k,sgd
+90:pokemini_TYPES = min
+93:prboom_TYPES = wad,iwad,pwad,lmp
+96:quicknes_TYPES = nes
+98:scummvm_TYPES = scummvm
+102:smsplus-gx_TYPES = sms,bin,rom,col,gg,sg
+104:snes9x2002_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+108:snes9x2005_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+113:snes9x2005_plus_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+115:snes9x2010_TYPES = smc,fig,sfc,gd3,gd7,dx2,bsx,swc,zip
+118:stella2014_TYPES = a26,bin
+120:tyrquake_TYPES = pak
+470:gme_TYPES = ay,gbs,gym,hes,kss,nsf,nsfe,sap,spc,vgm,vgz,zip

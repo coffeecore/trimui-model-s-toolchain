@@ -1,0 +1,98 @@
+===== FDS =====
+
+===== GBA =====
+
+===== PCE CD =====
+
+===== PLAYSTATION =====
+
+===== SEGA CD =====
+
+===== 32X =====
+
+===== FMSX =====
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/Shared Roms/KANJI.rom
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/Shared Roms/MSX.rom
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/Shared Roms/MSX2PEXT.rom
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/Shared Roms/MSX2P.rom
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/Shared Roms/MSX2.rom
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/Shared Roms/MSX2EXT.rom
+/workspace/build/picoarch-sources/bluemsx/system/bluemsx/Machines/MSX2+ - European/KANJI.rom
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/KANJI.ROM
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/MSX2PEXT.ROM
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/MSX2EXT.ROM
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/MSX2P.ROM
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/DISK.ROM
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/MSX.ROM
+/workspace/build/picoarch-sources/fmsx/fMSX/ROMs/MSX2.ROM
+
+===== MINUI BIOS REFERENCES =====
+/workspace/sources/minui/paks/PlayStation.pak/post.sh:8:if [ ! -f ./bios/scph5502.bin ]; then
+/workspace/sources/minui/paks/PlayStation.pak/post.sh:10:	cp "/usr/trimui/bin/pcsx_rearmed/bios/scph5502.bin" ./bios
+/workspace/sources/minui/paks/Game Boy Advance.pak/post.sh:10:	rm -f gba_bios.bin
+/workspace/sources/minui/third-party/picodrive/platform/common/emu.c:165:	"us_scd2_9306", "SegaCDBIOS9303", "us_scd1_9210", "bios_CD_U"
+/workspace/sources/minui/third-party/picodrive/platform/common/emu.c:168:	"eu_mcd2_9306", "eu_mcd2_9303", "eu_mcd1_9210", "bios_CD_E"
+/workspace/sources/minui/third-party/picodrive/platform/common/emu.c:171:	"jp_mcd2_921222", "jp_mcd1_9112", "jp_mcd1_9111", "bios_CD_J"
+/workspace/sources/minui/third-party/picodrive/platform/libretro/libretro.c:1100:   "us_scd2_9306", "SegaCDBIOS9303", "us_scd1_9210", "bios_CD_U"
+/workspace/sources/minui/third-party/picodrive/platform/libretro/libretro.c:1103:   "eu_mcd2_9306", "eu_mcd2_9303", "eu_mcd1_9210", "bios_CD_E"
+/workspace/sources/minui/third-party/picodrive/platform/libretro/libretro.c:1106:   "jp_mcd2_921222", "jp_mcd1_9112", "jp_mcd1_9111", "bios_CD_J"
+/workspace/sources/minui/third-party/pcsx_rearmed/include/psemu_plugin_defs.h:158:// MOUSE SCPH-1030
+/workspace/sources/minui/third-party/pcsx_rearmed/include/psemu_plugin_defs.h:164:// STANDARD PAD SCPH-1080, SCPH-1150
+/workspace/sources/minui/third-party/pcsx_rearmed/include/psemu_plugin_defs.h:166:// ANALOG JOYSTICK SCPH-1110
+/workspace/sources/minui/third-party/pcsx_rearmed/include/psemu_plugin_defs.h:170:// ANALOG CONTROLLER SCPH-1150
+/workspace/sources/minui/third-party/pcsx_rearmed/include/psemu_plugin_defs.h:239:	char CdromID[9];	// ie. 'SCPH12345', no \0 trailing character
+/workspace/sources/minui/third-party/pcsx_rearmed/libpcsxcore/plugins.c:692:		case PSE_PAD_TYPE_ANALOGPAD: // scph1150
+/workspace/sources/minui/third-party/pcsx_rearmed/libpcsxcore/plugins.c:703:		case PSE_PAD_TYPE_ANALOGJOY: // scph1110
+/workspace/sources/minui/third-party/pcsx_rearmed/libpcsxcore/psxbios.c:2954:	//biosB0[0x40] = psxBios_cd;
+/workspace/sources/minui/third-party/pcsx_rearmed/libpcsxcore/plugins.h:290:	char CdromID[9];	// ie. 'SCPH12345', no \0 trailing character
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/libretro.c:2611:      if ((strncasecmp(ent->d_name, "scph", 4) != 0) && (strncasecmp(ent->d_name, "psx", 3) != 0))
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/libretro.c:2687:      "SCPH101", "scph101",
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/libretro.c:2688:      "SCPH5501", "scph5501",
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/libretro.c:2689:      "SCPH7001", "scph7001",
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/libretro.c:2690:      "SCPH1001", "scph1001"
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/menu.c:1310:	"Standard (SCPH-1080)",
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/menu.c:1311:	"Analog (SCPH-1150)",
+/workspace/sources/minui/third-party/pcsx_rearmed/frontend/menu.c:1999:		"The file is usually named SCPH1001.BIN,\n"
+/workspace/sources/minui/third-party/picogpsp/libretro.c:970:     strcat(filename_bios, "/gba_bios.bin");
+/workspace/sources/minui/third-party/picogpsp/libretro.c:989:     memcpy(bios_rom, open_gba_bios_rom, sizeof(bios_rom));
+/workspace/sources/minui/third-party/picogpsp/gba_memory.h:216:extern u8 open_gba_bios_rom[1024*16];
+/workspace/sources/minui/third-party/picogpsp/frontend/main.c:364:	strncat(bios_filename, "gba_bios.bin", MAXPATHLEN - strlen(bios_filename));
+/workspace/sources/minui/third-party/picogpsp/frontend/main.c:372:		strncat(bios_filename, "/.picogpsp/gba_bios.bin", MAXPATHLEN - strlen(bios_filename));
+/workspace/sources/minui/third-party/picogpsp/frontend/main.c:380:			strncat(bios_filename, "/gba_bios.bin", MAXPATHLEN - strlen(bios_filename));
+/workspace/sources/minui/third-party/picogpsp/frontend/main.c:401:    memcpy(bios_rom, open_gba_bios_rom, sizeof(bios_rom));
+/workspace/sources/minui/third-party/fceux/README:67:   NOTE: You must put a copy of your fds bios (disksys.rom)
+/workspace/sources/minui/third-party/fceux/src/file.cpp:781:				sprintf(ret,"%s" PSS "disksys.rom",odirs[FCEUIOD_FDSROM]);
+/workspace/sources/minui/third-party/fceux/src/file.cpp:783:				sprintf(ret,"%s" PSS "disksys.rom",FileBaseDirectory);
+/workspace/sources/minui/third-party/fceux/src/file.cpp:785:					sprintf(ret,"%s" PSS "disksys.rom",BaseDirectory.c_str());
+/workspace/sources/minui/third-party/fceux/src/drivers/sdl/gui.cpp:1554:	gtk_file_filter_add_pattern(filterDiskSys, "disksys.rom");
+/workspace/sources/minui/third-party/fceux/src/drivers/sdl/gui.cpp:1555:	gtk_file_filter_set_name(filterDiskSys, "disksys.rom");
+/workspace/sources/minui/third-party/fceux/src/drivers/sdl/gui.cpp:1566:	fileChooser = gtk_file_chooser_dialog_new ("Load FDS BIOS (disksys.rom)", GTK_WINDOW(MainWindow),
+/workspace/sources/minui/third-party/fceux/src/drivers/sdl/gui.cpp:1578:		// copy BIOS file to proper place (~/.fceux/disksys.rom)
+/workspace/sources/minui/third-party/fceux/src/driver.h:210:#define FCEUIOD_FDSROM  3	//disksys.rom
+/workspace/sources/minui/third-party/temper/main.c:23:	snprintf(sys_path, MAX_PATH, "%s/%s", config.main_path, "syscards"); 
+/workspace/sources/minui/third-party/temper/main.c:61:		printf("syscard directory doesn't exist, creating\n");
+/workspace/sources/minui/third-party/temper/README.md:18:Alternatively, you can also put the syscards bios in /media/home/.temper/syscards.
+/workspace/sources/minui/third-party/temper/README.md:19:Name it syscard3.pce and you're ready to play CD games !
+/workspace/sources/minui/third-party/temper/README.md:34:Don't forget to put the syscard file in /media/home/.temper/syscards !
+/workspace/sources/minui/third-party/temper/README.md:35:It needs to be called either syscard1.pce, syscard2.pce, syscard3.pce
+/workspace/sources/minui/third-party/temper/arcade_card.c:274:  // This puts it beyond the 392KB needed for the syscard itself
+/workspace/sources/minui/third-party/temper/memory.c:1275:s32 load_syscard()
+/workspace/sources/minui/third-party/temper/memory.c:1282:  char syscard_path[MAX_PATH];
+/workspace/sources/minui/third-party/temper/memory.c:1283:  char *syscard_name;
+/workspace/sources/minui/third-party/temper/memory.c:1288:      syscard_name = "syscard1";
+/workspace/sources/minui/third-party/temper/memory.c:1292:      syscard_name = "syscard2";
+/workspace/sources/minui/third-party/temper/memory.c:1298:      syscard_name = "syscard3";
+/workspace/sources/minui/third-party/temper/memory.c:1302:      syscard_name = "games_express";
+/workspace/sources/minui/third-party/temper/memory.c:1306:  printf("loading syscard %s\n", syscard_name);
+/workspace/sources/minui/third-party/temper/memory.c:1308:  sprintf(syscard_path, "%s%csyscards%c%s.bin", config.main_path,
+/workspace/sources/minui/third-party/temper/memory.c:1309:   DIR_SEPARATOR_CHAR, DIR_SEPARATOR_CHAR, syscard_name);
+/workspace/sources/minui/third-party/temper/memory.c:1311:  rom_file = fopen(syscard_path, "rb");
+/workspace/sources/minui/third-party/temper/memory.c:1315:    sprintf(syscard_path, "%s%csyscards%c%s.pce", config.main_path,
+/workspace/sources/minui/third-party/temper/memory.c:1316:     DIR_SEPARATOR_CHAR, DIR_SEPARATOR_CHAR, syscard_name);
+/workspace/sources/minui/third-party/temper/memory.c:1318:    printf("could not open syscard, trying %s\n", syscard_path);
+/workspace/sources/minui/third-party/temper/memory.c:1319:    rom_file = fopen(syscard_path, "rb");
+/workspace/sources/minui/third-party/temper/memory.c:1388:      if((strlen(path) > 7) && (strcasecmp(dot_ptr - 7, "syscard.bin")))
+/workspace/sources/minui/third-party/temper/memory.c:1535:    if(load_syscard() == -1)
+/workspace/sources/minui/build/PAYLOAD/Emus/PlayStation.pak/post.sh:8:if [ ! -f ./bios/scph5502.bin ]; then
+/workspace/sources/minui/build/PAYLOAD/Emus/PlayStation.pak/post.sh:10:	cp "/usr/trimui/bin/pcsx_rearmed/bios/scph5502.bin" ./bios
+/workspace/sources/minui/build/PAYLOAD/Emus/Game Boy Advance.pak/post.sh:10:	rm -f gba_bios.bin

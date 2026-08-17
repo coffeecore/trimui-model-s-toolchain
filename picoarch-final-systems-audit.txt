@@ -1,0 +1,174 @@
+===== BS-X BIOS =====
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.h:25:extern uint8_t  *BSXBIOSROMBase;
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:113:static void BSX_Map_BIOS (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:119:static uint8_t BSX_LoadBIOS (void);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:466:static void BSX_Map_BIOS (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:542:	BSX_Map_BIOS();
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:592:	/* BS-X BIOS performs after a Sharp command. In plain flash-read mode */
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:1263:static uint8_t BSX_LoadBIOS (void)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:1270:	sprintf(name, "%s%sBS-X.bin", S9xGetDirectory(BIOS_DIR), SLASH_STR);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:1274:		sprintf(name, "%s%sBS-X.bios", S9xGetDirectory(BIOS_DIR), SLASH_STR);
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:1298:static uint8_t is_BSX_BIOS (const uint8_t *data, uint32_t size)
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:1315:	if (is_BSX_BIOS(ROM,Memory.CalculatedSize))
+/workspace/build/picoarch-sources/snes9x2010/src/bsx.c:1364:			if (!BSX_LoadBIOS() && !is_BSX_BIOS(BIOSROM,BIOS_SIZE))
+
+===== SUFAMI DIRECT CONTENT =====
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:833: * If called, it should be called in <tt>retro_load_game()</tt>.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:865: * @note This function should be called inside \c retro_load_game()
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:877: * Ideally, no later than \c retro_load_game().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:945: * @note Should be called in <tt>retro_load_game()</tt>.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1044: * \c retro_load_game receives an argument of <tt>NULL</tt>.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1053: * @see retro_load_game
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1136: * Should be called from either \c retro_init() or \c retro_load_game(),
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1210: * Should be called in \c retro_load_game().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1434: * it must call \c retro_load_game_special() instead of \c retro_load_game().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1446: * @see retro_load_game_special
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1484: * Should be called in retro_load_game.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:1852: * ideally in \c retro_set_environment (but \c retro_load_game is acceptable).
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2176:                                            * in retro_load_game() or retro_load_game_special().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2227:                                            *   retro_load_game() (or retro_load_game_special())
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2241:                                            * retro_load_game() or retro_load_game_special().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2254:                                            * - If function is called inside retro_load_game(),
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2264:                                            * - If the function is called inside retro_load_game_special(),
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2267:                                            *   retro_load_game_special()
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2280: * ideally in \c retro_set_environment (but \c retro_load_game is acceptable).
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2511:                                            * Should be set in either retro_init or retro_load_game, but not both.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2667: *    negotiation once, during \c retro_load_game() (after any
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:2705: * Should be set in either \c retro_init or \c retro_load_game, but not both.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:3753: * once \c retro_load_game has returned.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:4168:    * to the corresponding entry in \c retro_load_game_special().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:4230:   /** A unique identifier passed to retro_load_game_special(). */
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5573: * Arguments to pass in info have same requirements as retro_load_game().
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5588: * The semantics of each field are the same as in \c retro_load_game.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5610: * before \c retro_load_game is called.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5612: * \c retro_load_game does not provide a way to ensure
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5615: * Frontends should call it immediately before \c retro_load_game,
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5617: * to validate the disk image in \c retro_load_game.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5632: * @warning If \c RETRO_ENVIRONMENT_SET_DISK_CONTROL_EXT_INTERFACE is called within \c retro_load_game,
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:5639: * instead, it should use it within \c retro_load_game
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6331:    * If need_fullpath is true and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6335:    * If need_fullpath is false and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6358: *       retro_load_game() may be replaced with
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6359: *       retro_load_game_special() */
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6374:    * If need_fullpath is true and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6379:    * If need_fullpath is false and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6386:    * If need_fullpath is true and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6400:    * If need_fullpath is false and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6445:    * data buffer available in retro_load_game() is 'persistent'
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6447:    * If persistent_data is false and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6449:    *      are valid only until retro_load_game() returns
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6451:    *      are valid only until retro_load_game() returns
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6453:    * If persistent_data is true and retro_load_game() is called:
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6467: *       retro_load_game() may be replaced with
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6468: *       retro_load_game_special() */
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:6554:    *     valid only until retro_load_game() returns
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:7117: * May also be called after \ref retro_load_game "loading a game",
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8028: * @note Can be called only after \c retro_load_game() has successfully completed.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8095: * @note Between calls to \c retro_load_game() and \c retro_unload_game(), the
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8157:RETRO_API bool retro_load_game(const struct retro_game_info *game);
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8164: * Others may return \c false or delegate to <tt>retro_load_game</tt>.
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8178: * @see retro_load_game()
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8181:RETRO_API bool retro_load_game_special(
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro-common/include/libretro.h:8191: * @see retro_load_game()
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro_core_options.h:381: * retro_set_environment(), and no later than retro_load_game()
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:225:#define RETRO_GAME_TYPE_SUFAMI_TURBO		0x0102
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:875:			{ "Sufami Turbo",                     "st",  st_roms,  2, RETRO_GAME_TYPE_SUFAMI_TURBO },
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:2060:bool retro_load_game(const struct retro_game_info *game)
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:2157:bool retro_load_game_special(unsigned game_type, const struct retro_game_info *info, size_t num_info)
+/workspace/build/picoarch-sources/snes9x2010/libretro/libretro.c:2170:	if (game_type == RETRO_GAME_TYPE_SUFAMI_TURBO)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.h:252:uint8_t LoadSufamiTurbo (const char *cartA, const char *cartB);
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1045:	   any battery save into Memory.SRAM after retro_load_game returns,
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1094:			r = LoadSufamiTurbo(cartA, cartB);
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1125:uint8_t LoadSufamiTurbo (const char *cartA, const char *cartB)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1168:	strcat(path, "STBIOS.bin");
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:1925:static uint8_t is_SufamiTurbo_Combined (uint8_t *data, uint32_t size)
+/workspace/build/picoarch-sources/snes9x2010/src/memmap.c:2028:	if (is_SufamiTurbo_Combined(Memory.ROM, Memory.CalculatedSize))
+/workspace/build/picoarch-sources/snes9x2010/README.md:64:  Turbo base-cassette BIOS (`STBIOS.bin`), matching every other emulator.
+
+===== HEXEN / PRBOOM =====
+/workspace/build/picoarch-sources/prboom/src/d_main.c:59:#include "hexen/sn_sonix.h"
+/workspace/build/picoarch-sources/prboom/src/d_main.c:86:#include "hexen/p_mapinfo.h"
+/workspace/build/picoarch-sources/prboom/src/d_main.c:521:  /* Heretic and Hexen's full-screen lumps (TITLE, CREDIT, HELP1, HELP2)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:607:  /* Heretic and Hexen's full-screen title lump is named TITLE, not Doom's
+/workspace/build/picoarch-sources/prboom/src/d_main.c:900:           * NOTE: Hexen IWADs also carry M_HTIC, so Hexen must be tested
+/workspace/build/picoarch-sources/prboom/src/d_main.c:907:          /* All Hexen IWADs carry a MAPINFO lump, but MAPINFO alone is NOT
+/workspace/build/picoarch-sources/prboom/src/d_main.c:908:           * a Hexen signature: ZDoom-targeted standalone Doom-engine wads
+/workspace/build/picoarch-sources/prboom/src/d_main.c:910:           * also requires Hexen's other invariants. */
+/workspace/build/picoarch-sources/prboom/src/d_main.c:932:      /* Hexen IWAD.  The signature is the conjunction of Hexen's lump-table
+/workspace/build/picoarch-sources/prboom/src/d_main.c:938:       * Hexen uses MAP## levels like commercial Doom and shares
+/workspace/build/picoarch-sources/prboom/src/d_main.c:939:       * a great deal of code with Heretic, so set both the hexen flag and the
+/workspace/build/picoarch-sources/prboom/src/d_main.c:940:       * raven umbrella (raven == heretic || hexen).  The full game has 30+
+/workspace/build/picoarch-sources/prboom/src/d_main.c:942:       * with the Hexen signature as commercial and let the map count stand. */
+/workspace/build/picoarch-sources/prboom/src/d_main.c:943:      extern dbool hexen;
+/workspace/build/picoarch-sources/prboom/src/d_main.c:945:      hexen       = true;
+/workspace/build/picoarch-sources/prboom/src/d_main.c:947:      gamemission = hexen_mission;
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1063:      /* CheckIWAD already recognised a Heretic or Hexen IWAD and set
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1064:       * gamemission = heretic_mission / hexen_mission; do not overwrite it
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1065:       * with a Doom mission below.  (Hexen and commercial Doom both use
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1402:  /* Hexen binds both Use and Jump, but the stock key defaults put key_use
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1406:   * use.  When they collide under Hexen, move Use to 'e' per the Hexen
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1407:   * keyboard scheme (spacebar is Jump, E is Use - see kbd_hexen_desc). */
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1408:  if (hexen && key_use == key_jump)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1464:    if (hexen)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1466:      doomverstr = "Hexen: Beyond Heretic";
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1771:     * precedence.  Hexen and Heretic interpret MAPINFO themselves. */
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1772:    if (!hexen && !heretic && !U_mapinfo.mapcount &&
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1786:  if (!hexen && !heretic && W_CheckNumForName("DECORATE") >= 0)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1791:  if (!hexen && !heretic && W_CheckNumForName("DECORATE") >= 0)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1796:  if (!hexen && !heretic && W_CheckNumForName("DECORATE") >= 0)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1801:  if (!hexen && !heretic && W_CheckNumForName("DECORATE") >= 0)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1805:   * present, but must stay out of Heretic/Hexen, which share the mobjinfo
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1807:  if (!hexen && !heretic)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1814:   * (never for Hexen/Heretic, which use their own ACS engine).  Gate the
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1815:   * parse to the Doom game too, both to match that path and so a Hexen or
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1817:  if (!hexen && !heretic)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1824:  if (hexen)
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1826:    lprintf(LO_INFO,"\nP_LoadMapInfo: Parsing Hexen MAPINFO.\n");
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1865:  /* Hexen is class-based; until the class-selection menu exists, default
+/workspace/build/picoarch-sources/prboom/src/d_main.c:1870:  if (hexen)
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:440:/* "Hexen Gamepad Modern" layout.
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:442: * Hexen on a modern pad: sticks move and turn, triggers run and fire, and
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:443: * the Hexen-specific actions sit on real engine binds (key_jump,
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:456:static gamepad_layout_t gp_hexen_modern = {
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:500:/* "Hexen Gamepad Classic" layout: the PS1-style classic mapping with the
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:501: * Hexen actions on real binds.  Run becomes the L3 toggle so that Jump can
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:505:static gamepad_layout_t gp_hexen_classic = {
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:548: * inventory and flight keys.  Heretic uses spacebar for Use; Hexen reserves
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:568:static const struct retro_input_descriptor kbd_hexen_desc[] = {
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1214:				extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1216:				           hexen   ? gp_hexen_classic.desc :
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1223:				extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1225:				           hexen   ? gp_hexen_modern.desc :
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1232:				extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1233:				if (hexen)
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1235:					           (void *)kbd_hexen_desc);
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1249:				extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1251:				           hexen   ? gp_hexen_classic.desc :
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:1997:    * otherwise MAPxx (Hexen/DOOM 2) PWAD must not be mis-routed here. */
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2671:   /* Game type (Doom vs Heretic vs Hexen) is now known. The controller
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2675:    * Heretic / Hexen control schemes. */
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2677:      extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2678:      if (hexen)
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2680:         static const struct retro_controller_description hexen_port[] = {
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2681:            { "Hexen Gamepad Modern", RETROPAD_MODERN },
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2682:            { "Hexen Gamepad Classic", RETROPAD_CLASSIC },
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2683:            { "Hexen RetroKeyboard/Mouse", RETRO_DEVICE_KEYBOARD },
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2686:         static const struct retro_controller_info hexen_ports[] = {
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2687:            { hexen_port, 3 },
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2690:         environ_cb(RETRO_ENVIRONMENT_SET_CONTROLLER_INFO, (void*)hexen_ports);
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2940:  /* Hexen savegames are much larger than Doom/Heretic ones: the maps carry
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2957:  if (!hexen && thinkercap.next != NULL)
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:2973:  return sizeof(struct extra_serialize) + (hexen ? 0x400000 : need);
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:3471:            extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:3472:            gamepad_layout_t *gp = hexen   ? &gp_hexen_classic :
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:3488:            extern dbool heretic, hexen;
+/workspace/build/picoarch-sources/prboom/libretro/libretro.c:3489:            gamepad_layout_t *gp = hexen   ? &gp_hexen_modern :
+/workspace/build/picoarch-sources/prboom/README.md:18:- **Heretic** and **Hexen** (full game logic, not just map loading)
+/workspace/build/picoarch-sources/prboom/README.md:178:  random pitch variation (and the Heretic/Hexen jitter) is applied
+/workspace/build/picoarch-sources/prboom/README.md:198:their content onto the engine's native Boom/MBF/Hexen capabilities. Where a
+/workspace/build/picoarch-sources/prboom/README.md:215:- **Map formats.** Doom-binary, **Hexen-binary**, and **UDMF** text maps
+/workspace/build/picoarch-sources/prboom/README.md:216:  (`Doom`, `Heretic`, `Hexen`, `DSDA`, `ZDoom` namespaces).
+/workspace/build/picoarch-sources/prboom/README.md:217:- **Hexen features.** Polyobjects and the Hexen line-special / ACS action set.
+/workspace/build/picoarch-sources/prboom/README.md:218:- **3D floors** on binary ZDoom/Hexen maps (`Sector_Set3DFloor`).
+/workspace/build/picoarch-sources/prboom/README.md:221:  and Doom-in-Hexen maps) and thing-based **vertex slopes** (slope-vertex things
+/workspace/build/picoarch-sources/prboom/README.md:365:and texture replacements, ACS-scripted set pieces, reskinned monsters, Hexen-

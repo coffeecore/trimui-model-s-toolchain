@@ -234,3 +234,27 @@ C’est particulièrement important pour les extras qu’on a seulement validés
 * archive finale MinUI/Model S.
 
 Je pense qu’on doit **commencer maintenant par les étapes 1 à 5** : audit du `make/picoarch.mk`, clean complet, rebuild de tous les cores, puis validation globale. On ne commence les PAKs qu’une fois cette base totalement reproductible.
+
+# 4
+
+MinUI multi-emulator support
+
+[ ] option globale enable-emulator-selector
+[ ] déclaration du système dans les PAKs alternatifs
+[ ] découverte des PAKs compatibles
+[ ] écran de sélection d'émulateur
+[ ] mémorisation du dernier PAK par ROM
+[ ] lancement direct du dernier PAK
+[ ] action pour changer d'émulateur
+[ ] intégration correcte avec Resume/mmenu
+[ ] fallback propre si le PAK mémorisé a été supprimé
+[ ] comportement MinUI original lorsque la fonction est désactivée
+
+better :
+[ ] option globale multi-emulator
+[ ] A ouvre toujours le sélecteur si option activée
+[ ] dernier émulateur utilisé mémorisé par ROM
+[ ] dernier émulateur présélectionné
+[ ] marqueur [default]
+[ ] premier lancement -> PAK principal comme default
+[ ] intégration Resume cohérente avec l'émulateur choisi
