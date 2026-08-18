@@ -1,0 +1,19 @@
+[SDL_Init] : libSDL modified for Trimui Model S.
+warning: video overlay is not hardware accelerated, not going to use it.
+warning: failed to do hugetlb mmap (0x2000000, 1572864): 22
+plat_sdl: using 320x240 as fullscreen resolution
+plat_sdl: overlay: fmt 59565955, planes: 1, pitch: 640, hw: 0
+input: new device #0 "sdl:keys"
+input: async-only devices detected..
+# drv probed binds name
+0   0      y     y sdl:keys
+platform/libpicofe/readpng.c: unexpected font image size 256x320, needed 128x160
+platform/libpicofe/readpng.c: unexpected selector image size 16x20, needed 8x10
+found skin.txt
+using sdl audio output driver
+emu_ReloadRom(/mnt/SDCARD/Roms/Genesis/Alex Kidd in the Enchanted Castle (Europe).zip)
+00000:000: couldn't open carthw.cfg!
+00000:000: sram: 200000 - 203fff; eeprom: 0
+starting audio: 44100 len: 735 stereo: 1, pal: 0
+starting audio: 44100 len: 735 stereo: 1, pal: 0
+[ FB_VideoQuit ]

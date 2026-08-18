@@ -1,0 +1,27 @@
+[SDL_Init] : libSDL modified for Trimui Model S.
+input: new device #0 "sdl:keys"
+input: async-only devices detected..
+# drv probed binds name
+0   0      y     y sdl:keys
+INFO: Using nearest resampler (in: 0, out: 22050)
+libpicofe/readpng.c: failed to open: /mnt/SDCARD/Games/picoarch.pak/skin/font.png
+libpicofe/readpng.c: failed to open: /mnt/SDCARD/Games/picoarch.pak/skin/selector.png
+INFO: Loading core /mnt/SDCARD/Games/picoarch.pak/picodrive_libretro.so
+INFO: Config dir: /mnt/SDCARD/Games/picoarch.pak//.picoarch-picodrive/
+INFO: Save dir: /mnt/SDCARD/Games/picoarch.pak//.picoarch-picodrive/
+INFO: System dir: /mnt/SDCARD/Games/picoarch.pak//.picoarch-picodrive/
+INFO: Using nearest resampler (in: 0, out: 22050)
+menu_loop_romsel failed, dir: o.so
+INFO: Using audio adjustment (in: 0, out: 21984-22116)
+INFO: Finished loading core
+INFO: Loading /mnt/SDCARD/Roms/Genesis/Alex Kidd in the Enchanted Castle (Europe).zip
+INFO: 00000:000: couldn't open carthw.cfg!
+INFO: 00000:000: sram: 200000 - 203fff; eeprom: 0
+INFO: Screen: 320x240
+INFO: Audio sample rate: 44100.000000
+INFO: Frame rate: 60.000000
+INFO: Reported aspect ratio: 1.333333
+INFO: Using audio adjustment (in: 44100, out: 43968-44232)
+INFO: Dimensions changed to 320x224
+INFO: Unloading core...
+[ FB_VideoQuit ]

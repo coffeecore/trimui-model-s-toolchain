@@ -4,7 +4,12 @@ set -euo pipefail
 
 ROOT="/workspace"
 
-OFFICIAL_RELEASE="$ROOT/sources/minui/release/MinUI-20260812-0.zip"
+OFFICIAL_RELEASE=$(find "$ROOT/sources/minui/release" \
+    -maxdepth 1 \
+    -type f \
+    -name 'MinUI-*.zip' \
+    | sort \
+    | tail -n 1)
 
 MINUI_EXTRA="$ROOT/output/minui-extra-paks"
 STANDALONE="$ROOT/output/standalone-paks"
@@ -19,7 +24,8 @@ INNER="$BUILD/inner"
 PATCH_ROOT="$BUILD/patch-root"
 
 OUTPUT="$ROOT/output/minui-release"
-OUTPUT_ZIP="$OUTPUT/MinUI-20260812-0-custom.zip"
+RELEASE_NAME=$(basename "$OFFICIAL_RELEASE" .zip)
+OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-custom.zip"
 
 # ---------------------------------------------------------------------
 # Helpers
@@ -189,6 +195,10 @@ unzip -t "$OUTER/TrimuiUpdate_MinUI.zip" >/dev/null ||
 # ---------------------------------------------------------------------
 
 (
+    mv \
+    "$OUTER/TrimuiUpdate_MinUI.zip" \
+    "$OUTER/trimui_Minui.zip"
+
     cd "$OUTER"
 
     mapfile -d '' entries < <(
@@ -208,7 +218,7 @@ unzip -t "$OUTPUT_ZIP" >/dev/null ||
 # Validate the nested update directly from the final ZIP.
 unzip -p \
     "$OUTPUT_ZIP" \
-    TrimuiUpdate_MinUI.zip \
+    trimui_Minui.zip \
     > "$BUILD/final-inner.zip"
 
 unzip -t "$BUILD/final-inner.zip" >/dev/null ||

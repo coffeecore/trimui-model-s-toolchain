@@ -258,3 +258,36 @@ better :
 [ ] marqueur [default]
 [ ] premier lancement -> PAK principal comme default
 [ ] intégration Resume cohérente avec l'émulateur choisi
+
+# 5
+
+J’ai le ZIP et j’ai vérifié la structure. Tu m’as bien envoyé tout ce qu’il faut pour travailler sur la migration du toolchain : `Makefile`, tous les `make/*.mk`, `docker/dockerfile` et `docker-compose.yml`.
+
+La base actuelle confirme plusieurs points importants :
+
+* `make/common.mk` définit encore tout le monde autour de notre crosstool-NG `arm-unknown-linux-gnueabi` et du sysroot `/workspace/sysroot`.
+* `make/toolchain.mk` crée effectivement les wrappers de compatibilité `/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-*`.
+* `MinUI`, PicoArch, Stella et GnGeo utilisent déjà ce préfixe historique `/opt/trimui-toolchain/...`.
+* notre `libs.mk` reconstruit beaucoup de bibliothèques en **statique**, ce qui explique directement pourquoi notre `MinUI` s’est retrouvé à 735 Kio au lieu des ~31 Kio de l’officiel.
+* le Dockerfile actuel ne contient aucun vrai toolchain dans `/opt/trimui-toolchain` : il crée seulement le répertoire pour que nos wrappers puissent y être installés.
+
+J’ai aussi vérifié le dépôt `union-trimui-toolchain`. Son README confirme que le toolchain est installé **directement sous `/opt/` dans son image Docker**, et qu’il est basé sur le toolchain Trimui de neonloop. ([GitHub][1]) C’est particulièrement pertinent pour PicoArch : Shaun Inman crédite explicitement neonloop pour le toolchain Trimui original et pour PicoArch, et le PicoArch Trimui est conçu pour être construit après mise en place de ce toolchain. ([GitHub][2])
+
+Donc oui : **on a maintenant la base nécessaire et je pense toujours qu’il est pertinent d’essayer de migrer vers le toolchain historique comme toolchain unique**, mais progressivement.
+
+Je te propose l’ordre suivant, sans encore supprimer quoi que ce soit :
+
+1. intégrer `union-trimui-toolchain` dans notre environnement Docker actuel ;
+2. identifier exactement les chemins qu’il fournit sous `/opt/`;
+3. compiler uniquement MinUI avec lui ;
+4. comparer le nouveau binaire au MinUI officiel qui fonctionne ;
+5. si MinUI fonctionne sur console, tester PicoArch avec le même toolchain ;
+6. ensuite Arnold, Stella, GnGeo et Retro8 ;
+7. seulement après validation globale, supprimer crosstool-NG, les wrappers et les morceaux de `libs.mk` devenus inutiles.
+
+Et bonne nouvelle : comme plusieurs de tes Makefiles utilisent déjà `/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-*`, **la migration pourrait nécessiter beaucoup moins de changements de chemins que prévu**.
+
+On peut commencer maintenant par l’étape 1 : intégrer le vrai `union-trimui-toolchain` à ton Dockerfile actuel sans encore toucher aux Makefiles des émulateurs.
+
+[1]: https://github.com/shauninman/union-trimui-toolchain?utm_source=chatgpt.com "GitHub - shauninman/union-trimui-toolchain · GitHub"
+[2]: https://github.com/shauninman/MinUI/blob/main/skeleton/BASE/README.txt?utm_source=chatgpt.com "MinUI/skeleton/BASE/README.txt at main · shauninman/MinUI · GitHub"

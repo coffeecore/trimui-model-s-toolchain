@@ -1,0 +1,211 @@
+/mnt/SDCARD/Emus/NEOGEO.pak/gngeo: /usr/lib/libz.so.1: no version information available (required by /mnt/SDCARD/Emus/NEOGEO.pak/gngeo)
+c=66
+flags biospath set on cmd line
+c=105
+flags rompath set on cmd line
+original rom name=[/mnt/SDCARD/Roms/NEOGEO/mslug.zip]
+rom name=[mslug]
+[SDL_Init] : libSDL modified for Trimui Model S.
+CURSOR=0
+CURSOR=0
+Get mapid A
+Get mapid B
+Get mapid C
+Get mapid D
+Get mapid START
+Get mapid COIN
+Get mapid UP
+Get mapid DOWN
+Get mapid LEFT
+Get mapid RIGHT
+Get mapid MENU
+DATAFILE = ./gngeo_data.zip
+Readed=126265 
+STBILOAD 0xb616f008 304 224 4 1216
+DATAFILE = ./gngeo_data.zip
+Readed=33898 
+STBILOAD 0x2031230 605 14 4 2420
+DATAFILE = ./gngeo_data.zip
+Readed=33898 
+STBILOAD 0x2039690 605 14 4 2420
+DATAFILE = ./gngeo_data.zip
+Readed=33898 
+STBILOAD 0x2041af0 605 14 4 2420
+DATAFILE = ./gngeo_data.zip
+Readed=33898 
+STBILOAD 0x2049f50 605 14 4 2420
+DATAFILE = ./gngeo_data.zip
+Readed=33898 
+STBILOAD 0x20523b0 605 14 4 2420
+DATAFILE = ./gngeo_data.zip
+Readed=33898 
+STBILOAD 0x205a810 605 14 4 2420
+DATAFILE = ./gngeo_data.zip
+Readed=69626 
+STBILOAD 0x2073c70 1243 14 4 4972
+DATAFILE = ./gngeo_data.zip
+Readed=69626 
+STBILOAD 0x2084c60 1243 14 4 4972
+DATAFILE = ./gngeo_data.zip
+Readed=69626 
+STBILOAD 0x2095c50 1243 14 4 4972
+DATAFILE = ./gngeo_data.zip
+Readed=69626 
+STBILOAD 0x20a6c40 1243 14 4 4972
+DATAFILE = ./gngeo_data.zip
+Readed=69626 
+STBILOAD 0x20b7c30 1243 14 4 4972
+DATAFILE = ./gngeo_data.zip
+Readed=69626 
+STBILOAD 0x20c8c20 1243 14 4 4972
+DATAFILE = ./gngeo_data.zip
+Readed=2540 
+STBILOAD 0x2019798 32 32 4 128
+DATAFILE = ./gngeo_data.zip
+Readed=2455 
+STBILOAD 0x201a848 32 32 4 128
+DATAFILE = ./gngeo_data.zip
+Readed=2861 
+STBILOAD 0x201b8f8 32 32 4 128
+DATAFILE = ./gngeo_data.zip
+Readed=2826 
+STBILOAD 0x201f128 32 32 4 128
+DATAFILE = ./gngeo_data.zip
+Readed=12237 
+STBILOAD 0x202bd98 75 67 4 300
+DATAFILE = ./gngeo_data.zip
+Readed=1263 
+STBILOAD 0x2062c70 75 90 4 300
+AA Blitter soft effect none
+[ FB_VideoQuit ]
+[SDL_Init] : libSDL modified for Trimui Model S.
+CURSOR=0
+CURSOR=0
+BBB Blitter soft effect none
+Loading /mnt/SDCARD/Roms/NEOGEO/mslug.zip
+Allocating 0x00200000 byte for Region 8
+Allocating 0x00020000 byte for Region 1
+Allocating 0x01000000 byte for Region 9
+Allocating 0x00020000 byte for Region 6
+Allocating 0x00001000 byte for Region 11
+Allocating 0x00800000 byte for Region 3
+Allocating 0x00000000 byte for Region 4
+BIOS SIZE 00000000 00000000 00000000
+Trying to load file 201-p1.bin        in region 8
+Load file 201-p1.bin        in region 8: OK 
+setoffset: 0 00100000 00000000 00100000
+Trying to load file 201-p1.bin        in region 8
+Load file 201-p1.bin        in region 8: OK 
+Trying to load file 201-s1.bin        in region 6
+Load file 201-s1.bin        in region 6: OK 
+Trying to load file 201-m1.bin        in region 1
+Load file 201-m1.bin        in region 1: OK 
+Trying to load file 201-v1.bin        in region 3
+Load file 201-v1.bin        in region 3: OK 
+Trying to load file 201-v2.bin        in region 3
+Load file 201-v2.bin        in region 3: OK 
+Trying to load file 201-c1.bin        in region 9
+Load file 201-c1.bin        in region 9: OK 
+Trying to load file 201-c2.bin        in region 9
+Load file 201-c2.bin        in region 9: OK 
+Trying to load file 201-c3.bin        in region 9
+Load file 201-c3.bin        in region 9: OK 
+Trying to load file 201-c4.bin        in region 9
+Load file 201-c4.bin        in region 9: OK 
+Default roms init
+Allocating 0x00008000 byte for Region 10
+Readed=131072 
+Load Sfix
+Couldn't find sfix.sfx, try sfix.sfix
+Readed=131072 
+Loading sp-s2.sp1
+Readed=131072 
+Obtained sample rate: 22050
+PAUSE audio 0
+Selecting Bios Vector
+Selecting Bios Vector
+Selecting Game Vector
+Selecting Game Vector
+Selecting Bios Vector
+Selecting Game Vector
+305 10
+Selecting Bios Vector
+Selecting Game Vector
+13 9
+13 9
+306 1
+306 1
+306 1
+32 2
+32 2
+308 3
+32 2
+306 1
+275 8
+306 1
+32 2
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+32 2
+306 1
+274 6
+306 1
+275 8
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+306 1
+PAUSE audio 1
+32 2
+306 1
+306 1
+PAUSE audio 0
+Save state mode WRITE PC=00002002
+Save state Phase 2 PC=000b97ac
+275 8
+Save state mode READ PC=00001fe8
+Save state Phase 2 PC=000b97ec
+Free Region 0x13f34c 0xb5102008 2097152
+Free Region 0x13f3b4 (nil) 0
+Free tiles
+Free Region 0x13f35c 0xb4101008 16777216
+Free Region 0x13f364 0x2127428 131072
+Free Region 0x13f354 0x2107420 131072
+Free Region 0x13f374 (nil) 0
+Free Region 0x13f38c 0xb3900008 8388608
+Free Region 0x13f384 0x2187440 131072
+Free Region 0x13f36c 0x2167438 131072
+Free Region 0x13f39c 0x20ff418 32768
+[ FB_VideoQuit ]

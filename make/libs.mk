@@ -17,6 +17,10 @@ LIBPNG_DIR := $(WORKSPACE)/libs/libpng
 LIBPNG_BUILD_DIR := $(WORKSPACE)/build/libpng
 
 SDL_VERSION := 1.2.15
+SDL_REPO := https://github.com/coffeecore/SDL-1.2.git
+SDL_BRANCH := trimui-model-s
+SDL_COMMIT := 65e28f147edefb6f6ad8fe3dd02f457ef0d15b62
+
 SDL_DIR := $(WORKSPACE)/libs/SDL-1.2
 SDL_BUILD_DIR := $(WORKSPACE)/build/SDL-1.2
 
@@ -257,11 +261,20 @@ clean-install-libpng:
 build-sdl:
 	test -x $(TOOLCHAIN_BIN)/$(TARGET)-gcc
 	test -d $(SYSROOT)
+
 	@if [ ! -d "$(SDL_DIR)/.git" ]; then \
-		git clone --branch release-$(SDL_VERSION) --depth 1 \
-			https://github.com/libsdl-org/SDL-1.2.git $(SDL_DIR); \
+		git clone \
+			--branch "$(SDL_BRANCH)" \
+			--single-branch \
+			"$(SDL_REPO)" \
+			"$(SDL_DIR)"; \
 	fi
-	cd $(SDL_DIR) && ./autogen.sh
+
+	cd "$(SDL_DIR)" && git fetch origin "$(SDL_BRANCH)"
+	cd "$(SDL_DIR)" && git checkout --detach "$(SDL_COMMIT)"
+
+	cd "$(SDL_DIR)" && ./autogen.sh
+
 	rm -rf $(SDL_BUILD_DIR)
 	mkdir -p $(SDL_BUILD_DIR)
 	cd $(SDL_BUILD_DIR) && \

@@ -1,0 +1,12 @@
+Gambatte SDL
+Per-Game config not found. Loading default config...
+Failed to open config file for reading.
+CART TYPE: DMG
+PICROSS 2
+GamePak type: MBC1 [RAM,battery] rambanks: 1 rombanks: 32
+header checksum: ok
+cgb: 0
+[SDL_Init] : libSDL modified for Trimui Model S.
+Could not detect IPU scaling
+Saving savedata...
+[ FB_VideoQuit ]
