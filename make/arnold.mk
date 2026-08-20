@@ -41,7 +41,7 @@ source-arnold:
 #   /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-gcc
 #
 # Ce chemin est fourni par notre couche de compatibilité toolchain.
-build-arnold: source-arnold
+build-arnold: source-arnold minui-libs
 	cd "$(ARNOLD_DIR)" && $(MAKE) -j$(JOBS)
 
 	test -x "$(ARNOLD_DIR)/arnold"

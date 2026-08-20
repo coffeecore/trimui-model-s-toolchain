@@ -21,3 +21,5 @@ toolchain/
 .DS_Store
 
 tmp/
+
+trimui-toolchain-aarch64.tar.xz

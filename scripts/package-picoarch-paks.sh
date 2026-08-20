@@ -32,7 +32,7 @@ fi
 required_cores=(
     beetle-pce-fast_libretro.so
     bluemsx_libretro.so
-    fake08_libretro.so
+    # fake08_libretro.so
     fbalpha2012_libretro.so
     fceumm_libretro.so
     fmsx_libretro.so
@@ -464,10 +464,10 @@ create_pak \
     "gme_libretro.so" \
     "Game Music"
 
-create_pak \
-    "PICO-8 (Fake-08)" \
-    "fake08_libretro.so" \
-    "PICO-8"
+# create_pak \
+#     "PICO-8 (Fake-08)" \
+#     "fake08_libretro.so" \
+#     "PICO-8"
 
 create_pak \
     "Doom (PrBoom)" \
@@ -498,10 +498,16 @@ pak_count=$(
         | wc -l
 )
 
-if [ "$pak_count" -ne 38 ]; then
-    echo "ERROR: expected 38 PAKs, got $pak_count"
+# if [ "$pak_count" -ne 38 ]; then
+#     echo "ERROR: expected 38 PAKs, got $pak_count"
+#     exit 1
+# fi
+
+if [ "$pak_count" -ne 37 ]; then
+    echo "ERROR: expected 37 PAKs, got $pak_count"
     exit 1
 fi
+
 
 while IFS= read -r -d '' pak; do
     if [ ! -s "$pak/system" ]; then

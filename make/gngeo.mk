@@ -43,12 +43,12 @@ configure-gngeo: source-gngeo
 	CC_FOR_BUILD=gcc \
 	SDL_CONFIG="$(SYSROOT)/usr/bin/sdl-config" \
 	CFLAGS="-O3 -Wall -fomit-frame-pointer -ffast-math -I$(SYSROOT)/usr/include" \
-	LDFLAGS="-L$(SYSROOT)/usr/lib" \
+	LDFLAGS="-L$(SYSROOT)/usr/lib -ldl" \
 	./configure \
-		--host=arm-unknown-linux-gnueabi \
-		--disable-sdltest
+        --host=$(TARGET) \
+        --disable-sdltest
 
-build-gngeo: configure-gngeo
+build-gngeo: configure-gngeo minui-libs
 	cd "$(GNGEO_DIR)" && \
 	PATH="$(SYSROOT)/usr/bin:$$PATH" \
 	$(MAKE) -j$(JOBS)

@@ -3,8 +3,9 @@
 set -euo pipefail
 
 ROOT="/workspace"
+MODE="${1:-full}"
 
-OFFICIAL_RELEASE=$(find "$ROOT/sources/minui/release" \
+BASE_RELEASE=$(find "$ROOT/sources/minui/release" \
     -maxdepth 1 \
     -type f \
     -name 'MinUI-*.zip' \
@@ -14,18 +15,58 @@ OFFICIAL_RELEASE=$(find "$ROOT/sources/minui/release" \
 MINUI_EXTRA="$ROOT/output/minui-extra-paks"
 STANDALONE="$ROOT/output/standalone-paks"
 PICOARCH="$ROOT/output/picoarch-paks"
+PICOARCH_TOOL="$ROOT/output/picoarch-tool/Tools/PicoArch.pak"
 
 PATCH="$ROOT/patches/minui/0001-update-use-system-metadata.patch"
 SOURCE_UPDATE="$ROOT/sources/minui/paks/System.pak/update.sh"
 
-BUILD="$ROOT/build/minui-release"
+BUILD="$ROOT/build/minui-release-$MODE"
 OUTER="$BUILD/outer"
 INNER="$BUILD/inner"
 PATCH_ROOT="$BUILD/patch-root"
 
-OUTPUT="$ROOT/output/minui-release"
-RELEASE_NAME=$(basename "$OFFICIAL_RELEASE" .zip)
-OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-custom.zip"
+RELEASE_NAME=$(basename "$BASE_RELEASE" .zip)
+
+INCLUDE_EXTRA=0
+INCLUDE_STANDALONE=0
+INCLUDE_PICOARCH=0
+
+case "$MODE" in
+    only)
+        OUTPUT="$ROOT/output/minui-only"
+        OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-minui-only.zip"
+        ;;
+
+    standalone)
+        INCLUDE_EXTRA=1
+        INCLUDE_STANDALONE=1
+
+        OUTPUT="$ROOT/output/minui-standalone"
+        OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-standalone.zip"
+        ;;
+
+    picoarch)
+        INCLUDE_PICOARCH=1
+
+        OUTPUT="$ROOT/output/minui-picoarch"
+        OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-picoarch.zip"
+        ;;
+
+    full)
+        INCLUDE_EXTRA=1
+        INCLUDE_STANDALONE=1
+        INCLUDE_PICOARCH=1
+
+        OUTPUT="$ROOT/output/minui-release"
+        OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-custom.zip"
+        ;;
+
+    *)
+        echo "ERROR: unknown release mode: $MODE" >&2
+        echo "Expected: only, standalone, picoarch or full" >&2
+        exit 1
+        ;;
+esac
 
 # ---------------------------------------------------------------------
 # Helpers
@@ -47,101 +88,6 @@ count_paks()
         | wc -l
 }
 
-# ---------------------------------------------------------------------
-# Validate inputs
-# ---------------------------------------------------------------------
-
-[ -f "$OFFICIAL_RELEASE" ] ||
-    die "missing official MinUI release: $OFFICIAL_RELEASE"
-
-[ -f "$PATCH" ] ||
-    die "missing MinUI patch: $PATCH"
-
-[ -f "$SOURCE_UPDATE" ] ||
-    die "missing source update.sh: $SOURCE_UPDATE"
-
-[ -d "$MINUI_EXTRA" ] ||
-    die "missing MinUI extra PAK output"
-
-[ -d "$STANDALONE" ] ||
-    die "missing standalone PAK output"
-
-[ -d "$PICOARCH" ] ||
-    die "missing PicoArch PAK output"
-
-[ "$(count_paks "$MINUI_EXTRA")" -eq 5 ] ||
-    die "expected 5 MinUI extra PAKs"
-
-[ "$(count_paks "$STANDALONE")" -eq 4 ] ||
-    die "expected 4 standalone PAKs"
-
-[ "$(count_paks "$PICOARCH")" -eq 38 ] ||
-    die "expected 38 PicoArch PAKs"
-
-# Every PicoArch PAK must provide canonical system metadata.
-for pak in "$PICOARCH"/*-picoarch.pak; do
-    [ -s "$pak/system" ] ||
-        die "missing system metadata: $pak/system"
-done
-
-# ---------------------------------------------------------------------
-# Prepare official release
-# ---------------------------------------------------------------------
-
-rm -rf "$BUILD" "$OUTPUT"
-
-mkdir -p "$OUTER" "$INNER" "$PATCH_ROOT" "$OUTPUT"
-
-unzip -q "$OFFICIAL_RELEASE" -d "$OUTER"
-
-[ -f "$OUTER/TrimuiUpdate_MinUI.zip" ] ||
-    die "official release has no TrimuiUpdate_MinUI.zip"
-
-unzip -q "$OUTER/TrimuiUpdate_MinUI.zip" -d "$INNER"
-
-[ -d "$INNER/Emus" ] ||
-    die "inner update has no Emus directory"
-
-[ -f "$INNER/System/System.pak/update.sh" ] ||
-    die "inner update has no System/System.pak/update.sh"
-
-# The release updater must correspond exactly to the source updater
-# against which our patch was created.
-cmp -s \
-    "$INNER/System/System.pak/update.sh" \
-    "$SOURCE_UPDATE" ||
-    die "release update.sh differs from sources/minui version"
-
-BASE_PAK_COUNT=$(count_paks "$INNER/Emus")
-
-echo "Official MinUI PAKs: $BASE_PAK_COUNT"
-
-# ---------------------------------------------------------------------
-# Patch MinUI updater
-# ---------------------------------------------------------------------
-
-mkdir -p "$PATCH_ROOT/paks/System.pak"
-
-cp \
-    "$SOURCE_UPDATE" \
-    "$PATCH_ROOT/paks/System.pak/update.sh"
-
-(
-    cd "$PATCH_ROOT"
-    git apply "$PATCH"
-)
-
-cp \
-    "$PATCH_ROOT/paks/System.pak/update.sh" \
-    "$INNER/System/System.pak/update.sh"
-
-grep -q 'DST/system' "$INNER/System/System.pak/update.sh" ||
-    die "system metadata patch was not applied"
-
-# ---------------------------------------------------------------------
-# Add PAKs
-# ---------------------------------------------------------------------
-
 copy_paks()
 {
     local source="$1"
@@ -151,54 +97,189 @@ copy_paks()
         name=$(basename "$pak")
 
         if [ -e "$INNER/Emus/$name" ]; then
-            die "PAK already exists in official MinUI payload: $name"
+            die "PAK already exists in MinUI payload: $name"
         fi
 
         cp -a "$pak" "$INNER/Emus/"
     done
 }
 
-copy_paks "$MINUI_EXTRA"
-copy_paks "$STANDALONE"
-copy_paks "$PICOARCH"
-
-FINAL_PAK_COUNT=$(count_paks "$INNER/Emus")
-EXPECTED_PAK_COUNT=$((BASE_PAK_COUNT + 5 + 4 + 38))
-
-[ "$FINAL_PAK_COUNT" -eq "$EXPECTED_PAK_COUNT" ] ||
-    die "expected $EXPECTED_PAK_COUNT total PAKs, got $FINAL_PAK_COUNT"
-
 # ---------------------------------------------------------------------
-# Rebuild inner TrimuiUpdate_MinUI.zip
+# Validate base release
 # ---------------------------------------------------------------------
 
-rm -f "$OUTER/TrimuiUpdate_MinUI.zip"
+[ -f "$BASE_RELEASE" ] ||
+    die "missing MinUI release"
 
-(
-    cd "$INNER"
+if [ "$INCLUDE_EXTRA" -eq 1 ]; then
+    [ -d "$MINUI_EXTRA" ] ||
+        die "missing MinUI extra PAK output"
 
-    zip -qr \
-        "$OUTER/TrimuiUpdate_MinUI.zip" \
-        System \
-        Emus \
-        Tools \
-        updater \
-        launch.sh \
-        TrimuiUpdate_MinUI.zip
-)
+    [ "$(count_paks "$MINUI_EXTRA")" -eq 5 ] ||
+        die "expected 5 MinUI extra PAKs"
+fi
 
-unzip -t "$OUTER/TrimuiUpdate_MinUI.zip" >/dev/null ||
-    die "inner TrimuiUpdate_MinUI.zip validation failed"
+if [ "$INCLUDE_STANDALONE" -eq 1 ]; then
+    [ -d "$STANDALONE" ] ||
+        die "missing standalone PAK output"
+
+    [ "$(count_paks "$STANDALONE")" -eq 4 ] ||
+        die "expected 4 standalone PAKs"
+fi
+
+if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+    [ -d "$PICOARCH" ] ||
+        die "missing PicoArch PAK output"
+
+    # [ "$(count_paks "$PICOARCH")" -eq 38 ] ||
+    [ "$(count_paks "$PICOARCH")" -eq 37 ] ||
+        die "expected 37 PicoArch PAKs"
+
+    [ -d "$PICOARCH_TOOL" ] ||
+        die "missing PicoArch Tool PAK"
+
+    [ -f "$PATCH" ] ||
+        die "missing MinUI patch: $PATCH"
+
+    [ -f "$SOURCE_UPDATE" ] ||
+        die "missing source update.sh: $SOURCE_UPDATE"
+
+    for pak in "$PICOARCH"/*-picoarch.pak; do
+        [ -s "$pak/system" ] ||
+            die "missing system metadata: $pak/system"
+    done
+fi
 
 # ---------------------------------------------------------------------
-# Rebuild outer MinUI release
+# Prepare MinUI release
 # ---------------------------------------------------------------------
 
-(
-    mv \
+rm -rf "$BUILD" "$OUTPUT"
+
+mkdir -p "$OUTER" "$OUTPUT"
+
+unzip -q "$BASE_RELEASE" -d "$OUTER"
+
+[ -f "$OUTER/TrimuiUpdate_MinUI.zip" ] ||
+    die "MinUI release has no TrimuiUpdate_MinUI.zip"
+
+# MinUI-only requires no modification of the inner update.
+if [ "$MODE" != "only" ]; then
+    mkdir -p "$INNER"
+
+    unzip -q "$OUTER/TrimuiUpdate_MinUI.zip" -d "$INNER"
+
+    [ -d "$INNER/Emus" ] ||
+        die "inner update has no Emus directory"
+
+    BASE_PAK_COUNT=$(count_paks "$INNER/Emus")
+
+    echo "Base MinUI PAKs: $BASE_PAK_COUNT"
+
+    # -----------------------------------------------------------------
+    # Patch updater when PicoArch metadata support is required
+    # -----------------------------------------------------------------
+
+    if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+        [ -f "$INNER/System/System.pak/update.sh" ] ||
+            die "inner update has no System/System.pak/update.sh"
+
+        cmp -s \
+            "$INNER/System/System.pak/update.sh" \
+            "$SOURCE_UPDATE" ||
+            die "release update.sh differs from sources/minui version"
+
+        mkdir -p "$PATCH_ROOT/paks/System.pak"
+
+        cp \
+            "$SOURCE_UPDATE" \
+            "$PATCH_ROOT/paks/System.pak/update.sh"
+
+        (
+            cd "$PATCH_ROOT"
+            git apply "$PATCH"
+        )
+
+        cp \
+            "$PATCH_ROOT/paks/System.pak/update.sh" \
+            "$INNER/System/System.pak/update.sh"
+
+        grep -q 'DST/system' "$INNER/System/System.pak/update.sh" ||
+            die "system metadata patch was not applied"
+    fi
+
+    # -----------------------------------------------------------------
+    # Add requested PAKs
+    # -----------------------------------------------------------------
+
+    ADDED_PAK_COUNT=0
+
+    if [ "$INCLUDE_EXTRA" -eq 1 ]; then
+        copy_paks "$MINUI_EXTRA"
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 5))
+    fi
+
+    if [ "$INCLUDE_STANDALONE" -eq 1 ]; then
+        copy_paks "$STANDALONE"
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 4))
+    fi
+
+    if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+        copy_paks "$PICOARCH"
+        # ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 38))
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 37))
+
+        mkdir -p "$INNER/Tools"
+
+        rm -rf "$INNER/Tools/PicoArch.pak"
+
+        cp -a \
+            "$PICOARCH_TOOL" \
+            "$INNER/Tools/"
+    fi
+
+    FINAL_PAK_COUNT=$(count_paks "$INNER/Emus")
+    EXPECTED_PAK_COUNT=$((BASE_PAK_COUNT + ADDED_PAK_COUNT))
+
+    [ "$FINAL_PAK_COUNT" -eq "$EXPECTED_PAK_COUNT" ] ||
+        die "expected $EXPECTED_PAK_COUNT total PAKs, got $FINAL_PAK_COUNT"
+
+    # -----------------------------------------------------------------
+    # Rebuild inner update
+    # -----------------------------------------------------------------
+
+    rm -f "$OUTER/TrimuiUpdate_MinUI.zip"
+
+    (
+        cd "$INNER"
+
+        zip -qr \
+            "$OUTER/TrimuiUpdate_MinUI.zip" \
+            System \
+            Emus \
+            Tools \
+            updater \
+            launch.sh \
+            TrimuiUpdate_MinUI.zip
+    )
+
+    unzip -t "$OUTER/TrimuiUpdate_MinUI.zip" >/dev/null ||
+        die "inner TrimuiUpdate_MinUI.zip validation failed"
+fi
+
+# ---------------------------------------------------------------------
+# Firmware 0.108 expects this exact update ZIP name
+# ---------------------------------------------------------------------
+
+mv \
     "$OUTER/TrimuiUpdate_MinUI.zip" \
     "$OUTER/trimui_Minui.zip"
 
+# ---------------------------------------------------------------------
+# Rebuild outer release
+# ---------------------------------------------------------------------
+
+(
     cd "$OUTER"
 
     mapfile -d '' entries < <(
@@ -215,7 +296,6 @@ unzip -t "$OUTER/TrimuiUpdate_MinUI.zip" >/dev/null ||
 unzip -t "$OUTPUT_ZIP" >/dev/null ||
     die "final MinUI ZIP validation failed"
 
-# Validate the nested update directly from the final ZIP.
 unzip -p \
     "$OUTPUT_ZIP" \
     trimui_Minui.zip \
@@ -230,12 +310,15 @@ unzip -t "$BUILD/final-inner.zip" >/dev/null ||
 
 echo
 echo "MinUI release packaging complete."
-echo
-echo "Official PAKs : $BASE_PAK_COUNT"
-echo "Extra PAKs    : 5"
-echo "Standalone    : 4"
-echo "PicoArch      : 38"
-echo "Total PAKs    : $FINAL_PAK_COUNT"
+echo "Mode: $MODE"
+
+if [ "$MODE" != "only" ]; then
+    echo
+    echo "Base PAKs       : $BASE_PAK_COUNT"
+    echo "Added PAKs      : $ADDED_PAK_COUNT"
+    echo "Total PAKs      : $FINAL_PAK_COUNT"
+fi
+
 echo
 echo "Release:"
 echo "  $OUTPUT_ZIP"

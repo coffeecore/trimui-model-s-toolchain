@@ -39,8 +39,41 @@ WORKDIR /workspace
 
 RUN chown -R builder:builder /workspace
 
-RUN mkdir -p /opt/trimui-toolchain/bin \
+# RUN mkdir -p /opt/trimui-toolchain/bin \
+#     && chown -R builder:builder /opt/trimui-toolchain
+
+ARG TRIMUI_TOOLCHAIN_VERSION=v001
+
+RUN ARCH="$(uname -m)" \
+    && if [ "$ARCH" = "aarch64" ]; then \
+        TOOLCHAIN_TAR="trimui-toolchain-aarch64.tar.xz"; \
+    else \
+        TOOLCHAIN_TAR="trimui-toolchain.tar.xz"; \
+    fi \
+    && wget -O "/tmp/$TOOLCHAIN_TAR" \
+        "https://github.com/shauninman/union-trimui-toolchain/releases/download/${TRIMUI_TOOLCHAIN_VERSION}/${TOOLCHAIN_TAR}" \
+    && tar -xf "/tmp/$TOOLCHAIN_TAR" -C /opt \
+    && rm "/tmp/$TOOLCHAIN_TAR" \
     && chown -R builder:builder /opt/trimui-toolchain
+
+# Compatibility path expected by MinUI Legacy and its submodules.
+RUN mkdir -p /opt/trimui-toolchain/bin \
+    && for tool in /opt/trimui-toolchain/usr/bin/arm-buildroot-linux-gnueabi-* \
+                   /opt/trimui-toolchain/usr/bin/arm-linux-*; do \
+        name="$(basename "$tool")"; \
+        printf '#!/bin/sh\nexec "/opt/trimui-toolchain/usr/bin/%s" "$@"\n' "$name" \
+            > "/opt/trimui-toolchain/bin/$name"; \
+        chmod +x "/opt/trimui-toolchain/bin/$name"; \
+    done
+
+# Compatibility layout expected by MinUI Legacy.
+RUN ln -s /opt/trimui-toolchain/usr/arm-buildroot-linux-gnueabi \
+          /opt/trimui-toolchain/arm-buildroot-linux-gnueabi
+
+ENV PATH="/opt/trimui-toolchain/usr/bin:${PATH}:/opt/trimui-toolchain/usr/arm-buildroot-linux-gnueabi/sysroot/usr/bin"
+ENV CROSS_COMPILE="/opt/trimui-toolchain/usr/bin/arm-buildroot-linux-gnueabi-"
+ENV PREFIX="/opt/trimui-toolchain/usr/arm-buildroot-linux-gnueabi/sysroot/usr"
+ENV UNION_PLATFORM="trimui"
 
 RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/builder/.bashrc \
     && chown builder:builder /home/builder/.bashrc

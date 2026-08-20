@@ -11,6 +11,11 @@ MINUI_BUILD_DIR := $(MINUI_DIR)/build
 MINUI_PAYLOAD_DIR := $(MINUI_BUILD_DIR)/PAYLOAD
 MINUI_ROMS_DIR := $(MINUI_BUILD_DIR)/Roms
 
+MINUI_TOOLCHAIN := /opt/trimui-toolchain
+MINUI_SYSROOT := $(MINUI_TOOLCHAIN)/usr/arm-buildroot-linux-gnueabi/sysroot
+MINUI_PREFIX := $(MINUI_SYSROOT)/usr
+MINUI_CROSS := $(MINUI_TOOLCHAIN)/bin/arm-buildroot-linux-gnueabi-
+
 .PHONY: build-minui clean-build-minui source-minui clean-source-minui minui
 
 minui:
@@ -43,6 +48,20 @@ build-minui: source-minui
 	$(MAKE) -C $(MINUI_DIR) readme
 	$(MAKE) -C $(MINUI_DIR) sys
 
+	# Rebuild MinUI libraries from the orchestration layer.
+	# Upstream `sys` builds its own copies first, so this must run afterwards.
+	$(MAKE) minui-libs
+
+	# Replace the libraries packaged by upstream `sys` with our reproducible
+	# orchestration builds. The upstream checkout remains untouched.
+	cp \
+		$(MINUI_LIBS_BUILD)/libmsettings/libmsettings.so \
+		$(MINUI_PAYLOAD_DIR)/System/lib/libmsettings.so
+
+	cp \
+		$(MINUI_LIBS_BUILD)/libmmenu/libmmenu.so \
+		$(MINUI_PAYLOAD_DIR)/System/lib/libmmenu.so
+
 	$(MAKE) -C $(MINUI_DIR) gb
 	$(MAKE) -C $(MINUI_DIR) pm
 	$(MAKE) -C $(MINUI_DIR) ngp
@@ -57,9 +76,14 @@ build-minui: source-minui
 	mkdir -p "$(MINUI_PAYLOAD_DIR)/Emus"
 
 	@if [ ! -f "$(MINUI_PICODRIVE_DIR)/config.mak" ]; then \
-		cd "$(MINUI_PICODRIVE_DIR)" && \
-		CROSS_COMPILE=$(COMPAT_BIN)/$(COMPAT_TARGET)- \
-			./configure --platform=trimui; \
+        cd "$(MINUI_PICODRIVE_DIR)" && \
+        PATH="$(MINUI_TOOLCHAIN)/usr/bin:$$PATH" \
+        CROSS_COMPILE="$(MINUI_CROSS)" \
+        PREFIX="$(MINUI_PREFIX)" \
+        SYSROOT="$(MINUI_SYSROOT)" \
+        PKG_CONFIG_SYSROOT_DIR="$(MINUI_SYSROOT)" \
+        PKG_CONFIG_LIBDIR="$(MINUI_PREFIX)/lib/pkgconfig" \
+                ./configure --platform=trimui; \
 	fi
 
 	# PicoDrive's Makefile uses PWD directly, therefore `cd && make` is required.

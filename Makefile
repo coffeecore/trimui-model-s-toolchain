@@ -11,21 +11,20 @@
 .DEFAULT_GOAL := help
 
 include make/common.mk
-include make/toolchain.mk
-include make/libs.mk
 include make/minui.mk
 include make/arnold.mk
 include make/stella.mk
 include make/gngeo.mk
 include make/retro8.mk
 include make/picoarch.mk
+include make/picoarch-tool.mk
 include make/picoarch-paks.mk
 include make/standalone-paks.mk
 include make/minui-extra-paks.mk
 include make/minui-release.mk
+include make/minui-libs.mk
 
-.PHONY: help shell toolchain libs setup
-
+.PHONY: help shell
 
 # Show the high-level commands intended for normal use.
 # Show the high-level commands intended for normal use.
@@ -33,9 +32,6 @@ help:
 	@echo "Trimui Model S build environment"
 	@echo
 	@echo "Main targets:"
-	@echo "  setup                    Build and install toolchain + libraries"
-	@echo "  toolchain                Clean, build and install the toolchain"
-	@echo "  libs                     Clean, build and install common libraries"
 	@echo "  minui                    Clean and build MinUI Legacy"
 	@echo "  arnold                   Clean, build and install Arnold"
 	@echo "  stella                   Clean, build and install Stella"
@@ -58,19 +54,6 @@ help:
 	@echo "  clean-standalone-paks    Remove standalone PAK output"
 	@echo "  clean-minui-extra-paks   Remove additional MinUI PAK output"
 	@echo "  clean-minui-release      Remove final MinUI release output/build"
-	@echo
-	@echo "Toolchain:"
-	@echo "  build-toolchain          Build the crosstool-NG toolchain"
-	@echo "  install-toolchain        Install sysroot and compatibility wrappers"
-	@echo "  clean-build-toolchain    Clean toolchain build"
-	@echo "  clean-install-toolchain  Remove installed toolchain view"
-	@echo
-	@echo "Libraries:"
-	@echo "  build-libs               Build all common libraries"
-	@echo "  install-libs             Install all common libraries"
-	@echo "  clean-build-libs         Clean all library builds"
-	@echo "  clean-install-libs       Clean installed libraries"
-	@echo "  clean-source-libs        Remove downloaded library sources"
 	@echo
 	@echo "MinUI Legacy:"
 	@echo "  source-minui             Clone/update MinUI sources and submodules"
@@ -118,24 +101,3 @@ help:
 # Open an interactive shell in the build container.
 shell:
 	docker compose run --rm builder
-
-# Full toolchain refresh: remove the previous installation/build, rebuild it,
-# then recreate the compatibility wrappers expected by legacy Trimui projects.
-toolchain:
-	$(MAKE) clean-install-toolchain
-	$(MAKE) clean-build-toolchain
-	$(MAKE) build-toolchain
-	$(MAKE) install-toolchain
-
-# Full common-library refresh. Sources are kept locally to avoid needless Git
-# downloads; build artifacts and installed libraries are recreated from scratch.
-libs:
-	$(MAKE) clean-install-libs
-	$(MAKE) clean-build-libs
-	$(MAKE) build-libs
-	$(MAKE) install-libs
-
-# First-time environment setup convenience target.
-setup:
-	$(MAKE) toolchain
-	$(MAKE) libs

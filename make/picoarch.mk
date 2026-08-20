@@ -91,10 +91,11 @@ PICOARCH_MAKE_ARGS := \
 # -----------------------------------------------------------------------------
 
 PICOARCH_FRONTEND_BUILD := /workspace/build/picoarch-frontend
+PICOARCH_MINUI_DIR := /workspace/sources/minui
 
 .PHONY: picoarch-frontend picoarch-clean-frontend
 
-picoarch-frontend:
+picoarch-frontend: minui-libs
 	rm -rf $(PICOARCH_FRONTEND_BUILD)
 
 	git clone \
@@ -187,7 +188,6 @@ picoarch-validated: \
 	picoarch-mame2003-plus \
 	picoarch-snes9x2010 \
 	picoarch-snes9x2005-plus \
-	picoarch-fake08 \
 	picoarch-prboom
 
 
@@ -317,6 +317,10 @@ picoarch-picodrive: picoarch-clean-picodrive
 	cd $(PICOARCH_BUILD)/picodrive && \
 		patch --no-backup-if-mismatch -p1 \
 		< $(PICOARCH_SOURCE)/patches/picodrive/1000-trimui-build.patch
+
+	cd $(PICOARCH_BUILD)/picodrive && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/picodrive/0002-lzma-old-arm-hwcap.patch
 
 	# Cyclone generator must run on the build host, not on ARM.
 	$(MAKE) -C $(PICOARCH_BUILD)/picodrive/cpu/cyclone clean
@@ -906,6 +910,7 @@ picoarch-snes9x2010: picoarch-clean-snes9x2010
 		CROSS_COMPILE=$(PICOARCH_CROSS) \
 		CC=$(PICOARCH_CC) \
 		CXX=$(PICOARCH_CXX) \
+		LDFLAGS="-lm" \
 		-j$(JOBS)
 
 	cp \
@@ -983,6 +988,10 @@ picoarch-fake08: picoarch-clean-fake08
 	cd $(PICOARCH_BUILD)/fake-08 && \
 		patch --no-backup-if-mismatch -p1 \
 		< $(PICOARCH_PATCHES)/fake-08/1000-trimui-build.patch
+
+	cd $(PICOARCH_BUILD)/fake-08 && \
+		patch --no-backup-if-mismatch -p1 \
+		< $(PICOARCH_PATCHES)/fake-08/0002-gcc6-compat.patch
 
 	$(MAKE) -C $(PICOARCH_BUILD)/fake-08/platform/libretro \
 		platform=$(PICOARCH_PLATFORM) \
@@ -1120,5 +1129,4 @@ picoarch-clean-validated: \
 	picoarch-clean-mame2003-plus \
 	picoarch-clean-snes9x2010 \
 	picoarch-clean-snes9x2005-plus \
-	picoarch-clean-fake08 \
 	picoarch-clean-prboom

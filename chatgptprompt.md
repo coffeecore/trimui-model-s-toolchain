@@ -291,3 +291,46 @@ On peut commencer maintenant par l’étape 1 : intégrer le vrai `union-trimui-
 
 [1]: https://github.com/shauninman/union-trimui-toolchain?utm_source=chatgpt.com "GitHub - shauninman/union-trimui-toolchain · GitHub"
 [2]: https://github.com/shauninman/MinUI/blob/main/skeleton/BASE/README.txt?utm_source=chatgpt.com "MinUI/skeleton/BASE/README.txt at main · shauninman/MinUI · GitHub"
+
+# 6
+
+Mon plan, pour cette partie, il faudra peut etre qu'on revoit comment on build et install les libs :
+- on compile les cores+front end
+- on compile les stand alone
+- on compile minui
+- on fait une release. Petit ajout, on doit avoir picoarch dispo dans le dossier Tools/ pour pouvoir le lancer sans passer par des roms, ca permettra de plus rapidement tester les cores
+- on teste sur la console si minui se lance
+
+Ensuite :
+- creer un pak pour mame4allx du firmware original
+- on regarde pour pifba, fba-sdl ou autre alternative
+
+# 7
+
+```bash
+BIN="/workspace/output/retro8/PICO-8.pak/retro8"
+
+echo "===== FILE ====="
+file "$BIN"
+
+echo
+echo "===== NEEDED ====="
+readelf -d "$BIN" | grep NEEDED || true
+
+echo
+echo "===== INTERPRETER ====="
+readelf -l "$BIN" | grep interpreter || true
+
+echo
+echo "===== GLIBC ====="
+readelf --version-info "$BIN" \
+    | grep -o 'GLIBC_[0-9.]*' \
+    | sort -Vu
+```
+
+doit donner 
+ARM 32-bit EABI5 ;
+/lib/ld-linux.so.3 ;
+GNU/Linux 3.10.0 ;
+dépendances attendues : SDL 1.2, png12, zlib, pthread, dl, libstdc++, libgcc_s, libc ;
+seulement GLIBC_2.4.
