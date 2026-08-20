@@ -11,6 +11,7 @@
 .DEFAULT_GOAL := help
 
 include make/common.mk
+include make/libs.mk
 include make/minui.mk
 include make/arnold.mk
 include make/stella.mk
