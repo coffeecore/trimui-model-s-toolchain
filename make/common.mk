@@ -16,6 +16,8 @@ TOOLCHAIN := /opt/trimui-toolchain
 TOOLCHAIN_BIN := $(TOOLCHAIN)/bin
 TOOLCHAIN_SYSROOT := $(TOOLCHAIN)/usr/arm-buildroot-linux-gnueabi/sysroot
 
+BUILD_SYSROOT := $(WORKSPACE)/build/sysroot
+
 CROSS_COMPILE := $(TOOLCHAIN_BIN)/$(TARGET)-
 SYSROOT := $(TOOLCHAIN_SYSROOT)
 
