@@ -23,4 +23,6 @@ toolchain/
 tmp/
 
 trimui-toolchain-aarch64.tar.xz
- trimui-toolchain.tar.xz
+trimui-toolchain.tar.xz
+trimui_V0.108/
+trimuiroms/

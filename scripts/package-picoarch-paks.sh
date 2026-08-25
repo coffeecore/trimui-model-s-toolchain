@@ -7,6 +7,7 @@ ROOT="/workspace"
 PICOARCH_OUTPUT="$ROOT/output/picoarch"
 PICOARCH_BIN="$PICOARCH_OUTPUT/picoarch"
 CORES_DIR="$PICOARCH_OUTPUT/cores"
+PICOARCH_BUILD="$ROOT/build/picoarch"
 
 OUTPUT="$ROOT/output/picoarch-paks"
 
@@ -29,6 +30,23 @@ if [ ! -d "$CORES_DIR" ]; then
     exit 1
 fi
 
+# libpicofe loads menu graphics from ./skin relative to PicoArch's current
+# working directory. Locate the pinned checkout's skin and package it with every
+# PAK instead of relying on files already present on the SD card.
+SKIN_DIR=$(
+    find "$PICOARCH_BUILD" \
+        -type f \
+        -path '*/skin/font.png' \
+        -printf '%h\n' \
+        | head -n 1
+)
+
+if [ -z "$SKIN_DIR" ] || [ ! -f "$SKIN_DIR/font.png" ] || [ ! -f "$SKIN_DIR/selector.png" ]; then
+    echo "ERROR: missing PicoArch/libpicofe skin (font.png + selector.png) under:"
+    echo "  $PICOARCH_BUILD"
+    exit 1
+fi
+
 required_cores=(
     beetle-pce-fast_libretro.so
     bluemsx_libretro.so
@@ -40,6 +58,7 @@ required_cores=(
     gme_libretro.so
     gpsp_libretro.so
     mame2000_libretro.so
+    mame2003_libretro.so
     mame2003_plus_libretro.so
     mednafen_ngp_libretro.so
     mednafen_wswan_libretro.so
@@ -118,6 +137,9 @@ create_pak()
 
     cp "$PICOARCH_BIN" "$pak_dir/picoarch"
     cp "$CORES_DIR/$core_file" "$pak_dir/$core_file"
+
+    mkdir -p "$pak_dir/skin"
+    cp -a "$SKIN_DIR/." "$pak_dir/skin/"
 
     cat > "$pak_dir/launch.sh" <<EOF_LAUNCH
 #!/bin/sh
@@ -445,6 +467,11 @@ create_pak \
     "Arcade"
 
 create_pak \
+    "Arcade (MAME 2003)" \
+    "mame2003_libretro.so" \
+    "Arcade"
+
+create_pak \
     "Arcade (MAME 2003 Plus)" \
     "mame2003_plus_libretro.so" \
     "Arcade"
@@ -498,13 +525,8 @@ pak_count=$(
         | wc -l
 )
 
-# if [ "$pak_count" -ne 38 ]; then
-#     echo "ERROR: expected 38 PAKs, got $pak_count"
-#     exit 1
-# fi
-
-if [ "$pak_count" -ne 37 ]; then
-    echo "ERROR: expected 37 PAKs, got $pak_count"
+if [ "$pak_count" -ne 38 ]; then
+    echo "ERROR: expected 38 PAKs, got $pak_count"
     exit 1
 fi
 

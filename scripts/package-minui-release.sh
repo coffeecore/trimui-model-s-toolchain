@@ -131,8 +131,7 @@ if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     [ -d "$PICOARCH" ] ||
         die "missing PicoArch PAK output"
 
-    # [ "$(count_paks "$PICOARCH")" -eq 38 ] ||
-    [ "$(count_paks "$PICOARCH")" -eq 37 ] ||
+    [ "$(count_paks "$PICOARCH")" -eq 38 ] ||
         die "expected 37 PicoArch PAKs"
 
     [ -d "$PICOARCH_TOOL" ] ||
@@ -226,8 +225,7 @@ if [ "$MODE" != "only" ]; then
 
     if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
         copy_paks "$PICOARCH"
-        # ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 38))
-        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 37))
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 38))
 
         mkdir -p "$INNER/Tools"
 

@@ -2,7 +2,7 @@
 # Common target libraries
 # ==============================================================================
 # All projects link against a single final sysroot. `build-libs` first creates a
-# temporary staging sysroot from the pristine crosstool-NG sysroot, then builds
+# project sysroot from the pristine vendor Buildroot sysroot, then builds
 # and installs every library into that staging tree in dependency order.
 
 # ------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ LIBMAD_BUILD_DIR := /workspace/build/libmad
 LIBMAD_ARCHIVE := /workspace/libs/libmad-$(LIBMAD_VERSION).tar.gz
 
 .PHONY: \
-	prepare-build-sysroot \
+	libs prepare-build-sysroot \
 	build-libs clean-build-libs install-libs clean-install-libs clean-source-libs \
 	build-zlib clean-build-zlib install-zlib clean-install-zlib \
 	build-libpng clean-build-libpng install-libpng clean-install-libpng \
@@ -75,6 +75,15 @@ LIBMAD_ARCHIVE := /workspace/libs/libmad-$(LIBMAD_VERSION).tar.gz
 # ------------------------------------------------------------------------------
 # Global library orchestration
 # ------------------------------------------------------------------------------
+LIBS_STAMP := $(BUILD_SYSROOT)/.project-libs-ready
+
+# Cheap dependency target for components that need the enriched project sysroot.
+# `make libs` only rebuilds the libraries when the staging sysroot is absent.
+libs: $(LIBS_STAMP)
+
+$(LIBS_STAMP):
+	$(MAKE) build-libs
+
 prepare-build-sysroot:
 	test -d $(TOOLCHAIN_SYSROOT)
 	rm -rf $(BUILD_SYSROOT)
@@ -117,6 +126,7 @@ build-libs: prepare-build-sysroot
 
 	$(MAKE) build-libmad SYSROOT=$(BUILD_SYSROOT)
 	$(MAKE) install-libmad SYSROOT=$(BUILD_SYSROOT)
+	touch $(LIBS_STAMP)
 
 # Clean build artifacts only. Git source checkouts are intentionally retained so
 # normal rebuilds do not redownload every dependency.
@@ -135,7 +145,9 @@ clean-build-libs:
 	chmod -R u+w $(BUILD_SYSROOT) 2>/dev/null || true
 	rm -rf $(BUILD_SYSROOT)
 
-# Install already-built libraries into the final project sysroot.
+# Re-install already-built libraries into the project sysroot.
+# SYSROOT defaults to BUILD_SYSROOT; this target never installs the rebuilt
+# common library stack into the vendor toolchain sysroot.
 install-libs:
 	$(MAKE) install-zlib
 	$(MAKE) install-libpng
@@ -149,8 +161,10 @@ install-libs:
 	$(MAKE) install-bzip2
 	$(MAKE) install-libmad
 
-# Remove installed library files in reverse dependency order.
+# Remove project-installed library files in reverse dependency order.
+# This only targets BUILD_SYSROOT through the global SYSROOT default.
 clean-install-libs:
+	rm -f $(LIBS_STAMP)
 	$(MAKE) clean-install-libmad
 	$(MAKE) clean-install-bzip2
 	$(MAKE) clean-install-alsa-lib
@@ -529,9 +543,9 @@ build-tinyalsa:
 			https://github.com/tinyalsa/tinyalsa.git $(TINYALSA_DIR); \
 	fi
 	rm -rf $(TINYALSA_BUILD_DIR)
-	cmake \
-		-S $(TINYALSA_DIR) \
-		-B $(TINYALSA_BUILD_DIR) \
+	mkdir -p $(TINYALSA_BUILD_DIR)
+	cd $(TINYALSA_BUILD_DIR) && cmake \
+		$(TINYALSA_DIR) \
 		-DCMAKE_SYSTEM_NAME=Linux \
 		-DCMAKE_C_COMPILER=$(CROSS_COMPILE)gcc \
 		-DCMAKE_SYSROOT=$(SYSROOT) \
@@ -541,14 +555,14 @@ build-tinyalsa:
 		-DTINYALSA_USES_PLUGINS=OFF \
 		-DTINYALSA_BUILD_EXAMPLES=OFF \
 		-DTINYALSA_BUILD_UTILS=OFF
-	cmake --build $(TINYALSA_BUILD_DIR) -j$(JOBS)
+	$(MAKE) -C $(TINYALSA_BUILD_DIR) -j$(JOBS)
 
 clean-build-tinyalsa:
 	rm -rf $(TINYALSA_BUILD_DIR)
 
 install-tinyalsa:
 	test -f $(TINYALSA_BUILD_DIR)/libtinyalsa.a
-	DESTDIR=$(SYSROOT) cmake --install $(TINYALSA_BUILD_DIR)
+	DESTDIR=$(SYSROOT) $(MAKE) -C $(TINYALSA_BUILD_DIR) install
 
 clean-install-tinyalsa:
 	rm -f $(SYSROOT)/usr/lib/libtinyalsa.a

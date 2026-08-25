@@ -9,13 +9,13 @@
 STELLA_REPO := https://github.com/coffeecore/Stella-3.9.3.git
 STELLA_COMMIT := d2eab06c5fdf1e302a8b7a7e21f036216315d0f7
 
-STELLA_DIR := /workspace/sources/stella
+STELLA_DIR := $(WORKSPACE)/sources/stella
 STELLA_OUTPUT_DIR := $(OUTPUT_DIR)/stella
 
-STELLA_CXX := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-g++
-STELLA_AR := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-ar
-STELLA_RANLIB := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-ranlib
-STELLA_STRIP := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-strip
+STELLA_CXX := $(CROSS_COMPILE)g++
+STELLA_AR := $(CROSS_COMPILE)ar
+STELLA_RANLIB := $(CROSS_COMPILE)ranlib
+STELLA_STRIP := $(CROSS_COMPILE)strip
 
 STELLA_PAK := $(STELLA_OUTPUT_DIR)/Atari2600.pak
 
@@ -42,7 +42,7 @@ source-stella:
 	fi
 	cd "$(STELLA_DIR)" && git checkout --detach "$(STELLA_COMMIT)"
 
-configure-stella: source-stella
+configure-stella: source-stella libs
 	@{ \
 		echo '# Generated externally for Trimui Model S.'; \
 		echo '# Upstream configure cannot cross-compile its disabled linupy target.'; \

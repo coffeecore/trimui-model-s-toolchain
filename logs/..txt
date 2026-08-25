@@ -1,3 +1,0 @@
-Using built-in BIOS
-[SDL_Init] : libSDL modified for Trimui Model S.
-Segmentation fault

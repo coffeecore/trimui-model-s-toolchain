@@ -4,6 +4,7 @@
 
 ARNOLD_REPO := https://github.com/coffeecore/arnold_gcw0.git
 ARNOLD_BRANCH := trimui-powkiddy-a66
+ARNOLD_COMMIT := da3141b9f37b3747f7198e840bddc0dd192d9ddd
 ARNOLD_DIR := /workspace/sources/arnold
 ARNOLD_OUTPUT_DIR := $(OUTPUT_DIR)/arnold
 
@@ -16,7 +17,7 @@ ARNOLD_OUTPUT_DIR := $(OUTPUT_DIR)/arnold
 	clean-install-arnold \
 	arnold
 
-arnold:
+arnold: source-arnold
 	$(MAKE) clean-install-arnold
 	$(MAKE) clean-build-arnold
 	$(MAKE) build-arnold
@@ -33,6 +34,7 @@ source-arnold:
 			$(ARNOLD_REPO) \
 			$(ARNOLD_DIR); \
 	fi
+	git -C "$(ARNOLD_DIR)" checkout --detach "$(ARNOLD_COMMIT)"
 
 
 # Compile Arnold avec le Makefile upstream.

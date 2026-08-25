@@ -5,15 +5,15 @@
 GNGEO_REPO := https://github.com/coffeecore/gngeo.git
 GNGEO_COMMIT := 9336cb9f4cdda6de91b4234975248f4b0580ab5a
 
-GNGEO_DIR := /workspace/sources/gngeo
+GNGEO_DIR := $(WORKSPACE)/sources/gngeo
 GNGEO_OUTPUT_DIR := $(OUTPUT_DIR)/gngeo
 GNGEO_PAK := $(GNGEO_OUTPUT_DIR)/NEOGEO.pak
 
-GNGEO_CC := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-gcc
+GNGEO_CC := $(CROSS_COMPILE)gcc
 GNGEO_CPP := $(GNGEO_CC) -E
-GNGEO_AR := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-ar
-GNGEO_RANLIB := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-ranlib
-GNGEO_STRIP := /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-strip
+GNGEO_AR := $(CROSS_COMPILE)ar
+GNGEO_RANLIB := $(CROSS_COMPILE)ranlib
+GNGEO_STRIP := $(CROSS_COMPILE)strip
 
 .PHONY: \
 	gngeo \
@@ -32,7 +32,7 @@ source-gngeo:
 	fi
 	cd "$(GNGEO_DIR)" && git checkout --detach "$(GNGEO_COMMIT)"
 
-configure-gngeo: source-gngeo
+configure-gngeo: source-gngeo libs
 	cd "$(GNGEO_DIR)" && \
 	rm -f config.status config.log config.cache && \
 	CC="$(GNGEO_CC)" \
@@ -77,6 +77,24 @@ install-gngeo:
 	cp \
 		"$(GNGEO_DIR)/src/gngeo" \
 		"$(GNGEO_PAK)/gngeo"
+
+	# The Buildroot SDL used by GnGeo has a runtime dependency on tslib.
+	# The Trimui Model S firmware does not provide libts-1.0.so.0, so keep this
+	# non-system dependency private to the PAK instead of modifying the firmware.
+	test -e "$(SYSROOT)/usr/lib/libts-1.0.so.0"
+	mkdir -p "$(GNGEO_PAK)/lib"
+	cp -a $(SYSROOT)/usr/lib/libts-1.0.so* "$(GNGEO_PAK)/lib/"
+	@if [ -d "$(SYSROOT)/usr/lib/ts" ]; then \
+		cp -a "$(SYSROOT)/usr/lib/ts" "$(GNGEO_PAK)/lib/"; \
+	fi
+
+	# Make the private runtime directory visible before executing GnGeo.
+	sed -i '1a\
+PAK_DIR="$$(CDPATH= cd -- "$$(dirname -- "$$0")" && pwd)"\
+export LD_LIBRARY_PATH="$$PAK_DIR/lib$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH}"\
+export TSLIB_PLUGINDIR="$$PAK_DIR/lib/ts"' \
+		"$(GNGEO_PAK)/launch.sh"
+	sh -n "$(GNGEO_PAK)/launch.sh"
 
 clean-install-gngeo:
 	rm -rf "$(GNGEO_OUTPUT_DIR)"

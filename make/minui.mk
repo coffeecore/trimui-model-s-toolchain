@@ -5,20 +5,21 @@
 # orchestration layer instead of modifying MinUI or its submodules.
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
-MINUI_DIR := /workspace/sources/minui
+MINUI_COMMIT := 3e7496883aa60c62367135147ce0d82cfab5a608
+MINUI_DIR := $(WORKSPACE)/sources/minui
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
 MINUI_BUILD_DIR := $(MINUI_DIR)/build
 MINUI_PAYLOAD_DIR := $(MINUI_BUILD_DIR)/PAYLOAD
 MINUI_ROMS_DIR := $(MINUI_BUILD_DIR)/Roms
 
-MINUI_TOOLCHAIN := /opt/trimui-toolchain
-MINUI_SYSROOT := $(MINUI_TOOLCHAIN)/usr/arm-buildroot-linux-gnueabi/sysroot
+MINUI_TOOLCHAIN := $(TOOLCHAIN)
+MINUI_SYSROOT := $(TOOLCHAIN_SYSROOT)
 MINUI_PREFIX := $(MINUI_SYSROOT)/usr
-MINUI_CROSS := $(MINUI_TOOLCHAIN)/bin/arm-buildroot-linux-gnueabi-
+MINUI_CROSS := $(CROSS_COMPILE)
 
 .PHONY: build-minui clean-build-minui source-minui clean-source-minui minui
 
-minui:
+minui: source-minui
 	$(MAKE) clean-build-minui
 	$(MAKE) build-minui
 
@@ -29,6 +30,7 @@ source-minui:
 			$(MINUI_REPO) \
 			$(MINUI_DIR); \
 	fi
+	git -C "$(MINUI_DIR)" checkout --detach "$(MINUI_COMMIT)"
 
 	# Certains submodules upstream utilisent des URLs SSH GitHub.
 	# On les réécrit temporairement en HTTPS sans modifier .gitmodules.
@@ -44,9 +46,14 @@ clean-source-minui:
 # Reproduce the upstream build order. The only manually expanded emulator target
 # is PicoDrive (`gen`) because MinUI references platform/trimui/skin, while the
 # pinned PicoDrive commit actually provides platform/opendingux/data/skin.
-build-minui: source-minui
+build-minui: source-minui libs
 	$(MAKE) -C $(MINUI_DIR) readme
-	$(MAKE) -C $(MINUI_DIR) sys
+	# Keep upstream MinUI system/SDL on the vendor SDK sysroot. Only PREFIX is
+	# corrected to the actual Buildroot layout; do not override CC/SYSROOT here,
+	# because SDL 1.2/libtool expects the compiler command it was configured with.
+	$(MAKE) -C $(MINUI_DIR) sys \
+		CROSS_COMPILE="$(MINUI_CROSS)" \
+		PREFIX="$(MINUI_PREFIX)"
 
 	# Rebuild MinUI libraries from the orchestration layer.
 	# Upstream `sys` builds its own copies first, so this must run afterwards.
@@ -118,7 +125,9 @@ build-minui: source-minui
 # arbitrary errors with `-make` or `|| true`.
 clean-build-minui:
 	# MinUI system
-	$(MAKE) -C $(MINUI_DIR)/src/libmmenu clean
+	$(MAKE) -C $(MINUI_DIR)/src/libmmenu clean \
+		CROSS_COMPILE="$(MINUI_CROSS)" \
+		PREFIX="$(MINUI_PREFIX)"
 	$(MAKE) -C $(MINUI_DIR)/src/MinUI clean
 	$(MAKE) -C $(MINUI_DIR)/src/show clean
 	$(MAKE) -C $(MINUI_DIR)/src/confirm clean

@@ -334,3 +334,303 @@ ARM 32-bit EABI5 ;
 GNU/Linux 3.10.0 ;
 dépendances attendues : SDL 1.2, png12, zlib, pthread, dl, libstdc++, libgcc_s, libc ;
 seulement GLIBC_2.4.
+
+
+# 8
+Oui. Maintenant que les chemins sont propres, je ferais un **test complet de reproductibilité**, en gardant seulement le projet et le toolchain `/opt/trimui-toolchain`, comme si tu venais de cloner le dépôt.
+
+Point important : `minui-release` **ne compile pas tout tout seul** dans tes Makefiles actuels. Il faut construire les éléments avant le packaging.
+
+### 1. Repartir proprement
+
+Avant de supprimer les sources, retire les libs que notre projet a installées dans le sysroot actuel :
+
+```bash
+make clean-install-libs
+```
+
+Ensuite, pour vraiment simuler un clone frais du projet :
+
+```bash
+rm -rf /workspace/sources
+rm -rf /workspace/libs
+rm -rf /workspace/build
+rm -rf /workspace/output
+```
+
+On **ne touche pas** à :
+
+```text
+/opt/trimui-toolchain
+```
+
+C'est notre toolchain de base.
+
+Tu peux vérifier :
+
+```bash
+ls -lah /workspace
+ls -lah /opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-gcc
+```
+
+---
+
+### 2. Recompiler toutes les libs depuis zéro
+
+```bash
+make build-libs
+```
+
+Puis les installer dans le sysroot final :
+
+```bash
+make install-libs
+```
+
+Vérification rapide :
+
+```bash
+ls /opt/trimui-toolchain/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib | \
+grep -E 'libSDL\.a|libSDL_image\.a|libSDL_mixer\.a|libSDL_ttf\.a|libtinyalsa\.a|libasound\.a|libmad\.a|libbz2\.a'
+```
+
+Puis vérifier qu'aucun vieux toolchain n'est revenu :
+
+```bash
+grep -RIlE \
+'/workspace/toolchain|arm-unknown-linux-gnueabi|/workspace/sysroot|/opt/trimui-toolchain/arm-buildroot-linux-gnueabi' \
+/workspace/build 2>/dev/null
+```
+
+Ça doit être vide.
+
+---
+
+### 3. Recompiler MinUI Legacy complètement
+
+Comme on a supprimé `/workspace/sources`, **n'utilise pas `make minui` ici** : cette target commence par un clean d'un checkout qui n'existe plus.
+
+Utilise directement :
+
+```bash
+make build-minui
+```
+
+`build-minui` va lui-même :
+
+* cloner MinUI ;
+* récupérer les submodules ;
+* construire le système MinUI ;
+* reconstruire `libmsettings` / `libmmenu` ;
+* construire les émulateurs MinUI Legacy ;
+* construire PicoDrive ;
+* créer le zip upstream MinUI.
+
+Ensuite :
+
+```bash
+find /workspace/sources/minui/build -maxdepth 2 -type f | sort
+```
+
+---
+
+### 4. Compiler les quatre standalone
+
+Dans notre projet, ce sont :
+
+```text
+Arnold  -> GX4000
+Stella  -> Atari 2600
+GnGeo   -> Neo Geo
+Retro8  -> PICO-8
+```
+
+Puisque leurs sources n'existent plus, utilise les targets `build-*`, puis `install-*` :
+
+```bash
+make build-arnold
+make install-arnold
+
+make build-stella
+make install-stella
+
+make build-gngeo
+make install-gngeo
+
+make build-retro8
+make install-retro8
+```
+
+Puis :
+
+```bash
+find /workspace/output/arnold \
+     /workspace/output/stella \
+     /workspace/output/gngeo \
+     /workspace/output/retro8 \
+     -maxdepth 3 -type f | sort
+```
+
+À ce stade, on sait déjà que GnGeo fonctionne réellement sur la console, menu compris, donc ce rebuild nous permettra aussi de confirmer sa reproductibilité.
+
+---
+
+### 5. Recompiler PicoArch frontend
+
+```bash
+make picoarch-frontend
+```
+
+Puis tous les cores que nous avons validés :
+
+```bash
+make picoarch-validated
+```
+
+Ta target `picoarch-validated` contient actuellement les cores validés, notamment FCEUmm, Gambatte, gpSP, PicoDrive, MAME2000, FB Alpha 2012, PCSX-ReARMed, Beetle PCE Fast, BlueMSX, fMSX, GME, NGP, WonderSwan, Pokémon Mini, QuickNES, SMS Plus GX, SNES9x, Stella 2014, MAME2003 Plus, PrBoom, etc.
+
+Ensuite rassemble frontend + cores :
+
+```bash
+make picoarch-output
+```
+
+Vérifie :
+
+```bash
+ls -lah /workspace/output/picoarch/
+ls -lah /workspace/output/picoarch/cores/
+```
+
+Et surtout :
+
+```bash
+file /workspace/output/picoarch/picoarch
+file /workspace/output/picoarch/cores/*_libretro.so
+```
+
+Ils doivent être ARM, pas x86-64.
+
+---
+
+### 6. Vérification finale de l'ancien crosstool-NG
+
+Avant de packager :
+
+```bash
+grep -RIlE \
+'/workspace/toolchain|arm-unknown-linux-gnueabi|/workspace/sysroot|/opt/trimui-toolchain/arm-buildroot-linux-gnueabi' \
+/workspace/build \
+/workspace/output \
+/workspace/sources \
+2>/dev/null
+```
+
+**Idéalement aucune sortie.**
+
+C'est un test très intéressant parce qu'à ce moment-là absolument tout aura été généré depuis zéro avec le nouveau toolchain.
+
+---
+
+### 7. Construire les PAKs
+
+PicoArch :
+
+```bash
+make picoarch-paks
+```
+
+Standalone :
+
+```bash
+make standalone-paks
+```
+
+PAKs MinUI additionnels :
+
+```bash
+make minui-extra-paks
+```
+
+Et l'outil PicoArch :
+
+```bash
+make picoarch-tool
+```
+
+`picoarch-tool` dépend déjà de `picoarch-output`, donc son entrée sera prête.
+
+---
+
+### 8. Faire la release MinUI complète
+
+Enfin :
+
+```bash
+make minui-release
+```
+
+Puis :
+
+```bash
+find /workspace/output/minui-release -maxdepth 2 -type f -printf '%p  %k KB\n' | sort
+```
+
+Et pour voir le contenu du ZIP sans l'extraire :
+
+```bash
+unzip -l /workspace/output/minui-release/*.zip | less
+```
+
+### Donc, la séquence complète condensée
+
+Si tu veux la suivre tranquillement commande par commande :
+
+```bash
+make clean-install-libs
+
+rm -rf /workspace/sources
+rm -rf /workspace/libs
+rm -rf /workspace/build
+rm -rf /workspace/output
+
+make build-libs
+make install-libs
+
+make build-minui
+
+make build-arnold
+make install-arnold
+
+make build-stella
+make install-stella
+
+make build-gngeo
+make install-gngeo
+
+make build-retro8
+make install-retro8
+
+make picoarch-frontend
+make picoarch-validated
+make picoarch-output
+
+make picoarch-paks
+make standalone-paks
+make minui-extra-paks
+make picoarch-tool
+
+make minui-release
+```
+
+Je ferais **exactement ça maintenant**. C'est notre meilleur test pour savoir si le dépôt est réellement reproductible depuis un checkout propre, sans dépendre d'anciens artefacts.
+
+# 9
+
+```bash
+file /workspace/build/picoarch/mame2003_libretro.so
+
+readelf -d \
+    /workspace/build/picoarch/mame2003_libretro.so \
+    | grep NEEDED
+```
