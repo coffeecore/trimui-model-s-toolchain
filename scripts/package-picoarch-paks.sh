@@ -73,6 +73,9 @@ required_cores=(
     snes9x2005_plus_libretro.so
     snes9x2010_libretro.so
     stella2014_libretro.so
+    fbalpha2012_cps1_libretro.so
+    fbalpha2012_cps2_libretro.so
+    fbalpha2012_neogeo_libretro.so
 )
 
 for core in "${required_cores[@]}"; do
@@ -260,15 +263,15 @@ create_pak \
     "fceumm_libretro.so" \
     "Nintendo"
 
-create_pak \
-    "Nintendo (QuickNES)" \
-    "quicknes_libretro.so" \
-    "Nintendo"
+# create_pak \
+#     "Nintendo (QuickNES)" \
+#     "quicknes_libretro.so" \
+#     "Nintendo"
 
-create_pak \
-    "Famicom Disk System (FCEUmm)" \
-    "fceumm_libretro.so" \
-    "Famicom Disk System"
+    # create_pak \
+    #     "Famicom Disk System (FCEUmm)" \
+    #     "fceumm_libretro.so" \
+    #     "Famicom Disk System"
 
 
 # ---------------------------------------------------------------------
@@ -307,13 +310,13 @@ create_pak \
     "Master System"
 
 create_pak \
-    "ColecoVision (blueMSX)" \
+    "ColecoVision" \
     "bluemsx_libretro.so" \
     "ColecoVision" \
     "bluemsx"
 
 create_pak \
-    "SG-1000 (blueMSX)" \
+    "SG-1000" \
     "bluemsx_libretro.so" \
     "SG-1000" \
     "bluemsx"
@@ -343,35 +346,35 @@ create_pak \
 # Super Nintendo
 # ---------------------------------------------------------------------
 
-create_pak \
-    "Super Nintendo (Snes9x 2002)" \
-    "snes9x2002_libretro.so" \
-    "Super Nintendo"
+# create_pak \
+#     "Super Nintendo (Snes9x 2002)" \
+#     "snes9x2002_libretro.so" \
+#     "Super Nintendo"
 
 create_pak \
-    "Super Nintendo (Snes9x 2005)" \
+    "Super Nintendo" \
     "snes9x2005_libretro.so" \
     "Super Nintendo"
 
-create_pak \
-    "Super Nintendo (Snes9x 2005 Plus)" \
-    "snes9x2005_plus_libretro.so" \
-    "Super Nintendo"
+# create_pak \
+#     "Super Nintendo (Snes9x 2005 Plus)" \
+#     "snes9x2005_plus_libretro.so" \
+#     "Super Nintendo"
 
-create_pak \
-    "Super Nintendo (Snes9x 2010)" \
-    "snes9x2010_libretro.so" \
-    "Super Nintendo"
+# create_pak \
+#     "Super Nintendo (Snes9x 2010)" \
+#     "snes9x2010_libretro.so" \
+#     "Super Nintendo"
 
-create_pak \
-    "Satellaview (Snes9x 2010)" \
-    "snes9x2010_libretro.so" \
-    "Satellaview"
+# create_pak \
+#     "Satellaview (Snes9x 2010)" \
+#     "snes9x2010_libretro.so" \
+#     "Satellaview"
 
-create_pak \
-    "Sufami Turbo (Snes9x 2010)" \
-    "snes9x2010_libretro.so" \
-    "Sufami Turbo"
+# create_pak \
+#     "Sufami Turbo (Snes9x 2010)" \
+#     "snes9x2010_libretro.so" \
+#     "Sufami Turbo"
 
 
 # ---------------------------------------------------------------------
@@ -435,16 +438,16 @@ create_pak \
 # ---------------------------------------------------------------------
 
 create_pak \
-    "MSX (blueMSX)" \
+    "MSX" \
     "bluemsx_libretro.so" \
     "MSX" \
     "bluemsx"
 
-create_pak \
-    "MSX (fMSX)" \
-    "fmsx_libretro.so" \
-    "MSX" \
-    "fmsx"
+# create_pak \
+#     "MSX (fMSX)" \
+#     "fmsx_libretro.so" \
+#     "MSX" \
+#     "fmsx"
 
 
 # ---------------------------------------------------------------------
@@ -462,25 +465,39 @@ create_pak \
 # ---------------------------------------------------------------------
 
 create_pak \
-    "Arcade (MAME 2000)" \
+    "MAME 2000" \
     "mame2000_libretro.so" \
-    "Arcade"
+    "MAME 2000"
 
 create_pak \
-    "Arcade (MAME 2003)" \
+    "MAME 2003" \
     "mame2003_libretro.so" \
-    "Arcade"
+    "MAME 2003"
+
+# create_pak \
+#     "Arcade (MAME 2003 Plus)" \
+#     "mame2003_plus_libretro.so" \
+#     "Arcade"
 
 create_pak \
-    "Arcade (MAME 2003 Plus)" \
-    "mame2003_plus_libretro.so" \
-    "Arcade"
-
-create_pak \
-    "Arcade (FBA 2012)" \
+    "FBA 2012" \
     "fbalpha2012_libretro.so" \
-    "Arcade"
+    "FBA 2012"
 
+create_pak \
+    "Neo Geo" \
+    "fbalpha2012_neogeo_libretro.so" \
+    "Neo Geo"
+
+create_pak \
+    "CPS1" \
+    "fbalpha2012_cps1_libretro.so" \
+    "CPS1"
+
+create_pak \
+    "CPS2" \
+    "fbalpha2012_cps2_libretro.so" \
+    "CPS2"
 
 # ---------------------------------------------------------------------
 # Other
@@ -525,8 +542,8 @@ pak_count=$(
         | wc -l
 )
 
-if [ "$pak_count" -ne 38 ]; then
-    echo "ERROR: expected 38 PAKs, got $pak_count"
+if [ "$pak_count" -ne 32 ]; then
+    echo "ERROR: expected 32 PAKs, got $pak_count"
     exit 1
 fi
 

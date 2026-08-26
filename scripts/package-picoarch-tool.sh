@@ -29,9 +29,13 @@ fi
 
 cp "$PICOARCH_OUTPUT/picoarch" "$PAK/picoarch"
 
-# launch.sh runs PicoArch from the cores directory so the skin must be there.
-mkdir -p "$PAK/cores/skin"
-cp -a "$SKIN_DIR/." "$PAK/cores/skin/"
+# PicoArch resolves its libpicofe skin relative to the picoarch executable.
+mkdir -p "$PAK/skin"
+cp -a "$SKIN_DIR/." "$PAK/skin/"
+
+test -f "$PAK/skin/font.png"
+test -f "$PAK/skin/selector.png"
+test -f "$PAK/skin/skin.txt"
 
 find "$PICOARCH_OUTPUT/cores" \
     -maxdepth 1 \
@@ -49,7 +53,7 @@ LOG="$LOG_DIR/PicoArch-Tool.txt"
 
 mkdir -p "$LOG_DIR"
 
-exec >"$LOG" 2>&1
+exec >>"$LOG" 2>&1
 
 echo "=== PicoArch Tool ==="
 echo "PAK_DIR=$PAK_DIR"
@@ -60,7 +64,7 @@ cd "$PAK_DIR/cores"
 echo "PWD after cd=$(pwd)"
 echo
 echo "=== skin ==="
-ls -lah "$PAK_DIR/cores/skin" 2>&1
+ls -lah "$PAK_DIR/skin" 2>&1
 echo
 echo "=== cores ==="
 ls -lah "$PAK_DIR/cores" 2>&1

@@ -153,14 +153,18 @@ picoarch-check-patches: prepare-picoarch
 # The frontend and every core now share the same complete PicoArch working tree.
 # This is required because the root Makefile owns the *_libretro.so targets.
 picoarch-frontend: minui-libs picoarch-check-patches
-	PATH="$(BUILD_SYSROOT)/usr/bin:$$PATH" \
+	test -x "$(TOOLCHAIN_SYSROOT)/usr/bin/sdl-config"
+	test -f "$(MINUI_MMENU_BUILD)/mmenu.h"
+
+	PATH="$(TOOLCHAIN_SYSROOT)/usr/bin:$$PATH" \
 		$(MAKE) -C $(PICOARCH_BUILD) \
 		platform=$(PICOARCH_PLATFORM) \
 		MINUI=1 \
 		CROSS_COMPILE=$(PICOARCH_CROSS) \
-		CC="$(PICOARCH_CC) --sysroot=$(BUILD_SYSROOT)" \
-		CXX="$(PICOARCH_CXX) --sysroot=$(BUILD_SYSROOT)" \
+		CC="$(PICOARCH_CC) --sysroot=$(TOOLCHAIN_SYSROOT) -I$(MINUI_MMENU_BUILD)" \
+		CXX="$(PICOARCH_CXX) --sysroot=$(TOOLCHAIN_SYSROOT) -I$(MINUI_MMENU_BUILD)" \
 		picoarch
+
 	test -x "$(PICOARCH_BUILD)/picoarch"
 
 # Removing the frontend working tree also removes any cores copied into it.

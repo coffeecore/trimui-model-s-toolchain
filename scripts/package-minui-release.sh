@@ -131,8 +131,8 @@ if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     [ -d "$PICOARCH" ] ||
         die "missing PicoArch PAK output"
 
-    [ "$(count_paks "$PICOARCH")" -eq 38 ] ||
-        die "expected 37 PicoArch PAKs"
+    [ "$(count_paks "$PICOARCH")" -eq 32 ] ||
+        die "expected 32 PicoArch PAKs"
 
     [ -d "$PICOARCH_TOOL" ] ||
         die "missing PicoArch Tool PAK"
@@ -158,6 +158,15 @@ rm -rf "$BUILD" "$OUTPUT"
 mkdir -p "$OUTER" "$OUTPUT"
 
 unzip -q "$BASE_RELEASE" -d "$OUTER"
+
+if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+    mkdir -p "$OUTER/Roms"
+
+    for pak in "$PICOARCH"/*-picoarch.pak; do
+        SYSTEM_NAME=$(cat "$pak/system")
+        mkdir -p "$OUTER/Roms/$SYSTEM_NAME"
+    done
+fi
 
 [ -f "$OUTER/TrimuiUpdate_MinUI.zip" ] ||
     die "MinUI release has no TrimuiUpdate_MinUI.zip"
@@ -225,7 +234,7 @@ if [ "$MODE" != "only" ]; then
 
     if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
         copy_paks "$PICOARCH"
-        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 38))
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 32))
 
         mkdir -p "$INNER/Tools"
 
