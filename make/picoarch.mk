@@ -116,8 +116,9 @@ prepare-picoarch: source-picoarch
 		cp -a "$(PICOARCH_SOURCE)" "$(PICOARCH_BUILD)"; \
 		cp "$(PICOARCH_PATCHES)/libpicofe/0001-key-combos.patch" \
 			"$(PICOARCH_BUILD)/patches/libpicofe/0001-key-combos.patch"; \
-		patch -l -d "$(PICOARCH_BUILD)" -p1 \
-			< "$(PICOARCH_PATCHES)/frontend/0001-fix-minui-directories.patch"; \
+		for patch_file in "$(PICOARCH_PATCHES)"/frontend/*.patch; do \
+			patch -l -d "$(PICOARCH_BUILD)" -p1 < "$$patch_file"; \
+		done; \
 		touch "$(PICOARCH_PREPARED_STAMP)"; \
 	fi
 

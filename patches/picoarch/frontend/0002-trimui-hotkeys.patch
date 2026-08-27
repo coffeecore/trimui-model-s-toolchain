@@ -1,0 +1,37 @@
+--- a/main.h
++++ b/main.h
+@@ -11,6 +11,7 @@
+   EACTION_NONE = 0,
+   EACTION_MENU,
+   EACTION_TOGGLE_HUD,
++  EACTION_TOGGLE_FPS,
+   EACTION_TOGGLE_FF,
+   EACTION_SAVE_STATE,
+   EACTION_LOAD_STATE,
+--- a/main.c
++++ b/main.c
+@@ -451,6 +451,13 @@
+ 		/* Force the hud to clear */
+ 		plat_video_set_msg(NULL, 0, 0);
+ 		break;
++        case EACTION_TOGGLE_FPS:
++                show_fps = !show_fps;
++                if (show_fps)
++                        show_hud = 1;
++                /* Force the hud to clear */
++                plat_video_set_msg(NULL, 0, 0);
++                break;
+ 	case EACTION_SAVE_STATE:
+ 		state_write();
+ 		break;
+--- a/plat_trimui.c
++++ b/plat_trimui.c
+@@ -23,6 +23,8 @@
+ 	{ SDLK_BACKSPACE, IN_BINDTYPE_PLAYER12, RETRO_DEVICE_ID_JOYPAD_R },
+ 	{ SDLK_q,         IN_BINDTYPE_PLAYER12, RETRO_DEVICE_ID_JOYPAD_L2 },
+ 	{ SDLK_BACKSLASH, IN_BINDTYPE_PLAYER12, RETRO_DEVICE_ID_JOYPAD_R2 },
++        { SDLK_5,         IN_BINDTYPE_EMU, EACTION_TOGGLE_FF },
++        { SDLK_7,         IN_BINDTYPE_EMU, EACTION_TOGGLE_FPS },
+ 	{ SDLK_ESCAPE,    IN_BINDTYPE_EMU, EACTION_MENU },
+ 	{ 0, 0, 0 }
+ };
