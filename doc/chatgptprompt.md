@@ -634,3 +634,209 @@ readelf -d \
     /workspace/build/picoarch/mame2003_libretro.so \
     | grep NEEDED
 ```
+
+# 10
+
+Oui. Et tu as bien identifié la différence entre les deux launchers.
+
+Dans les PAKs système, ton script construit actuellement :
+
+```sh
+ROM_DIR="/mnt/SDCARD/Roms/$rom_dir_name"
+SYSTEM_DIR="$ROM_DIR/.picoarch-$core_name"
+```
+
+puis surtout :
+
+```sh
+HOME="$ROM_DIR"
+```
+
+PicoArch dérive ensuite lui-même ses répertoires depuis `HOME`, d'où par exemple :
+
+```text
+/mnt/SDCARD/Roms/MAME 2003/.picoarch-mame2003/
+```
+
+ 
+
+Dans le Tool, il n'y a effectivement **aucun `HOME=`**. Le launcher fait juste :
+
+```sh
+cd "$PAK_DIR/cores"
+"$PAK_DIR/picoarch"
+```
+
+
+
+C'est pour ça qu'on obtenait :
+
+```text
+Config dir: //.picoarch-mame2003/
+Save dir: //.picoarch-mame2003/
+System dir: //.picoarch-mame2003/
+```
+
+
+
+## 1. Un seul dossier de config par core, partagé PAK + Tool
+
+Je ferais quelque chose de très simple :
+
+```text
+/mnt/SDCARD/.picoarch-mame2003/
+/mnt/SDCARD/.picoarch-mame2000/
+/mnt/SDCARD/.picoarch-gambatte/
+/mnt/SDCARD/.picoarch-picodrive/
+...
+```
+
+Autrement dit :
+
+```sh
+HOME="/mnt/SDCARD"
+```
+
+partout.
+
+### Dans `package-picoarch-paks.sh`
+
+Remplace :
+
+```sh
+SYSTEM_DIR="\$ROM_DIR/.picoarch-$core_name"
+```
+
+par :
+
+```sh
+SYSTEM_DIR="/mnt/SDCARD/.picoarch-$core_name"
+```
+
+Et plus bas remplace :
+
+```sh
+HOME="\$ROM_DIR"
+```
+
+par :
+
+```sh
+HOME="/mnt/SDCARD"
+```
+
+Donc un MAME2003 lancé normalement utilisera :
+
+```text
+/mnt/SDCARD/.picoarch-mame2003/picoarch.cfg
+```
+
+Le `SYSTEM_DIR` doit suivre le même déplacement, car ton script s'en sert aussi pour installer certains fichiers nécessaires aux cores, par exemple les BIOS PSX et les assets blueMSX. 
+
+### Dans `package-picoarch-tool.sh`
+
+Juste avant :
+
+```sh
+cd "$PAK_DIR/cores"
+```
+
+ajoute :
+
+```sh
+HOME="/mnt/SDCARD"
+export HOME
+```
+
+Donc :
+
+```sh
+HOME="/mnt/SDCARD"
+export HOME
+
+cd "$PAK_DIR/cores"
+
+"$PAK_DIR/picoarch"
+```
+
+Le Tool choisit ensuite son core et PicoArch construit automatiquement :
+
+```text
+mame2003 -> /mnt/SDCARD/.picoarch-mame2003/
+gambatte -> /mnt/SDCARD/.picoarch-gambatte/
+...
+```
+
+Tu obtiens donc exactement le partage recherché :
+
+```text
+MAME 2003.pak ──┐
+                ├── /mnt/SDCARD/.picoarch-mame2003/picoarch.cfg
+PicoArch Tool ──┘
+```
+
+Je préfère ça à essayer de faire calculer un `SYSTEM_DIR` au Tool : **le Tool ne connaît pas encore le core au moment où son `launch.sh` démarre**, puisque c'est PicoArch qui te fait choisir le core.
+
+---
+
+## 2. `scale_size` par défaut sur Aspect
+
+Dans ton `set_defaults()` tu as actuellement :
+
+```c
+scale_size = SCALE_SIZE_NONE;
+```
+
+La modification est effectivement à cet endroit.
+
+Il faut d'abord confirmer le nom exact de l'enum dans **ta version** :
+
+```sh
+grep -Rni 'SCALE_SIZE_' \
+    /workspace/build/picoarch \
+    --include='*.h' \
+    --include='*.c' \
+    | head -30
+```
+
+Si, comme prévu, tu as bien une valeur :
+
+```c
+SCALE_SIZE_ASPECT
+```
+
+alors la modification sera simplement :
+
+```c
+scale_size = SCALE_SIZE_ASPECT;
+```
+
+à la place de :
+
+```c
+scale_size = SCALE_SIZE_NONE;
+```
+
+C'est bien `set_defaults()` qu'il faut modifier : cela changera le **défaut initial**, tout en laissant une config existante contenant par exemple :
+
+```ini
+scale_size = 0
+```
+
+prendre le dessus ensuite.
+
+Je l'ajouterais à notre `0002-trimui-hotkeys.patch` ou, encore plus propre maintenant qu'il contient déjà des adaptations TrimUI, je le renommerais éventuellement en quelque chose comme :
+
+```text
+0002-trimui-defaults.patch
+```
+
+et on y garde :
+
+```text
+MENU+B -> FF
+MENU+X -> FPS
+scale par défaut -> Aspect
+```
+
+Pour le déplacement des configs, par contre, **pas besoin de patcher PicoArch** : les deux scripts de packaging suffisent.
