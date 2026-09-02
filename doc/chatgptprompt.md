@@ -840,3 +840,344 @@ scale par défaut -> Aspect
 ```
 
 Pour le déplacement des configs, par contre, **pas besoin de patcher PicoArch** : les deux scripts de packaging suffisent.
+
+# 11
+
+Oui, mais **tes Makefiles actuels ont besoin d’une petite adaptation** pour avoir un workflow de dev agréable. La bonne nouvelle est que l’architecture que tu as déjà est assez proche de ce qu’il faut.
+
+### 1. Le problème actuel avec la branche MinUI
+
+Dans `minui.mk`, tu as :
+
+```make
+MINUI_COMMIT := 3e7496883aa60c62367135147ce0d82cfab5a608
+```
+
+et surtout :
+
+```make
+git -C "$(MINUI_DIR)" checkout --detach "$(MINUI_COMMIT)"
+```
+
+Or `build-minui` dépend de `source-minui`.
+
+Donc actuellement :
+
+```text
+tu développes sur une branche
+        ↓
+make build-minui
+        ↓
+source-minui
+        ↓
+checkout --detach du commit figé
+```
+
+=> pas adapté au développement.
+
+Je modifierais ça très simplement avec :
+
+```make
+MINUI_COMMIT := 3e7496883aa60c62367135147ce0d82cfab5a608
+MINUI_REF ?= $(MINUI_COMMIT)
+MINUI_DEV_BRANCH ?= dev
+```
+
+et :
+
+```make
+git -C "$(MINUI_DIR)" checkout "$(MINUI_REF)"
+```
+
+Ainsi, le comportement release ne change absolument pas :
+
+```sh
+make release-all
+```
+
+utilise toujours :
+
+```text
+3e749688...
+```
+
+Mais en dev tu peux faire :
+
+```sh
+make build-minui MINUI_REF=dev
+```
+
+et tu restes réellement sur ta branche `dev`.
+
+Pour créer la branche une première fois depuis ton checkout actuel :
+
+```sh
+git -C /workspace/sources/minui switch -c dev
+git -C /workspace/sources/minui push -u origin dev
+```
+
+---
+
+### 2. Je ne garderais pas `build-minui` comme commande de dev
+
+Ton `build-minui` fait actuellement beaucoup trop de choses :
+
+```text
+readme
+sys
+libmsettings
+libmmenu
+GB
+Pokemon Mini
+NGP
+Game Gear
+SNES
+PS
+GBA
+NES
+PicoDrive
+PCE
+WonderSwan
+Lynx
+tools
+zip
+```
+
+Si tu modifies juste MinUI, attendre la reconstruction des émulateurs n’a aucun intérêt.
+
+Je refactoriserais donc `minui.mk` avec un target intermédiaire du genre :
+
+```text
+build-minui-system
+```
+
+qui ferait uniquement :
+
+```text
+sys
+  ├── MinUI
+  ├── keymon
+  ├── show/confirm/etc.
+  └── système MinUI
+
+minui-libs
+  ├── libmsettings
+  └── libmmenu
+
+copie des deux .so dans build/PAYLOAD/System/lib/
+```
+
+Puis :
+
+```text
+build-minui
+    ↓
+build-minui-system
+    ↓
+émulateurs
+    ↓
+tools
+    ↓
+zip
+```
+
+Donc tu ne dupliques aucune logique.
+
+Pour développer, tu aurais alors simplement :
+
+```sh
+make build-minui-system MINUI_REF=dev
+```
+
+Et pour une vraie release :
+
+```sh
+make release-all
+```
+
+Le workflow release resterait figé sur le commit.
+
+---
+
+### 3. Tester sur la TrimUI sans refaire de release
+
+Oui, absolument.
+
+Ton build MinUI produit déjà :
+
+```text
+/workspace/sources/minui/build/PAYLOAD/System/
+```
+
+Il n’est pas nécessaire de refaire :
+
+```text
+TrimuiUpdate_MinUI.zip
+release MinUI
+custom release
+```
+
+à chaque modification.
+
+En dev, on peut ajouter un target :
+
+```text
+deploy-minui-dev
+```
+
+qui copie simplement :
+
+```text
+build/PAYLOAD/System/
+        ↓
+/mnt/SDCARD/System/
+```
+
+sur la console.
+
+Donc ton cycle deviendrait :
+
+```text
+modifier le code
+      ↓
+make minui-dev
+      ↓
+compilation ciblée
+      ↓
+make deploy-minui-dev
+      ↓
+redémarrer MinUI
+      ↓
+tester
+```
+
+Quelques secondes/minutes au lieu d’une release complète.
+
+Pour le déploiement, on pourra utiliser soit :
+
+```text
+ADB / USB Bridge
+```
+
+soit :
+
+```text
+rsync vers la SD montée
+```
+
+selon ce que tu préfères. Le Legacy Model S possède bien un environnement `adbd`/USB Bridge ; les notes upstream en parlent explicitement. ([GitHub][1])
+
+Je préfère qu’on fasse le target de déploiement **après** le refactor build, car le choix ADB vs SD n’affecte pas la compilation.
+
+---
+
+## 4. `libmsettings` : oui… mais pas comme fichier de config générique
+
+C’est la nuance importante.
+
+`libmsettings` est bien la bibliothèque qui centralise des **settings système MinUI**, notamment des choses comme volume, luminosité et autres états matériels. Dans MinUI moderne on retrouve par exemple les appels `GetHDMI()`, `SetBrightness()`, `GetBrightness()`, `SetRawVolume()`, etc. via `msettings.h`. ([GitHub][2])
+
+Et dans les notes du MinUI Legacy, l’auteur parle justement du stockage de luminosité/volume et de `system.json`, dans le contexte de `keymon` et des réglages système. ([GitHub][1])
+
+Donc :
+
+**Oui**, si ta nouvelle config est quelque chose de global au système, par exemple :
+
+```text
+volume
+brightness
+timeout de veille
+auto shutdown
+comportement d'une touche globale
+setting partagé entre MinUI et keymon
+```
+
+alors étendre `libmsettings` est très logique.
+
+En revanche, pour une option uniquement liée à l’interface MinUI, par exemple :
+
+```text
+afficher X dans le launcher
+ordre de tri
+option visuelle spécifique au menu
+```
+
+je ne mettrais pas ça dans `libmsettings`.
+
+Je ferais plutôt :
+
+```text
+MinUI
+  ↓
+.minui/settings/config...
+```
+
+directement.
+
+Autrement dit :
+
+```text
+libmsettings
+    = API commune de réglages système
+
+pas
+    = moteur générique de configuration de MinUI
+```
+
+### Et ton build est déjà bien préparé pour modifier `libmsettings`
+
+Tu as déjà :
+
+```make
+MINUI_MSETTINGS_BUILD := $(MINUI_LIBS_BUILD)/libmsettings
+```
+
+et `minui-libs` copie :
+
+```text
+sources/minui/src/libmsettings
+    ↓
+build/minui-libs/libmsettings
+```
+
+puis construit :
+
+```text
+libmsettings.so
+```
+
+et `build-minui` la remplace ensuite dans :
+
+```text
+PAYLOAD/System/lib/libmsettings.so
+```
+
+Donc si tu modifies `src/libmsettings` dans ta branche MinUI, **ton infrastructure actuelle sait déjà la reconstruire**.
+
+---
+
+Je partirais donc sur cette architecture :
+
+```text
+MinUI repo
+│
+├── branche release / commit figé
+│       └── make release-all
+│
+└── branche dev
+        │
+        ├── src/MinUI/
+        ├── src/libmsettings/
+        ├── src/keymon/
+        │
+        └── make minui-dev
+                ↓
+        PAYLOAD/System/
+                ↓
+        deploy directement sur TrimUI
+```
+
+Et je ferais comme prochaine étape **uniquement le support de `MINUI_REF` + le target `build-minui-system`**, sans encore toucher au déploiement. Une fois ça validé, on ajoute `minui-dev`, puis le push sur la console.
+
+[1]: https://github.com/shauninman/MinUI-Legacy-Trimui-Model-S/blob/main/notes.txt?utm_source=chatgpt.com "MinUI-Legacy-Trimui-Model-S/notes.txt at main · shauninman/MinUI-Legacy-Trimui-Model-S · GitHub"
+[2]: https://github.com/shauninman/MinUI/blob/main/workspace/rg35xxplus/platform/platform.c?utm_source=chatgpt.com "MinUI/workspace/rg35xxplus/platform/platform.c at main · shauninman/MinUI · GitHub"

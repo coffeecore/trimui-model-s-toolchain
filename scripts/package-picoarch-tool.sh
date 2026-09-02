@@ -14,16 +14,12 @@ mkdir -p "$PAK/cores"
 
 test -x "$PICOARCH_OUTPUT/picoarch"
 
-SKIN_DIR=$(
-    find "$PICOARCH_BUILD" \
-        -type f \
-        -path '*/skin/font.png' \
-        -printf '%h\n' \
-        | head -n 1
-)
+SKIN_DIR="/workspace/build/picoarch-sources/picodrive/platform/opendingux/data/skin"
 
-if [ -z "$SKIN_DIR" ] || [ ! -f "$SKIN_DIR/font.png" ] || [ ! -f "$SKIN_DIR/selector.png" ]; then
-    echo "ERROR: missing PicoArch/libpicofe skin under $PICOARCH_BUILD" >&2
+if [ ! -f "$SKIN_DIR/font.png" ] || \
+   [ ! -f "$SKIN_DIR/selector.png" ] || \
+   [ ! -f "$SKIN_DIR/skin.txt" ]; then
+    echo "ERROR: missing PicoArch/libpicofe skin under $SKIN_DIR" >&2
     exit 1
 fi
 
@@ -51,7 +47,18 @@ PAK_DIR="$(dirname "$0")"
 LOG_DIR="/mnt/SDCARD/.minui/logs"
 LOG="$LOG_DIR/PicoArch-Tool.txt"
 
+PICOARCH_HOME="/mnt/SDCARD/.minui/picoarch"
+PICOARCH_SAVE_ROOT="/mnt/SDCARD/Saves/picoarch"
+PICOARCH_SYSTEM_ROOT="/mnt/SDCARD/Bios/picoarch"
+
 mkdir -p "$LOG_DIR"
+mkdir -p "$PICOARCH_HOME"
+mkdir -p "$PICOARCH_SAVE_ROOT"
+mkdir -p "$PICOARCH_SYSTEM_ROOT"
+
+export HOME="$PICOARCH_HOME"
+export PICOARCH_SAVE_ROOT
+export PICOARCH_SYSTEM_ROOT
 
 exec >>"$LOG" 2>&1
 

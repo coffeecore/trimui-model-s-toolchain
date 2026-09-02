@@ -15,6 +15,8 @@ GNGEO_AR := $(CROSS_COMPILE)ar
 GNGEO_RANLIB := $(CROSS_COMPILE)ranlib
 GNGEO_STRIP := $(CROSS_COMPILE)strip
 
+GNGEO_PATCHES := /workspace/patches/gngeo
+
 .PHONY: \
 	gngeo \
 	source-gngeo \
@@ -31,6 +33,16 @@ source-gngeo:
 		git clone "$(GNGEO_REPO)" "$(GNGEO_DIR)"; \
 	fi
 	cd "$(GNGEO_DIR)" && git checkout --detach "$(GNGEO_COMMIT)"
+
+	@set -e; \
+	for patch_file in "$(GNGEO_PATCHES)"/*.patch; do \
+		if git -C "$(GNGEO_DIR)" apply --reverse --check "$$patch_file" >/dev/null 2>&1; then \
+			echo "GnGeo patch already applied: $$(basename "$$patch_file")"; \
+		else \
+			git -C "$(GNGEO_DIR)" apply --check "$$patch_file"; \
+			git -C "$(GNGEO_DIR)" apply "$$patch_file"; \
+		fi; \
+	done	
 
 configure-gngeo: source-gngeo libs
 	cd "$(GNGEO_DIR)" && \

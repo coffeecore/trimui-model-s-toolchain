@@ -25,7 +25,7 @@ OUTER="$BUILD/outer"
 INNER="$BUILD/inner"
 PATCH_ROOT="$BUILD/patch-root"
 
-RELEASE_NAME=$(basename "$BASE_RELEASE" .zip)
+RELEASE_NAME="MinUI-$(TZ=Europe/Paris date +%Y%m%d)-0"
 
 INCLUDE_EXTRA=0
 INCLUDE_STANDALONE=0
@@ -160,7 +160,10 @@ mkdir -p "$OUTER" "$OUTPUT"
 unzip -q "$BASE_RELEASE" -d "$OUTER"
 
 if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+    mkdir -p "$OUTER/Bios/gngeo"
+    mkdir -p "$OUTER/Bios/picoarch"
     mkdir -p "$OUTER/Roms"
+    mkdir -p "$OUTER/Saves/picoarch"
 
     for pak in "$PICOARCH"/*-picoarch.pak; do
         SYSTEM_NAME=$(cat "$pak/system")

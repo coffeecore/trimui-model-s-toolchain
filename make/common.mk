@@ -7,7 +7,7 @@ WORKSPACE := /workspace
 
 # Number of parallel jobs. Keep a conservative default for the Trimui build
 # environment, while allowing command-line overrides (e.g. `JOBS=8`).
-JOBS ?= 4
+JOBS ?= 6
 
 TARGET := arm-buildroot-linux-gnueabi
 

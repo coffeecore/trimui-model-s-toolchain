@@ -7,7 +7,6 @@ ROOT="/workspace"
 PICOARCH_OUTPUT="$ROOT/output/picoarch"
 PICOARCH_BIN="$PICOARCH_OUTPUT/picoarch"
 CORES_DIR="$PICOARCH_OUTPUT/cores"
-PICOARCH_BUILD="$ROOT/build/picoarch"
 
 OUTPUT="$ROOT/output/picoarch-paks"
 
@@ -33,19 +32,15 @@ fi
 # libpicofe loads menu graphics from ./skin relative to PicoArch's current
 # working directory. Locate the pinned checkout's skin and package it with every
 # PAK instead of relying on files already present on the SD card.
-SKIN_DIR=$(
-    find "$PICOARCH_BUILD" \
-        -type f \
-        -path '*/skin/font.png' \
-        -printf '%h\n' \
-        | head -n 1
-)
+SKIN_DIR="$ROOT/build/picoarch-sources/picodrive/platform/opendingux/data/skin"
 
-if [ -z "$SKIN_DIR" ] || [ ! -f "$SKIN_DIR/font.png" ] || [ ! -f "$SKIN_DIR/selector.png" ]; then
-    echo "ERROR: missing PicoArch/libpicofe skin (font.png + selector.png) under:"
-    echo "  $PICOARCH_BUILD"
+if [ ! -f "$SKIN_DIR/font.png" ] || \
+   [ ! -f "$SKIN_DIR/selector.png" ] || \
+   [ ! -f "$SKIN_DIR/skin.txt" ]; then
+    echo "ERROR: missing PicoArch/libpicofe skin under $SKIN_DIR" >&2
     exit 1
 fi
+
 
 required_cores=(
     beetle-pce-fast_libretro.so
@@ -151,11 +146,17 @@ EMU_EXE="picoarch"
 EMU_DIR=\$(dirname "\$0")
 
 ROM_DIR="/mnt/SDCARD/Roms/$rom_dir_name"
-SYSTEM_DIR="\$ROM_DIR/.picoarch-$core_name"
+
+PICOARCH_HOME="/mnt/SDCARD/.minui/picoarch"
+PICOARCH_SAVE_ROOT="/mnt/SDCARD/Saves/picoarch"
+PICOARCH_SYSTEM_ROOT="/mnt/SDCARD/Bios/picoarch"
+SYSTEM_DIR="\$PICOARCH_SYSTEM_ROOT/$core_name"
 
 EMU_NAME="$pak_name"
 ROM="\$1"
 
+mkdir -p "\$PICOARCH_HOME"
+mkdir -p "\$PICOARCH_SAVE_ROOT"
 mkdir -p "\$SYSTEM_DIR"
 mkdir -p "/mnt/SDCARD/.minui/logs"
 EOF_LAUNCH
@@ -242,7 +243,9 @@ EOF_LAUNCH
 
     cat >> "$pak_dir/launch.sh" <<EOF_LAUNCH
 
-HOME="\$ROM_DIR"
+export HOME="\$PICOARCH_HOME"
+export PICOARCH_SAVE_ROOT
+export PICOARCH_SYSTEM_ROOT
 
 cd "\$EMU_DIR"
 
