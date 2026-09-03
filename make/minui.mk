@@ -6,7 +6,9 @@
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_COMMIT := 3e7496883aa60c62367135147ce0d82cfab5a608
+MINUI_REF ?= $(MINUI_COMMIT)
 MINUI_DIR := $(WORKSPACE)/sources/minui
+
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
 MINUI_BUILD_DIR := $(MINUI_DIR)/build
 MINUI_PAYLOAD_DIR := $(MINUI_BUILD_DIR)/PAYLOAD
@@ -17,7 +19,52 @@ MINUI_SYSROOT := $(TOOLCHAIN_SYSROOT)
 MINUI_PREFIX := $(MINUI_SYSROOT)/usr
 MINUI_CROSS := $(CROSS_COMPILE)
 
-.PHONY: build-minui clean-build-minui source-minui clean-source-minui minui
+ADB ?= adb
+
+MINUI_DEPLOY_SOURCE ?= $(CURDIR)/sources/minui/build/PAYLOAD/System
+MINUI_DEPLOY_STAGE := /mnt/SDCARD/.minui-dev
+MINUI_DEVICE_SYSTEM := /mnt/SDCARD/System
+
+.PHONY: build-minui build-minui-system clean-build-minui source-minui clean-source-minui minui deploy-minui
+
+deploy-minui:
+	@test -d "$(MINUI_DEPLOY_SOURCE)" || { \
+		echo "ERROR: MinUI build not found: $(MINUI_DEPLOY_SOURCE)" >&2; \
+		exit 1; \
+	}
+
+	@command -v "$(ADB)" >/dev/null || { \
+		echo "ERROR: adb not found" >&2; \
+		exit 1; \
+	}
+
+	@"$(ADB)" get-state >/dev/null 2>&1 || { \
+		echo "ERROR: TrimUI not connected through ADB" >&2; \
+		exit 1; \
+	}
+
+	"$(ADB)" shell rm -rf "$(MINUI_DEPLOY_STAGE)"
+	"$(ADB)" shell mkdir -p "$(MINUI_DEPLOY_STAGE)"
+
+	"$(ADB)" push -a \
+		"$(MINUI_DEPLOY_SOURCE)" \
+		"$(MINUI_DEPLOY_STAGE)/"
+
+	"$(ADB)" shell '\
+		set -e; \
+		SRC="$(MINUI_DEPLOY_STAGE)/System"; \
+		DST="$(MINUI_DEVICE_SYSTEM)"; \
+		find "$$SRC" -type d | while IFS= read -r path; do \
+			rel="$${path#$$SRC}"; \
+			mkdir -p "$$DST$$rel"; \
+		done; \
+		find "$$SRC" ! -type d | while IFS= read -r path; do \
+			rel="$${path#$$SRC}"; \
+			mkdir -p "$$(dirname "$$DST$$rel")"; \
+			mv -f "$$path" "$$DST$$rel"; \
+		done; \
+		rm -rf "$(MINUI_DEPLOY_STAGE)"; \
+		sync'
 
 minui: source-minui
 	$(MAKE) clean-build-minui
@@ -30,7 +77,7 @@ source-minui:
 			$(MINUI_REPO) \
 			$(MINUI_DIR); \
 	fi
-	git -C "$(MINUI_DIR)" checkout --detach "$(MINUI_COMMIT)"
+	git -C "$(MINUI_DIR)" checkout "$(MINUI_REF)"
 
 	# Certains submodules upstream utilisent des URLs SSH GitHub.
 	# On les réécrit temporairement en HTTPS sans modifier .gitmodules.
@@ -43,24 +90,21 @@ source-minui:
 clean-source-minui:
 	rm -rf $(MINUI_DIR)
 
-# Reproduce the upstream build order. The only manually expanded emulator target
-# is PicoDrive (`gen`) because MinUI references platform/trimui/skin, while the
-# pinned PicoDrive commit actually provides platform/opendingux/data/skin.
-build-minui: source-minui libs
+# Build only MinUI itself and its shared libraries.
+# Intended for fast development iterations without rebuilding bundled emulators.
+build-minui-system: source-minui libs
 	$(MAKE) -C $(MINUI_DIR) readme
-	# Keep upstream MinUI system/SDL on the vendor SDK sysroot. Only PREFIX is
-	# corrected to the actual Buildroot layout; do not override CC/SYSROOT here,
-	# because SDL 1.2/libtool expects the compiler command it was configured with.
+
+	# Keep upstream MinUI system/SDL on the vendor SDK sysroot.
 	$(MAKE) -C $(MINUI_DIR) sys \
 		CROSS_COMPILE="$(MINUI_CROSS)" \
 		PREFIX="$(MINUI_PREFIX)"
 
-	# Rebuild MinUI libraries from the orchestration layer.
-	# Upstream `sys` builds its own copies first, so this must run afterwards.
+	# Rebuild MinUI libraries from the current MinUI source tree.
 	$(MAKE) minui-libs
 
-	# Replace the libraries packaged by upstream `sys` with our reproducible
-	# orchestration builds. The upstream checkout remains untouched.
+	# Replace the libraries packaged by upstream `sys` with our
+	# reproducible orchestration builds.
 	cp \
 		$(MINUI_LIBS_BUILD)/libmsettings/libmsettings.so \
 		$(MINUI_PAYLOAD_DIR)/System/lib/libmsettings.so
@@ -69,6 +113,10 @@ build-minui: source-minui libs
 		$(MINUI_LIBS_BUILD)/libmmenu/libmmenu.so \
 		$(MINUI_PAYLOAD_DIR)/System/lib/libmmenu.so
 
+# Reproduce the upstream build order. The only manually expanded emulator target
+# is PicoDrive (`gen`) because MinUI references platform/trimui/skin, while the
+# pinned PicoDrive commit actually provides platform/opendingux/data/skin.
+build-minui: build-minui-system
 	$(MAKE) -C $(MINUI_DIR) gb
 	$(MAKE) -C $(MINUI_DIR) pm
 	$(MAKE) -C $(MINUI_DIR) ngp

@@ -64,6 +64,8 @@ help:
 	@echo "  build-minui              Build MinUI Legacy and bundled emulators"
 	@echo "  clean-build-minui        Clean MinUI build"
 	@echo "  clean-source-minui       Remove MinUI sources"
+	@echo "  build-minui-system       Build MinUI system + libraries only (make build-minui-system MINUI_REF=yourBranch)"
+	@echo "  deploy-minui            Deploy built MinUI System to TrimUI over ADB"
 	@echo
 	@echo "Arnold:"
 	@echo "  source-arnold            Checkout Arnold source"
