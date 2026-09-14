@@ -132,7 +132,6 @@ preflight:
 		scripts/package-picoarch-paks.sh \
 		scripts/package-picoarch-tool.sh \
 		scripts/package-standalone-paks.sh \
-		patches/minui/0001-update-use-system-metadata.patch \
 		patches/picoarch/beetle-pce-fast/0001-frameskip-interval.patch \
 		patches/picoarch/frontend/0001-fix-minui-directories.patch \
 		patches/picoarch/libpicofe/0001-key-combos.patch \

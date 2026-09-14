@@ -1181,3 +1181,366 @@ Et je ferais comme prochaine étape **uniquement le support de `MINUI_REF` + le 
 
 [1]: https://github.com/shauninman/MinUI-Legacy-Trimui-Model-S/blob/main/notes.txt?utm_source=chatgpt.com "MinUI-Legacy-Trimui-Model-S/notes.txt at main · shauninman/MinUI-Legacy-Trimui-Model-S · GitHub"
 [2]: https://github.com/shauninman/MinUI/blob/main/workspace/rg35xxplus/platform/platform.c?utm_source=chatgpt.com "MinUI/workspace/rg35xxplus/platform/platform.c at main · shauninman/MinUI · GitHub"
+
+
+# 12
+
+Oui. Et je corrige légèrement l’étape précédente : pour faire le port proprement, **je déplacerais `emus` hors du `if (dh != NULL)`** avant d’ajouter le `else`.
+
+Pourquoi ? Parce qu’on veut que les collections fonctionnent même dans ce cas :
+
+```text
+/Collections/Favorites.txt
+/Collections/Arcade.txt
+
+/Roms/   <- absent ou vide
+```
+
+Avec ton placement actuel, toute la logique Collections est enfermée dans :
+
+```c
+DIR *dh = opendir(path);
+if (dh != NULL) {
+    ...
+}
+```
+
+Donc si `/Roms` n’existe pas, MinUI ne regarderait jamais les collections. Le MiniUI Legacy Miyoo traite justement les collections **après** avoir terminé le scan des systèmes. 
+
+Je ferais donc ça.
+
+Dans ton `getRoot()`, tu as actuellement approximativement :
+
+```c
+char* path = kRootDir "/Roms";
+DIR *dh = opendir(path);
+
+if (dh!=NULL) {
+    ...
+    Array* emus = Array_new();
+
+    // scan...
+
+    EntryArray_sort(emus);
+
+    if (hasCollections() && emus->count) {
+        Array_push(entries, Entry_new(kCollectionsDir, kEntryDir));
+    }
+
+    for (...) {
+        ...
+    }
+
+    Array_free(emus);
+    closedir(dh);
+}
+```
+
+On va changer légèrement l'organisation.
+
+D'abord, crée `emus` **avant** d'ouvrir `/Roms` :
+
+```c
+char* path = kRootDir "/Roms";
+
+// This temporary array contains only visible systems.
+// Keeping it outside the /Roms opendir() block also lets us handle
+// Collections when /Roms does not exist at all.
+Array* emus = Array_new();
+
+DIR *dh = opendir(path);
+```
+
+Ensuite le `if (dh != NULL)` ne fait plus que **scanner `/Roms`** :
+
+```c
+if (dh!=NULL) {
+    struct dirent *dp;
+
+    char full_path[256];
+    full_path[0] = '\0';
+    concat(full_path, path, 256);
+    concat(full_path, "/", 256);
+
+    // tmp always points just after "/mnt/SDCARD/Roms/".
+    // Each iteration overwrites only the system-name part.
+    char* tmp = full_path + strlen(full_path);
+
+    while((dp = readdir(dh)) != NULL) {
+        if (hide(dp->d_name)) continue;
+
+        strcpy(tmp, dp->d_name);
+        tmp[strlen(dp->d_name)] = '\0';
+
+        // Only expose a system when it has ROMs and at least one
+        // usable MinUI/PicoArch emulator according to hasRoms().
+        if (hasRoms(full_path)) {
+            Array_push(emus, Entry_new(full_path, kEntryDir));
+            has_roms = 1;
+        }
+    }
+
+    closedir(dh);
+}
+```
+
+Remarque importante : on enlève donc de ce bloc :
+
+```c
+EntryArray_sort(emus);
+```
+
+ainsi que :
+
+```c
+for (...)
+Array_free(emus);
+```
+
+On va les faire **après**.
+
+À partir de là, `/Roms` est complètement traité et fermé. Tu peux donc trier :
+
+```c
+// Systems are displayed alphabetically.
+EntryArray_sort(emus);
+```
+
+Et maintenant on traite les collections.
+
+Ton test devient :
+
+```c
+if (hasCollections()) {
+    if (emus->count) {
+        // Normal case:
+        // we have visible systems, so Collections appears as one
+        // additional directory in the root menu.
+        Array_push(entries, Entry_new(kCollectionsDir, kEntryDir));
+    }
+    else {
+        // No visible systems:
+        // individual collection files are promoted directly to root.
+    }
+}
+```
+
+C'est exactement le comportement recherché par le code Legacy Miyoo : avec des systèmes visibles, `/Collections` apparaît comme un dossier ; sans système visible, les collections individuelles sont directement promues à la racine. 
+
+Maintenant le contenu du `else`.
+
+```c
+else {
+    DIR* collections_dh = opendir(kCollectionsDir);
+
+    if (collections_dh != NULL) {
+        struct dirent* dp;
+
+        char full_path[256];
+        full_path[0] = '\0';
+        concat(full_path, kCollectionsDir, 256);
+        concat(full_path, "/", 256);
+
+        // Example:
+        //
+        // full_path = "/mnt/SDCARD/Collections/"
+        // tmp -------^ points here
+        //
+        // We keep the directory prefix intact and overwrite only
+        // the filename on each iteration.
+        char* tmp = full_path + strlen(full_path);
+
+        // Temporary array so collections can be sorted before
+        // transferring their Entry objects to entries.
+        Array* collections = Array_new();
+
+        while((dp = readdir(collections_dh)) != NULL) {
+            if (hide(dp->d_name)) continue;
+
+            strcpy(tmp, dp->d_name);
+            tmp[strlen(dp->d_name)] = '\0';
+
+            // A collection is physically a .txt file, but MinUI
+            // intentionally exposes it as a directory.
+            //
+            // Later Directory_new() will recognize this path and
+            // load the ROM paths contained in the file.
+            Array_push(collections, Entry_new(full_path, kEntryDir));
+        }
+
+        EntryArray_sort(collections);
+
+        // Transfer ownership of the Entry objects to entries.
+        for (int i=0; i<collections->count; i++) {
+            Array_push(entries, collections->items[i]);
+        }
+
+        // Important: Array_free() only frees the Array container and
+        // its items pointer. It does NOT free the Entry objects.
+        // Those are now owned by entries.
+        Array_free(collections);
+
+        closedir(collections_dh);
+    }
+}
+```
+
+Ici, j'ai volontairement utilisé :
+
+```c
+DIR* collections_dh
+```
+
+et pas :
+
+```c
+dh
+```
+
+C'est beaucoup plus clair et ça évite toute ambiguïté avec le `DIR *dh` utilisé pour `/Roms`.
+
+Ton `Array_free()` fonctionne bien pour ce transfert d'ownership : dans ton Legacy, `Array_free()` ne libère que `self->items` et l'`Array`, alors que `EntryArray_free()` est celui qui détruit effectivement les `Entry`. 
+
+Autre détail utile : tu n'as pas besoin de retirer toi-même `.txt`.
+
+Si tu as :
+
+```text
+/mnt/SDCARD/Collections/Arcade Favorites.txt
+```
+
+on crée :
+
+```c
+Entry_new(
+    "/mnt/SDCARD/Collections/Arcade Favorites.txt",
+    kEntryDir
+);
+```
+
+Ton `Entry_new()` appelle déjà :
+
+```c
+self->name = raw_name(path);
+```
+
+et `raw_name()` supprime l'extension avec :
+
+```c
+tmp = strrchr(name, '.');
+if (tmp!=NULL) tmp[0] = '\0';
+```
+
+Donc à l'écran tu obtiendras automatiquement :
+
+```text
+Arcade Favorites
+```
+
+et non :
+
+```text
+Arcade Favorites.txt
+```
+
+tout en conservant dans `Entry.path` le vrai chemin vers le `.txt`. 
+
+Enfin, **après tout le bloc Collections**, tu transfères les systèmes :
+
+```c
+// Collections have been added first.
+// Now append the visible systems.
+for (int i=0; i<emus->count; i++) {
+    Array_push(entries, emus->items[i]);
+}
+
+// entries now owns the Entry objects.
+// Only destroy the temporary Array container.
+Array_free(emus);
+```
+
+L'ordre est important. Avec des ROMs :
+
+```text
+Recently Played
+Collections
+Game Boy
+Game Boy Advance
+Neo Geo
+...
+Games
+Tools
+```
+
+Sans système visible mais avec des collections :
+
+```text
+Recently Played
+Arcade Favorites
+Metal Slug
+Shooters
+...
+Games
+Tools
+```
+
+Donc la partie centrale de `getRoot()` devrait maintenant avoir cette structure :
+
+```c
+Array* emus = Array_new();
+
+DIR* dh = opendir(kRootDir "/Roms");
+
+if (dh != NULL) {
+    // scan /Roms -> emus
+
+    closedir(dh);
+}
+
+EntryArray_sort(emus);
+
+if (hasCollections()) {
+    if (emus->count) {
+        // add Collections directory
+    }
+    else {
+        // promote individual collection files
+    }
+}
+
+// emus -> entries
+
+Array_free(emus);
+```
+
+C'est cette structure que je te conseille de mettre en place maintenant. **On ne touche encore ni à `getEntries()`, ni à `Directory_new()`, ni au contenu des collections.** À cette étape, notre seul objectif est que les bonnes entrées apparaissent à la racine sans casser le fonctionnement existant. 
+
+Une fois que tu as fait ça, envoie-moi ton diff de `getRoot()` : on le vérifie avant de passer à la partie suivante, où `Collections` devra réellement afficher ses fichiers `.txt` comme des dossiers.
+
+
+# 13
+
+```
+make -f makefile.libretro \
+    platform=trimui \
+    target=neogeo \
+    CROSS_COMPILE=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi- \
+    CC=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-gcc \
+    CXX=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi-g++ \
+    -j6
+```
+
+```
+cp fbalpha2012_neogeo_libretro.so \
+    /workspace/build/picoarch/fbalpha2012_neogeo_libretro.so
+
+cp fbalpha2012_neogeo_libretro.so \
+    /workspace/output/picoarch/cores/fbalpha2012_neogeo_libretro.so
+
+cp fbalpha2012_neogeo_libretro.so \
+    "/workspace/output/picoarch-paks/Neo Geo-picoarch.pak/fbalpha2012_neogeo_libretro.so"
+```
+
+```
+rm -f /mnt/SDCARD/Saves/picoarch/fbalpha2012_neogeo/mslug.fs
+```

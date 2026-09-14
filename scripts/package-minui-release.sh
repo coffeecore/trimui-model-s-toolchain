@@ -17,13 +17,11 @@ STANDALONE="$ROOT/output/standalone-paks"
 PICOARCH="$ROOT/output/picoarch-paks"
 PICOARCH_TOOL="$ROOT/output/picoarch-tool/Tools/PicoArch.pak"
 
-PATCH="$ROOT/patches/minui/0001-update-use-system-metadata.patch"
 SOURCE_UPDATE="$ROOT/sources/minui/paks/System.pak/update.sh"
 
 BUILD="$ROOT/build/minui-release-$MODE"
 OUTER="$BUILD/outer"
 INNER="$BUILD/inner"
-PATCH_ROOT="$BUILD/patch-root"
 
 RELEASE_NAME="MinUI-$(TZ=Europe/Paris date +%Y%m%d)-0"
 
@@ -131,22 +129,14 @@ if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     [ -d "$PICOARCH" ] ||
         die "missing PicoArch PAK output"
 
-    [ "$(count_paks "$PICOARCH")" -eq 32 ] ||
-        die "expected 32 PicoArch PAKs"
+    [ "$(count_paks "$PICOARCH")" -eq 28 ] ||
+        die "expected 28 PicoArch PAKs"
 
     [ -d "$PICOARCH_TOOL" ] ||
         die "missing PicoArch Tool PAK"
 
-    [ -f "$PATCH" ] ||
-        die "missing MinUI patch: $PATCH"
-
     [ -f "$SOURCE_UPDATE" ] ||
         die "missing source update.sh: $SOURCE_UPDATE"
-
-    for pak in "$PICOARCH"/*-picoarch.pak; do
-        [ -s "$pak/system" ] ||
-            die "missing system metadata: $pak/system"
-    done
 fi
 
 # ---------------------------------------------------------------------
@@ -166,7 +156,15 @@ if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     mkdir -p "$OUTER/Saves/picoarch"
 
     for pak in "$PICOARCH"/*-picoarch.pak; do
-        SYSTEM_NAME=$(cat "$pak/system")
+        # Derive the system name directly from the PicoArch PAK name.
+        #
+        # Example:
+        #   /workspace/output/picoarch-paks/Game Boy-picoarch.pak
+        #       -> Game Boy-picoarch.pak
+        #       -> Game Boy
+        SYSTEM_NAME=$(basename "$pak")
+        SYSTEM_NAME=${SYSTEM_NAME%-picoarch.pak}
+
         mkdir -p "$OUTER/Roms/$SYSTEM_NAME"
     done
 fi
@@ -188,35 +186,27 @@ if [ "$MODE" != "only" ]; then
     echo "Base MinUI PAKs: $BASE_PAK_COUNT"
 
     # -----------------------------------------------------------------
-    # Patch updater when PicoArch metadata support is required
+    # Validate PicoArch-aware updater
     # -----------------------------------------------------------------
 
     if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
         [ -f "$INNER/System/System.pak/update.sh" ] ||
             die "inner update has no System/System.pak/update.sh"
 
+        # The release must contain the updater from our MinUI source tree.
         cmp -s \
             "$INNER/System/System.pak/update.sh" \
             "$SOURCE_UPDATE" ||
             die "release update.sh differs from sources/minui version"
 
-        mkdir -p "$PATCH_ROOT/paks/System.pak"
-
-        cp \
-            "$SOURCE_UPDATE" \
-            "$PATCH_ROOT/paks/System.pak/update.sh"
-
-        (
-            cd "$PATCH_ROOT"
-            git apply "$PATCH"
-        )
-
-        cp \
-            "$PATCH_ROOT/paks/System.pak/update.sh" \
-            "$INNER/System/System.pak/update.sh"
-
-        grep -q 'DST/system' "$INNER/System/System.pak/update.sh" ||
-            die "system metadata patch was not applied"
+        # Make sure PicoArch PAKs map back to the normal ROM directory.
+        #
+        # Example:
+        #   Game Boy-picoarch.pak
+        #       -> Roms/Game Boy
+        grep -Fq 'ROM_DIR=${ROM_DIR%-picoarch}' \
+            "$INNER/System/System.pak/update.sh" ||
+            die "release update.sh has no PicoArch ROM mapping"
     fi
 
     # -----------------------------------------------------------------
@@ -237,7 +227,7 @@ if [ "$MODE" != "only" ]; then
 
     if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
         copy_paks "$PICOARCH"
-        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 32))
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 28))
 
         mkdir -p "$INNER/Tools"
 

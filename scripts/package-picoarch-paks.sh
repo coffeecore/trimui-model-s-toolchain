@@ -121,17 +121,28 @@ mkdir -p "$OUTPUT"
 
 create_pak()
 {
-    local pak_name="$1"
+    local system="$1"
     local core_file="$2"
-    local rom_dir_name="$3"
-    local mode="${4:-normal}"
+    local mode="${3:-normal}"
 
-    local pak_dir="$OUTPUT/$pak_name-picoarch.pak"
+    # One system name is used everywhere.
+    #
+    # Example:
+    #   system="Nintendo"
+    #
+    # ROM directory:
+    #   /mnt/SDCARD/Roms/Nintendo
+    #
+    # PicoArch PAK:
+    #   Nintendo-picoarch.pak
+    local pak_dir="$OUTPUT/$system-picoarch.pak"
+
+    # Example:
+    #   core_file="fceumm_libretro.so"
+    #   core_name="fceumm"
     local core_name="${core_file%_libretro.so}"
 
     mkdir -p "$pak_dir"
-
-    printf '%s\n' "$rom_dir_name" > "$pak_dir/system"
 
     cp "$PICOARCH_BIN" "$pak_dir/picoarch"
     cp "$CORES_DIR/$core_file" "$pak_dir/$core_file"
@@ -145,14 +156,19 @@ create_pak()
 EMU_EXE="picoarch"
 EMU_DIR=\$(dirname "\$0")
 
-ROM_DIR="/mnt/SDCARD/Roms/$rom_dir_name"
+# The PAK name and ROM directory always share the same system name.
+#
+# Example:
+#   Nintendo-picoarch.pak
+#   -> /mnt/SDCARD/Roms/Nintendo
+ROM_DIR="/mnt/SDCARD/Roms/$system"
 
 PICOARCH_HOME="/mnt/SDCARD/.minui/picoarch"
 PICOARCH_SAVE_ROOT="/mnt/SDCARD/Saves/picoarch"
 PICOARCH_SYSTEM_ROOT="/mnt/SDCARD/Bios/picoarch"
 SYSTEM_DIR="\$PICOARCH_SYSTEM_ROOT/$core_name"
 
-EMU_NAME="$pak_name"
+EMU_NAME="$system"
 ROM="\$1"
 
 mkdir -p "\$PICOARCH_HOME"
@@ -262,9 +278,8 @@ EOF_LAUNCH
 # ---------------------------------------------------------------------
 
 create_pak \
-    "Nintendo (FCEUmm)" \
-    "fceumm_libretro.so" \
-    "Nintendo"
+    "Nintendo" \
+    "fceumm_libretro.so"
 
 # create_pak \
 #     "Nintendo (QuickNES)" \
@@ -283,18 +298,15 @@ create_pak \
 
 create_pak \
     "Game Boy" \
-    "gambatte_libretro.so" \
-    "Game Boy"
+    "gambatte_libretro.so"
 
 create_pak \
     "Game Boy Color" \
-    "gambatte_libretro.so" \
-    "Game Boy Color"
+    "gambatte_libretro.so"
 
 create_pak \
     "Game Boy Advance" \
     "gpsp_libretro.so" \
-    "Game Boy Advance" \
     "swap"
 
 
@@ -304,24 +316,20 @@ create_pak \
 
 create_pak \
     "Game Gear" \
-    "smsplus-gx_libretro.so" \
-    "Game Gear"
+    "smsplus-gx_libretro.so" 
 
 create_pak \
     "Master System" \
-    "smsplus-gx_libretro.so" \
-    "Master System"
+    "smsplus-gx_libretro.so"
 
 create_pak \
     "ColecoVision" \
     "bluemsx_libretro.so" \
-    "ColecoVision" \
     "bluemsx"
 
 create_pak \
     "SG-1000" \
     "bluemsx_libretro.so" \
-    "SG-1000" \
     "bluemsx"
 
 
@@ -331,19 +339,15 @@ create_pak \
 
 create_pak \
     "Genesis" \
-    "picodrive_libretro.so" \
-    "Genesis"
+    "picodrive_libretro.so"
 
 create_pak \
     "Sega CD" \
-    "picodrive_libretro.so" \
-    "Sega CD"
+    "picodrive_libretro.so"
 
 create_pak \
     "Sega 32X" \
-    "picodrive_libretro.so" \
-    "Sega 32X"
-
+    "picodrive_libretro.so"
 
 # ---------------------------------------------------------------------
 # Super Nintendo
@@ -356,8 +360,7 @@ create_pak \
 
 create_pak \
     "Super Nintendo" \
-    "snes9x2005_libretro.so" \
-    "Super Nintendo"
+    "snes9x2005_libretro.so"
 
 # create_pak \
 #     "Super Nintendo (Snes9x 2005 Plus)" \
@@ -387,7 +390,6 @@ create_pak \
 create_pak \
     "PlayStation" \
     "pcsx_rearmed_libretro.so" \
-    "PlayStation" \
     "psx"
 
 
@@ -397,14 +399,11 @@ create_pak \
 
 create_pak \
     "TurboGrafx-16" \
-    "beetle-pce-fast_libretro.so" \
-    "TurboGrafx-16"
+    "beetle-pce-fast_libretro.so"
 
 create_pak \
     "TurboGrafx-CD" \
-    "beetle-pce-fast_libretro.so" \
-    "TurboGrafx-CD"
-
+    "beetle-pce-fast_libretro.so"
 
 # ---------------------------------------------------------------------
 # SNK / Bandai
@@ -412,29 +411,23 @@ create_pak \
 
 create_pak \
     "Neo Geo Pocket" \
-    "mednafen_ngp_libretro.so" \
-    "Neo Geo Pocket"
+    "mednafen_ngp_libretro.so"
 
 create_pak \
     "Neo Geo Pocket Color" \
-    "mednafen_ngp_libretro.so" \
-    "Neo Geo Pocket Color"
+    "mednafen_ngp_libretro.so"
 
 create_pak \
     "WonderSwan" \
-    "mednafen_wswan_libretro.so" \
-    "WonderSwan"
+    "mednafen_wswan_libretro.so"
 
 create_pak \
     "WonderSwan Color" \
-    "mednafen_wswan_libretro.so" \
-    "WonderSwan Color"
+    "mednafen_wswan_libretro.so"
 
 create_pak \
     "Pokemon Mini" \
-    "pokemini_libretro.so" \
-    "Pokemon Mini"
-
+    "pokemini_libretro.so"
 
 # ---------------------------------------------------------------------
 # MSX
@@ -443,7 +436,6 @@ create_pak \
 create_pak \
     "MSX" \
     "bluemsx_libretro.so" \
-    "MSX" \
     "bluemsx"
 
 # create_pak \
@@ -459,8 +451,7 @@ create_pak \
 
 create_pak \
     "Atari 2600" \
-    "stella2014_libretro.so" \
-    "Atari 2600"
+    "stella2014_libretro.so"
 
 
 # ---------------------------------------------------------------------
@@ -469,38 +460,32 @@ create_pak \
 
 create_pak \
     "MAME 2000" \
-    "mame2000_libretro.so" \
-    "MAME 2000"
+    "mame2000_libretro.so"
 
 create_pak \
     "MAME 2003" \
     "mame2003_libretro.so" \
-    "MAME 2003"
 
 # create_pak \
 #     "Arcade (MAME 2003 Plus)" \
 #     "mame2003_plus_libretro.so" \
 #     "Arcade"
 
-create_pak \
-    "FBA 2012" \
-    "fbalpha2012_libretro.so" \
-    "FBA 2012"
+# create_pak \
+#     "FBA 2012" \
+#     "fbalpha2012_libretro.so"
 
-create_pak \
-    "Neo Geo" \
-    "fbalpha2012_neogeo_libretro.so" \
-    "Neo Geo"
+# create_pak \
+#     "Neo Geo" \
+#     "fbalpha2012_neogeo_libretro.so"
 
-create_pak \
-    "CPS1" \
-    "fbalpha2012_cps1_libretro.so" \
-    "CPS1"
+# create_pak \
+#     "CPS1" \
+#     "fbalpha2012_cps1_libretro.so"
 
-create_pak \
-    "CPS2" \
-    "fbalpha2012_cps2_libretro.so" \
-    "CPS2"
+# create_pak \
+#     "CPS2" \
+#     "fbalpha2012_cps2_libretro.so"
 
 # ---------------------------------------------------------------------
 # Other
@@ -508,8 +493,7 @@ create_pak \
 
 create_pak \
     "Game Music" \
-    "gme_libretro.so" \
-    "Game Music"
+    "gme_libretro.so"
 
 # create_pak \
 #     "PICO-8 (Fake-08)" \
@@ -517,20 +501,16 @@ create_pak \
 #     "PICO-8"
 
 create_pak \
-    "Doom (PrBoom)" \
-    "prboom_libretro.so" \
-    "Doom"
+    "Doom" \
+    "prboom_libretro.so"
 
 create_pak \
-    "Heretic (PrBoom)" \
-    "prboom_libretro.so" \
-    "Heretic"
+    "Heretic" \
+    "prboom_libretro.so"
 
 create_pak \
-    "Hexen (PrBoom)" \
+    "Hexen" \
     "prboom_libretro.so" \
-    "Hexen"
-
 
 # ---------------------------------------------------------------------
 # Final validation
@@ -545,19 +525,13 @@ pak_count=$(
         | wc -l
 )
 
-if [ "$pak_count" -ne 32 ]; then
-    echo "ERROR: expected 32 PAKs, got $pak_count"
+if [ "$pak_count" -ne 28 ]; then
+    echo "ERROR: expected 28 PAKs, got $pak_count"
     exit 1
 fi
 
 
 while IFS= read -r -d '' pak; do
-    if [ ! -s "$pak/system" ]; then
-        echo "ERROR: missing system metadata:"
-        echo "  $pak/system"
-        exit 1
-    fi
-
     if ! sh -n "$pak/launch.sh"; then
         echo "ERROR: invalid launcher:"
         echo "  $pak/launch.sh"

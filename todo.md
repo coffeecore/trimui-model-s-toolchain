@@ -1,0 +1,3 @@
+- remove `patches/minui/0001-update-use-system-metadata.patch`. ALready migrate
+- migrate `patches/gngeo/0001-persistent-bios-path.patch` to gngeo project
+- migrate `patches/picoarch` to picoarch project

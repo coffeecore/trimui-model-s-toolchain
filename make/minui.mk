@@ -5,8 +5,8 @@
 # orchestration layer instead of modifying MinUI or its submodules.
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
-MINUI_COMMIT := 3e7496883aa60c62367135147ce0d82cfab5a608
-MINUI_REF ?= $(MINUI_COMMIT)
+MINUI_BRANCH := picoarch
+MINUI_COMMIT := 12382bf83777eeaa333b2f320423047d1d43c18a
 MINUI_DIR := $(WORKSPACE)/sources/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
@@ -74,10 +74,11 @@ source-minui:
 	@if [ ! -d "$(MINUI_DIR)/.git" ]; then \
 		mkdir -p "$(dir $(MINUI_DIR))"; \
 		git clone \
+			--branch "$(MINUI_BRANCH)" \
 			$(MINUI_REPO) \
 			$(MINUI_DIR); \
+		git -C "$(MINUI_DIR)" checkout "$(MINUI_COMMIT)"; \
 	fi
-	git -C "$(MINUI_DIR)" checkout "$(MINUI_REF)"
 
 	# Certains submodules upstream utilisent des URLs SSH GitHub.
 	# On les réécrit temporairement en HTTPS sans modifier .gitmodules.

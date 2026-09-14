@@ -60,7 +60,6 @@ cp -a \
 
 sed -i \
     -e 's/# NEOGEO\.pak\/launch\.sh/# Neo Geo.pak\/launch.sh/' \
-    -e 's|^BIOSPATH=.*$|BIOSPATH="/mnt/SDCARD/Emus/Neo Geo.pak/bios/"|' \
     "$OUTPUT/Neo Geo.pak/launch.sh"
 
 # Retro8
