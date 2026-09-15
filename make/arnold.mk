@@ -5,7 +5,7 @@
 ARNOLD_REPO := https://github.com/coffeecore/arnold_gcw0.git
 ARNOLD_BRANCH := trimui-powkiddy-a66
 ARNOLD_COMMIT := da3141b9f37b3747f7198e840bddc0dd192d9ddd
-ARNOLD_DIR := /workspace/sources/arnold
+ARNOLD_DIR := $(RELEASE_SOURCES_DIR)/arnold
 ARNOLD_OUTPUT_DIR := $(OUTPUT_DIR)/arnold
 
 .PHONY: \

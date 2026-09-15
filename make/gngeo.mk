@@ -1,11 +1,11 @@
 # -----------------------------------------------------------------------------
-# GnGeo / Neo Geo
+# GnGeo / Neo Geo - pinned Coffeecore release build
 # -----------------------------------------------------------------------------
 
 GNGEO_REPO := https://github.com/coffeecore/gngeo.git
 GNGEO_COMMIT := 9336cb9f4cdda6de91b4234975248f4b0580ab5a
 
-GNGEO_DIR := $(WORKSPACE)/sources/gngeo
+GNGEO_DIR := $(RELEASE_SOURCES_DIR)/gngeo-coffeecore
 GNGEO_OUTPUT_DIR := $(OUTPUT_DIR)/gngeo
 GNGEO_PAK := $(GNGEO_OUTPUT_DIR)/NEOGEO.pak
 

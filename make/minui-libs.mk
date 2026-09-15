@@ -4,8 +4,11 @@ MINUI_LIBS_BUILD := $(WORKSPACE)/build/minui-libs
 MINUI_MSETTINGS_BUILD := $(MINUI_LIBS_BUILD)/libmsettings
 MINUI_MMENU_BUILD := $(MINUI_LIBS_BUILD)/libmmenu
 
-.PHONY: minui-libs
-minui-libs: source-minui libs
+.PHONY: minui-libs _build-minui-libs
+minui-libs: source-minui
+	$(MAKE) _build-minui-libs
+
+_build-minui-libs: libs
 	rm -rf $(MINUI_LIBS_BUILD)
 	mkdir -p $(MINUI_LIBS_BUILD)
 

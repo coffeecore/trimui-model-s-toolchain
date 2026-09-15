@@ -4,7 +4,7 @@
 # This root Makefile intentionally stays small. Implementation details live in
 # make/*.mk so each component can evolve independently.
 #
-# Parallelism defaults to all available CPUs. Override without editing files:
+# Parallelism has a conservative default. Override without editing files:
 #   make libs JOBS=4
 #   make build-minui JOBS=4
 
@@ -25,84 +25,144 @@ include make/minui-extra-paks.mk
 include make/minui-release.mk
 include make/minui-libs.mk
 include make/mame4allx.mk
+include make/dev.mk
 
-.PHONY: help shell preflight release-all release-fresh
+.PHONY: help help-dev help-release shell preflight release-all release-fresh
 
-# Show the high-level commands intended for normal use.
+# Full command overview. Development and release help can also be shown alone.
 help:
 	@echo "Trimui Model S build environment"
 	@echo
-	@echo "Main targets:"
-	@echo "  minui                    Clean and build MinUI Legacy"
-	@echo "  arnold                   Clean, build and install Arnold"
-	@echo "  stella                   Clean, build and install Stella"
-	@echo "  gngeo                    Clean, build and install GnGeo"
-	@echo "  retro8                   Clean, build and install Retro8"
-	@echo "  picoarch-validated       Build all validated PicoArch cores"
-	@echo "  picoarch-frontend        Build PicoArch frontend"
-	@echo "  picoarch-output          Collect PicoArch frontend + cores"
-	@echo "  picoarch-paks            Build the 35 PicoArch MinUI PAKs"
-	@echo "  standalone-paks          Package the 4 standalone emulator PAKs"
-	@echo "  minui-extra-paks         Package the 5 additional MinUI PAKs"
-	@echo "  minui-release            Build the final installable MinUI release"
-	@echo "  preflight                Validate tools and local release inputs"
-	@echo "  release-all              Build/reuse sources and create the complete release"
-	@echo "  release-fresh            Delete generated clones/build/output and rebuild from scratch"
+	@$(MAKE) --no-print-directory help-dev
 	@echo
-	@echo "Release packaging:"
+	@$(MAKE) --no-print-directory help-release
+	@echo
+	@echo "Shared / utility targets:"
+	@echo "  shell                    Open an interactive builder container shell"
+	@echo "  libs                     Build/install the shared target libraries"
+	@echo "  build-libs               Recreate the project sysroot and all shared libraries"
+	@echo "  clean-build-libs         Remove the generated project sysroot/build artifacts"
+	@echo "  install-libs             Reinstall already-built libraries into the project sysroot"
+	@echo "  clean-install-libs       Remove project-installed library files"
+	@echo "  clean-source-libs        Remove downloaded library sources"
+	@echo "  JOBS=N                   Override parallel build jobs (default: $(JOBS))"
+
+help-dev:
+	@echo "Development targets"
+	@echo "  Source root: $(DEV_SOURCES_DIR)"
+	@echo "  Output root: $(DEV_OUTPUT_DIR)"
+	@echo
+	@echo "Status:"
+	@echo "  dev-status                       Show Git branch/status of all known dev trees"
+	@echo
+	@echo "GnGeo - Steward Fu (active GNO port):"
+	@echo "  dev-gngeo-steward-fu             Build sources/gngeo-steward-fu"
+	@echo "  dev-clean-gngeo-steward-fu       Clean its build artifacts"
+	@echo "  dev-install-gngeo-steward-fu     Copy binary to output/dev/gngeo-steward-fu"
+	@echo "  dev-gngeo                         Alias of dev-gngeo-steward-fu"
+	@echo "  dev-clean-gngeo                   Alias of dev-clean-gngeo-steward-fu"
+	@echo "  dev-install-gngeo                 Alias of dev-install-gngeo-steward-fu"
+	@echo
+	@echo "GnGeo - Coffeecore (known Trimui reference):"
+	@echo "  dev-gngeo-coffeecore              Build sources/gngeo-coffeecore"
+	@echo "  dev-clean-gngeo-coffeecore        Clean its build artifacts"
+	@echo "  dev-install-gngeo-coffeecore      Create output/dev/gngeo-coffeecore/NEOGEO.pak"
+	@echo
+	@echo "MinUI:"
+	@echo "  dev-minui-libs                    Build libmsettings/libmmenu from sources/minui"
+	@echo "  dev-minui-system                  Build only the MinUI System"
+	@echo "  dev-minui                         Build full MinUI from sources/minui"
+	@echo "  dev-clean-minui                   Clean generated MinUI artifacts"
+	@echo "  dev-deploy-minui                  Deploy dev MinUI System over ADB"
+	@echo
+	@echo "PicoArch:"
+	@echo "  dev-picoarch-frontend             Build sources/picoarch using pinned MinUI libs"
+	@echo "  dev-picoarch-frontend-with-dev-minui"
+	@echo "                                    Build PicoArch using sources/minui libmmenu"
+	@echo "  dev-picoarch-output               Copy dev frontend to output/dev/picoarch"
+	@echo "  dev-clean-picoarch                Remove dev PicoArch top-level build products"
+	@echo "  dev-picoarch-core CORE=<name>     Build sources/picoarch-cores/<name>"
+	@echo "                                    Example: make dev-picoarch-core CORE=mame2000"
+	@echo
+	@echo "Safety: dev targets never checkout/reset/clean Git and never auto-apply patches."
+
+help-release:
+	@echo "Release targets"
+	@echo "  Disposable pinned source root: $(RELEASE_SOURCES_DIR)"
+	@echo
+	@echo "Orchestration:"
+	@echo "  preflight                Validate release prerequisites"
+	@echo "  release-all              Build/reuse pinned sources and create the complete release"
+	@echo "  release-fresh            Delete generated libs/build/output and rebuild from scratch"
+	@echo
+	@echo "MinUI release source/build:"
+	@echo "  minui                    Clean and build pinned MinUI"
+	@echo "  source-minui             Prepare pinned MinUI source"
+	@echo "  build-minui-system       Build MinUI system + libraries"
+	@echo "  build-minui              Build full MinUI"
+	@echo "  clean-build-minui        Clean MinUI build artifacts"
+	@echo "  clean-source-minui       Remove only the release MinUI checkout"
+	@echo "  deploy-minui             Deploy the release MinUI System over ADB"
+	@echo
+	@echo "Standalone emulators:"
+	@echo "  arnold / source-arnold / build-arnold / install-arnold"
+	@echo "  clean-build-arnold / clean-install-arnold / clean-source-arnold"
+	@echo "  stella / source-stella / configure-stella / build-stella / install-stella"
+	@echo "  clean-build-stella / clean-install-stella / clean-source-stella"
+	@echo "  gngeo / source-gngeo / configure-gngeo / build-gngeo / install-gngeo"
+	@echo "      release GnGeo is pinned Coffeecore; dev GnGeo trees are not used"
+	@echo "  clean-build-gngeo / clean-install-gngeo / clean-source-gngeo"
+	@echo "  retro8 / source-retro8 / build-retro8 / install-retro8"
+	@echo "  clean-build-retro8 / clean-install-retro8 / clean-source-retro8"
+	@echo
+	@echo "PicoArch release:"
+	@echo "  source-picoarch          Prepare pinned PicoArch source"
+	@echo "  prepare-picoarch         Create patched release build tree"
+	@echo "  picoarch-check-patches   Validate required PicoArch patches"
+	@echo "  picoarch-frontend        Build PicoArch frontend"
+	@echo "  picoarch-validated       Build all validated cores"
+	@echo "  picoarch-output          Collect frontend + validated cores"
+	@echo "  picoarch-clean-frontend  Remove release PicoArch working tree"
+	@echo "  picoarch-clean-output    Remove collected PicoArch output"
+	@echo "  clean-source-picoarch    Remove only the release PicoArch checkout"
+	@echo
+	@echo "Individual PicoArch cores:"
+	@echo "  picoarch-fceumm picoarch-gambatte picoarch-gpsp picoarch-picodrive"
+	@echo "  picoarch-mame2000 picoarch-mame2003 picoarch-mame2003-plus"
+	@echo "  picoarch-pcsx-rearmed picoarch-beetle-pce-fast picoarch-bluemsx"
+	@echo "  picoarch-fmsx picoarch-gme picoarch-mednafen-ngp picoarch-mednafen-wswan"
+	@echo "  picoarch-pokemini picoarch-quicknes picoarch-smsplus-gx"
+	@echo "  picoarch-snes9x2002 picoarch-snes9x2005 picoarch-snes9x2005-plus"
+	@echo "  picoarch-snes9x2010 picoarch-stella2014 picoarch-prboom picoarch-fbalpha2012"
+	@echo "  picoarch-fake08          Available experimental/non-validated target"
+	@echo "Core cleanup targets:"
+	@echo "  picoarch-clean-fceumm picoarch-clean-gambatte picoarch-clean-gpsp picoarch-clean-picodrive"
+	@echo "  picoarch-clean-mame2000 picoarch-clean-mame2003 picoarch-clean-mame2003-plus"
+	@echo "  picoarch-clean-pcsx-rearmed picoarch-clean-beetle-pce-fast picoarch-clean-bluemsx"
+	@echo "  picoarch-clean-fmsx picoarch-clean-gme picoarch-clean-mednafen-ngp picoarch-clean-mednafen-wswan"
+	@echo "  picoarch-clean-pokemini picoarch-clean-quicknes picoarch-clean-smsplus-gx"
+	@echo "  picoarch-clean-snes9x2002 picoarch-clean-snes9x2005 picoarch-clean-snes9x2005-plus"
+	@echo "  picoarch-clean-snes9x2010 picoarch-clean-stella2014 picoarch-clean-prboom picoarch-clean-fbalpha2012"
+	@echo "  picoarch-clean-fake08 picoarch-clean-validated"
+	@echo
+	@echo "Packaging / release variants:"
 	@echo "  picoarch-paks            Create output/picoarch-paks"
+	@echo "  picoarch-tool            Create output/picoarch-tool"
 	@echo "  standalone-paks          Create output/standalone-paks"
 	@echo "  minui-extra-paks         Create output/minui-extra-paks"
-	@echo "  minui-release            Create output/minui-release/MinUI-*-custom.zip"
-	@echo "  clean-picoarch-paks      Remove PicoArch PAK output"
-	@echo "  clean-standalone-paks    Remove standalone PAK output"
-	@echo "  clean-minui-extra-paks   Remove additional MinUI PAK output"
-	@echo "  clean-minui-release      Remove final MinUI release output/build"
+	@echo "  mame4allx-pak            Package MAME4ALLX"
+	@echo "  minui-only-release       Build MinUI-only release"
+	@echo "  minui-standalone-release Build MinUI + standalone release"
+	@echo "  minui-picoarch-release   Build MinUI + PicoArch release"
+	@echo "  minui-release            Build full installable MinUI release"
 	@echo
-	@echo "MinUI Legacy:"
-	@echo "  source-minui             Clone/update MinUI sources and submodules"
-	@echo "  build-minui              Build MinUI Legacy and bundled emulators"
-	@echo "  clean-build-minui        Clean MinUI build"
-	@echo "  clean-source-minui       Remove MinUI sources"
-	@echo "  build-minui-system       Build MinUI system + libraries only (make build-minui-system MINUI_REF=yourBranch)"
-	@echo "  deploy-minui            Deploy built MinUI System to TrimUI over ADB"
+	@echo "Packaging cleanup:"
+	@echo "  clean-picoarch-paks / clean-picoarch-tool / clean-standalone-paks"
+	@echo "  clean-minui-extra-paks / clean-mame4allx-pak"
+	@echo "  clean-minui-only-release / clean-minui-standalone-release"
+	@echo "  clean-minui-picoarch-release / clean-minui-release"
 	@echo
-	@echo "Arnold:"
-	@echo "  source-arnold            Checkout Arnold source"
-	@echo "  build-arnold             Build Arnold"
-	@echo "  install-arnold           Install GX4000.pak into output/arnold"
-	@echo "  clean-build-arnold       Clean Arnold build"
-	@echo "  clean-install-arnold     Remove Arnold output"
-	@echo "  clean-source-arnold      Remove Arnold sources"
-	@echo
-	@echo "Stella:"
-	@echo "  source-stella            Checkout pinned Stella source"
-	@echo "  configure-stella         Generate Trimui config.mak"
-	@echo "  build-stella             Build Stella"
-	@echo "  install-stella           Install Atari2600.pak into output/stella"
-	@echo "  clean-build-stella       Clean Stella build"
-	@echo "  clean-install-stella     Remove Stella output"
-	@echo "  clean-source-stella      Remove Stella sources"
-	@echo
-	@echo "GnGeo:"
-	@echo "  source-gngeo             Checkout pinned GnGeo source"
-	@echo "  configure-gngeo          Configure GnGeo for Trimui"
-	@echo "  build-gngeo              Build GnGeo"
-	@echo "  install-gngeo            Install NEOGEO.pak into output/gngeo"
-	@echo "  clean-build-gngeo        Clean GnGeo build"
-	@echo "  clean-install-gngeo      Remove GnGeo output"
-	@echo "  clean-source-gngeo       Remove GnGeo sources"
-	@echo
-	@echo "Retro8:"
-	@echo "  source-retro8            Checkout pinned Retro8 source"
-	@echo "  build-retro8             Build Retro8"
-	@echo "  install-retro8           Install PICO-8.pak into output/retro8"
-	@echo "  clean-build-retro8       Clean Retro8 build"
-	@echo "  clean-install-retro8     Remove Retro8 output"
-	@echo "  clean-source-retro8      Remove Retro8 sources"
-	@echo
-	@echo "Options:"
-	@echo "  JOBS=N                   Number of parallel jobs"
+	@echo "Safety: release targets never remove, checkout or reset $(DEV_SOURCES_DIR)."
 
 # Open an interactive shell in the build container.
 shell:
@@ -180,12 +240,11 @@ release-all:
 # Individual projects still use JOBS internally where their build systems support it.
 .NOTPARALLEL: release-all release-fresh picoarch-validated
 
-# Reproduce the workflow of a newly cloned project while preserving the Docker SDK
-# and project-owned files (Makefiles, patches, scripts and assets).
+# Reproduce the workflow of a newly cloned release while preserving developer-owned
+# source trees under /workspace/sources and project-owned orchestration files.
 release-fresh:
 	$(MAKE) preflight
 	rm -rf \
-		$(WORKSPACE)/sources \
 		$(WORKSPACE)/libs \
 		$(WORKSPACE)/build \
 		$(WORKSPACE)/output

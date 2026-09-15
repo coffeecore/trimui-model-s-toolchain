@@ -7,7 +7,7 @@
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_BRANCH := picoarch
 MINUI_COMMIT := 12382bf83777eeaa333b2f320423047d1d43c18a
-MINUI_DIR := $(WORKSPACE)/sources/minui
+MINUI_DIR := $(RELEASE_SOURCES_DIR)/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
 MINUI_BUILD_DIR := $(MINUI_DIR)/build
@@ -20,12 +20,13 @@ MINUI_PREFIX := $(MINUI_SYSROOT)/usr
 MINUI_CROSS := $(CROSS_COMPILE)
 
 ADB ?= adb
+MINUI_LIBS_TARGET ?= minui-libs
 
-MINUI_DEPLOY_SOURCE ?= $(CURDIR)/sources/minui/build/PAYLOAD/System
+MINUI_DEPLOY_SOURCE ?= $(MINUI_DIR)/build/PAYLOAD/System
 MINUI_DEPLOY_STAGE := /mnt/SDCARD/.minui-dev
 MINUI_DEVICE_SYSTEM := /mnt/SDCARD/System
 
-.PHONY: build-minui build-minui-system clean-build-minui source-minui clean-source-minui minui deploy-minui
+.PHONY: build-minui build-minui-system _build-minui _build-minui-system clean-build-minui source-minui clean-source-minui minui deploy-minui
 
 deploy-minui:
 	@test -d "$(MINUI_DEPLOY_SOURCE)" || { \
@@ -93,7 +94,10 @@ clean-source-minui:
 
 # Build only MinUI itself and its shared libraries.
 # Intended for fast development iterations without rebuilding bundled emulators.
-build-minui-system: source-minui libs
+build-minui-system: source-minui
+	$(MAKE) _build-minui-system
+
+_build-minui-system: libs
 	$(MAKE) -C $(MINUI_DIR) readme
 
 	# Keep upstream MinUI system/SDL on the vendor SDK sysroot.
@@ -102,7 +106,7 @@ build-minui-system: source-minui libs
 		PREFIX="$(MINUI_PREFIX)"
 
 	# Rebuild MinUI libraries from the current MinUI source tree.
-	$(MAKE) minui-libs
+	$(MAKE) $(MINUI_LIBS_TARGET)
 
 	# Replace the libraries packaged by upstream `sys` with our
 	# reproducible orchestration builds.
@@ -117,7 +121,10 @@ build-minui-system: source-minui libs
 # Reproduce the upstream build order. The only manually expanded emulator target
 # is PicoDrive (`gen`) because MinUI references platform/trimui/skin, while the
 # pinned PicoDrive commit actually provides platform/opendingux/data/skin.
-build-minui: build-minui-system
+build-minui: source-minui
+	$(MAKE) _build-minui
+
+_build-minui: _build-minui-system
 	$(MAKE) -C $(MINUI_DIR) gb
 	$(MAKE) -C $(MINUI_DIR) pm
 	$(MAKE) -C $(MINUI_DIR) ngp

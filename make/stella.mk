@@ -9,7 +9,7 @@
 STELLA_REPO := https://github.com/coffeecore/Stella-3.9.3.git
 STELLA_COMMIT := d2eab06c5fdf1e302a8b7a7e21f036216315d0f7
 
-STELLA_DIR := $(WORKSPACE)/sources/stella
+STELLA_DIR := $(RELEASE_SOURCES_DIR)/stella
 STELLA_OUTPUT_DIR := $(OUTPUT_DIR)/stella
 
 STELLA_CXX := $(CROSS_COMPILE)g++

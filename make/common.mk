@@ -5,6 +5,12 @@
 
 WORKSPACE := /workspace
 
+# Source trees are deliberately split by purpose:
+# - sources/ is owned by the developer and is never modified by release targets.
+# - build/release-sources/ contains disposable, pinned checkouts used for releases.
+DEV_SOURCES_DIR := $(WORKSPACE)/sources
+RELEASE_SOURCES_DIR := $(WORKSPACE)/build/release-sources
+
 # Number of parallel jobs. Keep a conservative default for the Trimui build
 # environment, while allowing command-line overrides (e.g. `JOBS=8`).
 JOBS ?= 6
@@ -26,4 +32,5 @@ SYSROOT := $(BUILD_SYSROOT)
 # Reserved for final packaged artifacts. Once every standalone emulator and
 # PicoArch is handled, a global release target can collect their packages here.
 OUTPUT_DIR := $(WORKSPACE)/output
+DEV_OUTPUT_DIR := $(OUTPUT_DIR)/dev
 FINAL_RELEASE_DIR := $(OUTPUT_DIR)/release

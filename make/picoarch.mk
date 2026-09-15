@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 PICOARCH_REPO := https://github.com/coffeecore/picoarch.git
-PICOARCH_SOURCE := $(WORKSPACE)/sources/picoarch
+PICOARCH_SOURCE := $(RELEASE_SOURCES_DIR)/picoarch
 PICOARCH_BUILD := $(WORKSPACE)/build/picoarch
 PICOARCH_CORE_SOURCES := $(WORKSPACE)/build/picoarch-sources
 PICOARCH_PATCHES := $(WORKSPACE)/patches/picoarch
@@ -94,12 +94,12 @@ PICOARCH_MAKE_ARGS := \
 # PicoArch source/build tree and frontend (MinUI)
 # -----------------------------------------------------------------------------
 
-# Keep a pinned pristine-ish source checkout under sources/. The working tree in
+# Keep a pinned pristine-ish release checkout under build/release-sources/. The working tree in
 # build/picoarch is a full copy of that checkout (including the top-level
 # Makefile and upstream patches), so the core targets such as
 # fceumm_libretro.so are available.
 .PHONY: source-picoarch prepare-picoarch picoarch-check-patches \
-	picoarch-frontend picoarch-clean-frontend clean-source-picoarch
+	picoarch-frontend _build-picoarch-frontend picoarch-clean-frontend clean-source-picoarch
 
 source-picoarch:
 	@if [ ! -d "$(PICOARCH_SOURCE)/.git" ]; then \
@@ -154,6 +154,9 @@ picoarch-check-patches: prepare-picoarch
 # The frontend and every core now share the same complete PicoArch working tree.
 # This is required because the root Makefile owns the *_libretro.so targets.
 picoarch-frontend: minui-libs picoarch-check-patches
+	$(MAKE) _build-picoarch-frontend
+
+_build-picoarch-frontend:
 	test -x "$(TOOLCHAIN_SYSROOT)/usr/bin/sdl-config"
 	test -f "$(MINUI_MMENU_BUILD)/mmenu.h"
 

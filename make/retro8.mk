@@ -6,7 +6,7 @@ RETRO8_REPO := https://github.com/coffeecore/retro8.git
 RETRO8_BRANCH := trimui-model-s
 RETRO8_COMMIT := 6ff2acc19079b07e9aecb20e3cf5e0144d4b8338
 
-RETRO8_DIR := /workspace/sources/retro8
+RETRO8_DIR := $(RELEASE_SOURCES_DIR)/retro8
 
 RETRO8_OUTPUT_DIR := $(OUTPUT_DIR)/retro8
 RETRO8_PAK := $(RETRO8_OUTPUT_DIR)/PICO-8.pak
