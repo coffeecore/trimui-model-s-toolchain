@@ -2,7 +2,6 @@ FROM ubuntu:22.04 AS builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG GNGEO_REPO=https://github.com/coffeecore/gngeo-steward-fu.git
-ARG GNGEO_REF=trimui-model-s
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -13,9 +12,14 @@ RUN apt-get update \
         zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone "${GNGEO_REPO}" /opt/gngeo \
+ARG GNGEO_REF=trimui-model-s
+
+RUN git clone \
+        --branch "${GNGEO_REF}" \
+        --single-branch \
+        "${GNGEO_REPO}" \
+        /opt/gngeo \
     && cd /opt/gngeo \
-    && git checkout --detach "${GNGEO_REF}" \
     && make -f Makefile.host
 
 
