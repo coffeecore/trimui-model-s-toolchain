@@ -9,3 +9,11 @@ services:
             - .:/workspace
         stdin_open: true
         tty: true
+    gno:
+        build:
+            context: .
+            dockerfile: docker/gno/dockerfile
+            args:
+                GNGEO_REPO: ${GNGEO_GNO_REPO:-https://github.com/coffeecore/gngeo-steward-fu.git}
+                GNGEO_REF: ${GNGEO_GNO_REF:-trimui-model-s}
+        image: trimui-model-s-gno:local

@@ -31,6 +31,8 @@ RUN apt-get update && apt-get install -y \
     zstd \
     bash-completion \
     nano \
+    libsdl1.2-dev \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash builder

@@ -26,6 +26,7 @@ include make/minui-release.mk
 include make/minui-libs.mk
 include make/mame4allx.mk
 include make/dev.mk
+include make/gno.mk
 
 .PHONY: help help-dev help-release shell preflight release-all release-fresh
 
@@ -46,6 +47,11 @@ help:
 	@echo "  clean-install-libs       Remove project-installed library files"
 	@echo "  clean-source-libs        Remove downloaded library sources"
 	@echo "  JOBS=N                   Override parallel build jobs (default: $(JOBS))"
+	@echo "Neo Geo tools:"
+	@echo '  gno ROM=/path/game.zip       Convert one Neo Geo ZIP to GNO'
+	@echo '  gno-dir ROM_DIR=/path        Convert every Neo Geo ZIP in a directory'
+	@echo '  gno-image                    Build the GNO converter Docker image'
+	@echo
 
 help-dev:
 	@echo "Development targets"
