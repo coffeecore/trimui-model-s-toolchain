@@ -8,8 +8,8 @@ picoarch-tool:
 		-maxdepth 1 \
 		-type f \
 		-name '*_libretro.so' \
-		| wc -l)" -eq 27 || { \
-		echo "ERROR: expected 27 validated PicoArch cores in $(PICOARCH_OUTPUT_CORES)" >&2; \
+		| wc -l)" -eq 28 || { \
+		echo "ERROR: expected 28 validated PicoArch cores in $(PICOARCH_OUTPUT_CORES)" >&2; \
 		exit 1; \
 	}
 	$(PICOARCH_TOOL_SCRIPT)

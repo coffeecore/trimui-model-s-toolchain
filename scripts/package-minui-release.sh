@@ -149,8 +149,13 @@ mkdir -p "$OUTER" "$OUTPUT"
 
 unzip -q "$BASE_RELEASE" -d "$OUTER"
 
-if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+if [ "$INCLUDE_STANDALONE" -eq 1 ] || [ "$INCLUDE_PICOARCH" -eq 1 ]; then
+    # Standalone GnGeo expects neogeo.zip under /mnt/SDCARD/Bios/gngeo.
+    # Keep creating this directory for PicoArch releases too, as before.
     mkdir -p "$OUTER/Bios/gngeo"
+fi
+
+if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     mkdir -p "$OUTER/Bios/picoarch"
     mkdir -p "$OUTER/Roms"
     mkdir -p "$OUTER/Saves/picoarch"

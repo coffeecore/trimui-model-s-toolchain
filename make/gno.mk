@@ -18,7 +18,7 @@ FORCE ?= 0
 gno-image:
 	GNGEO_GNO_REPO="$(GNO_GNGEO_REPO)" \
 	GNGEO_GNO_REF="$(GNO_GNGEO_REF)" \
-	docker compose build "$(GNO_SERVICE)"
+	docker compose build "$(GNO_SERVICE)" --no-cache
 
 gno:
 	@test -n "$(ROM)" || { \

@@ -27,6 +27,8 @@ DEV_MINUI_MMENU_BUILD := $(DEV_MINUI_LIBS_BUILD)/libmmenu
 DEV_GNGEO_COFFEECORE_OUTPUT_DIR := $(DEV_OUTPUT_DIR)/gngeo-coffeecore
 DEV_GNGEO_COFFEECORE_PAK := $(DEV_GNGEO_COFFEECORE_OUTPUT_DIR)/NEOGEO.pak
 DEV_GNGEO_STEWARD_FU_OUTPUT_DIR := $(DEV_OUTPUT_DIR)/gngeo-steward-fu
+DEV_GNGEO_STEWARD_FU_PAK_TEMPLATE := $(DEV_GNGEO_STEWARD_FU_DIR)/trimui-dist/Emus/NEOGEO.pak
+DEV_GNGEO_STEWARD_FU_PAK := $(DEV_GNGEO_STEWARD_FU_OUTPUT_DIR)/NEOGEO.pak
 DEV_GNGEO_STEWARD_FU_BINARY := $(DEV_GNGEO_STEWARD_FU_DIR)/gngeo
 
 DEV_PICOARCH_OUTPUT := $(DEV_OUTPUT_DIR)/picoarch
@@ -195,9 +197,30 @@ dev-install-gngeo-steward-fu: dev-check-gngeo-steward-fu
 		echo "ERROR: build first with: make dev-gngeo-steward-fu" >&2; \
 		exit 1; \
 	}
+	@test -d "$(DEV_GNGEO_STEWARD_FU_PAK_TEMPLATE)" || { \
+		echo "ERROR: missing Steward Fu PAK template: $(DEV_GNGEO_STEWARD_FU_PAK_TEMPLATE)" >&2; \
+		exit 1; \
+	}
+	@test -f "$(DEV_GNGEO_STEWARD_FU_PAK_TEMPLATE)/launch.sh" || { \
+		echo "ERROR: missing Steward Fu launcher: $(DEV_GNGEO_STEWARD_FU_PAK_TEMPLATE)/launch.sh" >&2; \
+		exit 1; \
+	}
 	rm -rf "$(DEV_GNGEO_STEWARD_FU_OUTPUT_DIR)"
 	mkdir -p "$(DEV_GNGEO_STEWARD_FU_OUTPUT_DIR)"
-	cp "$(DEV_GNGEO_STEWARD_FU_BINARY)" "$(DEV_GNGEO_STEWARD_FU_OUTPUT_DIR)/gngeo"
+	cp -a \
+		"$(DEV_GNGEO_STEWARD_FU_PAK_TEMPLATE)" \
+		"$(DEV_GNGEO_STEWARD_FU_OUTPUT_DIR)/"
+	cp \
+		"$(DEV_GNGEO_STEWARD_FU_BINARY)" \
+		"$(DEV_GNGEO_STEWARD_FU_PAK)/gngeo"
+	@test -e "$(SYSROOT)/usr/lib/libts-1.0.so.0"
+	mkdir -p "$(DEV_GNGEO_STEWARD_FU_PAK)/lib"
+	cp -a $(SYSROOT)/usr/lib/libts-1.0.so* "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/"
+	@if [ -d "$(SYSROOT)/usr/lib/ts" ]; then \
+		cp -a "$(SYSROOT)/usr/lib/ts" "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/"; \
+	fi
+	chmod +x "$(DEV_GNGEO_STEWARD_FU_PAK)/gngeo" "$(DEV_GNGEO_STEWARD_FU_PAK)/launch.sh"
+	sh -n "$(DEV_GNGEO_STEWARD_FU_PAK)/launch.sh"
 
 # Short aliases intentionally point to the active/new GnGeo port. The explicit
 # targets above remain available at all times, so switching implementation is

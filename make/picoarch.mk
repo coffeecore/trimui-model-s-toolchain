@@ -15,8 +15,7 @@ PICOARCH_CC := $(PICOARCH_CROSS)gcc
 PICOARCH_CXX := $(PICOARCH_CROSS)g++
 
 # Exact PicoArch revision validated for Trimui Model S
-PICOARCH_REV := 53e0e6b2b72b8c50e6b9fceb437dfa8c650d05c5
-
+PICOARCH_REV := 0900670ca6edbae380c5890528ad19cfbf61287a
 
 # -----------------------------------------------------------------------------
 # Validated core revisions
@@ -105,12 +104,15 @@ source-picoarch:
 	@if [ ! -d "$(PICOARCH_SOURCE)/.git" ]; then \
 		mkdir -p "$(dir $(PICOARCH_SOURCE))"; \
 		git clone --recursive "$(PICOARCH_REPO)" "$(PICOARCH_SOURCE)"; \
+	else \
+		git -C "$(PICOARCH_SOURCE)" fetch --prune origin; \
 	fi
 	git -C "$(PICOARCH_SOURCE)" checkout --detach "$(PICOARCH_REV)"
 	git -C "$(PICOARCH_SOURCE)" submodule update --init --recursive
 
 prepare-picoarch: source-picoarch
-	@if [ ! -f "$(PICOARCH_PREPARED_STAMP)" ]; then \
+	@if [ ! -f "$(PICOARCH_PREPARED_STAMP)" ] || \
+		[ "$$(cat "$(PICOARCH_PREPARED_STAMP)" 2>/dev/null)" != "$(PICOARCH_REV)" ]; then \
 		rm -rf "$(PICOARCH_BUILD)"; \
 		mkdir -p "$(dir $(PICOARCH_BUILD))"; \
 		cp -a "$(PICOARCH_SOURCE)" "$(PICOARCH_BUILD)"; \
@@ -119,7 +121,7 @@ prepare-picoarch: source-picoarch
 		for patch_file in "$(PICOARCH_PATCHES)"/frontend/*.patch; do \
 			patch -l -d "$(PICOARCH_BUILD)" -p1 < "$$patch_file"; \
 		done; \
-		touch "$(PICOARCH_PREPARED_STAMP)"; \
+		echo "$(PICOARCH_REV)" > "$(PICOARCH_PREPARED_STAMP)"; \
 	fi
 
 # Fail before cloning any core if the pinned PicoArch checkout does not contain
@@ -136,6 +138,7 @@ picoarch-check-patches: prepare-picoarch
 		patches/gme/1000-trimui-build.patch \
 		patches/gpsp/1000-trimui-build.patch \
 		patches/gpsp/1002-frameskip-changes.patch \
+		patches/handy/1000-trimui-build.patch \
 		patches/mame2000/0002-arm-generic-target.patch \
 		patches/mame2000/1000-trimui-build.patch \
 		patches/mame2000/1002-reduce-vector-game-res.patch \
@@ -188,12 +191,12 @@ PICOARCH_OUTPUT_CORES := $(PICOARCH_OUTPUT)/cores
 
 .PHONY: picoarch-output picoarch-clean-output
 
-picoarch-output:
-	test -x $(PICOARCH_BUILD)/picoarch
+picoarch-output: picoarch-validated picoarch-frontend
+	test -x "$(PICOARCH_BUILD)/picoarch"
 	@test "$$(find $(PICOARCH_BUILD) -maxdepth 1 -type f -name '*_libretro.so' \
 		! -name 'fake08_libretro.so' \
-		| wc -l)" -eq 27 || { \
-		echo "ERROR: expected 27 validated PicoArch cores in $(PICOARCH_BUILD)" >&2; \
+		| wc -l)" -eq 28 || { \
+		echo "ERROR: expected 28 validated PicoArch cores in $(PICOARCH_BUILD)" >&2; \
 		exit 1; \
 	}
 	rm -rf $(PICOARCH_OUTPUT)
@@ -223,6 +226,7 @@ picoarch-validated: picoarch-check-patches \
 	picoarch-fceumm \
 	picoarch-gambatte \
 	picoarch-gpsp \
+	picoarch-handy \
 	picoarch-picodrive \
 	picoarch-mame2000 \
 	picoarch-pcsx-rearmed \
@@ -1325,6 +1329,22 @@ picoarch-clean-fbalpha2012:
 	rm -f $(PICOARCH_BUILD)/fbalpha2012_cps2_libretro.so
 	rm -f $(PICOARCH_BUILD)/fbalpha2012_neogeo_libretro.so
 
+
+# -----------------------------------------------------------------------------
+# Handy
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-handy
+picoarch-handy: picoarch-check-patches
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		handy_libretro.so
+
+.PHONY: picoarch-clean-handy
+picoarch-clean-handy:
+	rm -rf $(PICOARCH_BUILD)/handy
+	rm -f $(PICOARCH_BUILD)/handy_libretro.so
+
 # -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
@@ -1334,6 +1354,7 @@ picoarch-clean-validated: \
 	picoarch-clean-fceumm \
 	picoarch-clean-gambatte \
 	picoarch-clean-gpsp \
+	picoarch-clean-handy \
 	picoarch-clean-picodrive \
 	picoarch-clean-mame2000 \
 	picoarch-clean-pcsx-rearmed \

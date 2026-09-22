@@ -14,38 +14,42 @@ usage()
 convert_rom()
 {
     local rom="$1"
-    local dir
     local base
     local output
 
-    dir="$(dirname "$rom")"
     base="$(basename "$rom")"
 
     if [[ "${base,,}" == "neogeo.zip" ]]; then
-        return
-    fi
-
-    if [[ ! -f "$rom" ]]; then
-        echo "ERROR: ROM not found: $rom" >&2
-        exit 1
-    fi
-
-    if [[ ! -f "$dir/neogeo.zip" ]]; then
-        echo "ERROR: neogeo.zip not found in: $dir" >&2
-        exit 1
+        return 2
     fi
 
     output="${rom%.*}.gno"
 
     if [[ -f "$output" && "$FORCE" != "1" ]]; then
         echo "Skipping existing: $output"
-        return
+        return 2
     fi
 
     echo
     echo "Converting: $base"
 
-    "$DUMPER" "$rom"
+log_dir="$ROM_DIR/.gno-failures"
+mkdir -p "$log_dir"
+
+log="$log_dir/${base%.zip}.log"
+tmp_log="${log}.tmp"
+
+if "$DUMPER" "$rom" >"$tmp_log" 2>&1; then
+    cat "$tmp_log"
+    rm -f "$tmp_log" "$log"
+    return 0
+fi
+
+cat "$tmp_log"
+mv "$tmp_log" "$log"
+
+echo "ERROR: failed to convert: $base" >&2
+return 1
 }
 
 if [[ $# -lt 2 ]]; then
@@ -61,31 +65,54 @@ case "$1" in
     dir)
         ROM_DIR="$2"
 
-        if [[ ! -d "$ROM_DIR" ]]; then
+        [[ -d "$ROM_DIR" ]] || {
             echo "ERROR: directory not found: $ROM_DIR" >&2
             exit 1
-        fi
+        }
 
-        if [[ ! -f "$ROM_DIR/neogeo.zip" ]]; then
+        [[ -f "$ROM_DIR/neogeo.zip" ]] || {
             echo "ERROR: neogeo.zip not found in: $ROM_DIR" >&2
             exit 1
-        fi
+        }
 
         shopt -s nullglob nocaseglob
 
-        count=0
+        converted=0
+        skipped=0
+        failed=0
+        failed_roms=()
 
         for rom in "$ROM_DIR"/*.zip; do
-            if [[ "$(basename "${rom,,}")" == "neogeo.zip" ]]; then
-                continue
-            fi
+            if convert_rom "$rom"; then
+                converted=$((converted + 1))
+            else
+                status=$?
 
-            convert_rom "$rom"
-            count=$((count + 1))
+                if [[ "$status" -eq 2 ]]; then
+                    skipped=$((skipped + 1))
+                else
+                    failed=$((failed + 1))
+                    failed_roms+=("$(basename "$rom")")
+                fi
+            fi
         done
 
         echo
-        echo "Processed ROMs: $count"
+        echo "Conversion complete:"
+        echo "  Converted: $converted"
+        echo "  Skipped:   $skipped"
+        echo "  Failed:    $failed"
+
+        if [[ "$failed" -gt 0 ]]; then
+            echo
+            echo "Failed ROMs:"
+
+            for rom in "${failed_roms[@]}"; do
+                echo "  $rom"
+            done
+
+            exit 1
+        fi
         ;;
 
     *)
