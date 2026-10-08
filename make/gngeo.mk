@@ -46,8 +46,7 @@ source-gngeo:
 # Compatibility target: Steward Fu uses Makefile.trimui directly and has no
 # Autotools configure phase. Keep the target name so existing workflows do not
 # break.
-# configure-gngeo: source-gngeo libs minui-libs
-configure-gngeo: libs minui-libs
+configure-gngeo: source-gngeo libs minui-libs
 	@test -f "$(GNGEO_DIR)/Makefile.trimui" || { \
 		echo "ERROR: missing Makefile.trimui in $(GNGEO_DIR)" >&2; \
 		exit 1; \
