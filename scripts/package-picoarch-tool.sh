@@ -6,7 +6,7 @@ PICOARCH_BUILD="/workspace/build/picoarch"
 TOOL_OUTPUT="/workspace/output/picoarch-tool"
 PAK="$TOOL_OUTPUT/Tools/PicoArch.pak"
 
-TOTAL_CORES=28
+TOTAL_CORES=29
 
 rm -rf "$TOOL_OUTPUT"
 

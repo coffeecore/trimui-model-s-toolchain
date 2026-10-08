@@ -195,8 +195,8 @@ picoarch-output: picoarch-validated picoarch-frontend
 	test -x "$(PICOARCH_BUILD)/picoarch"
 	@test "$$(find $(PICOARCH_BUILD) -maxdepth 1 -type f -name '*_libretro.so' \
 		! -name 'fake08_libretro.so' \
-		| wc -l)" -eq 28 || { \
-		echo "ERROR: expected 28 validated PicoArch cores in $(PICOARCH_BUILD)" >&2; \
+		| wc -l)" -eq 29 || { \
+		echo "ERROR: expected 29 validated PicoArch cores in $(PICOARCH_BUILD)" >&2; \
 		exit 1; \
 	}
 	rm -rf $(PICOARCH_OUTPUT)
