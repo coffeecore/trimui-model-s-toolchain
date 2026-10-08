@@ -24,6 +24,12 @@ DEV_MINUI_LIBS_BUILD := $(WORKSPACE)/build/dev/minui-libs
 DEV_MINUI_MSETTINGS_BUILD := $(DEV_MINUI_LIBS_BUILD)/libmsettings
 DEV_MINUI_MMENU_BUILD := $(DEV_MINUI_LIBS_BUILD)/libmmenu
 
+DEV_MINUI_OUTPUT_DIR := $(DEV_OUTPUT_DIR)/minui
+DEV_MINUI_OUTPUT_SYSTEM := $(DEV_MINUI_OUTPUT_DIR)/System
+DEV_MINUI_OUTPUT_TOOLS := $(DEV_MINUI_OUTPUT_DIR)/Tools
+DEV_MINUI_CLOCK_PAK := $(DEV_MINUI_DIR)/build/PAYLOAD/Tools/Clock.pak
+DEV_MINUI_OUTPUT_CLOCK_PAK := $(DEV_MINUI_OUTPUT_TOOLS)/Clock.pak
+
 DEV_GNGEO_COFFEECORE_OUTPUT_DIR := $(DEV_OUTPUT_DIR)/gngeo-coffeecore
 DEV_GNGEO_COFFEECORE_PAK := $(DEV_GNGEO_COFFEECORE_OUTPUT_DIR)/NEOGEO.pak
 DEV_GNGEO_STEWARD_FU_OUTPUT_DIR := $(DEV_OUTPUT_DIR)/gngeo-steward-fu
@@ -38,7 +44,7 @@ DEV_PICOARCH_OUTPUT := $(DEV_OUTPUT_DIR)/picoarch
 	dev-check-gngeo-coffeecore dev-gngeo-coffeecore dev-clean-gngeo-coffeecore dev-install-gngeo-coffeecore \
 	dev-check-gngeo-steward-fu dev-gngeo-steward-fu dev-clean-gngeo-steward-fu dev-install-gngeo-steward-fu \
 	dev-gngeo dev-clean-gngeo dev-install-gngeo \
-	dev-check-minui dev-minui-libs dev-minui-system dev-minui dev-clean-minui dev-deploy-minui \
+	dev-check-minui dev-minui-libs dev-minui-system dev-minui dev-clean-minui \
 	dev-check-picoarch dev-picoarch-frontend dev-picoarch-frontend-with-dev-minui \
 	dev-picoarch-output dev-clean-picoarch dev-picoarch-core
 
@@ -215,9 +221,10 @@ dev-install-gngeo-steward-fu: dev-check-gngeo-steward-fu
 		"$(DEV_GNGEO_STEWARD_FU_PAK)/gngeo"
 	@test -e "$(SYSROOT)/usr/lib/libts-1.0.so.0"
 	mkdir -p "$(DEV_GNGEO_STEWARD_FU_PAK)/lib"
-	cp -a $(SYSROOT)/usr/lib/libts-1.0.so* "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/"
+	cp -L $(SYSROOT)/usr/lib/libts-1.0.so* "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/"
+	cp -L "$(SYSROOT)/usr/lib/libz.so.1" "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/libz.so.1"
 	@if [ -d "$(SYSROOT)/usr/lib/ts" ]; then \
-		cp -a "$(SYSROOT)/usr/lib/ts" "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/"; \
+		cp -aL "$(SYSROOT)/usr/lib/ts" "$(DEV_GNGEO_STEWARD_FU_PAK)/lib/"; \
 	fi
 	chmod +x "$(DEV_GNGEO_STEWARD_FU_PAK)/gngeo" "$(DEV_GNGEO_STEWARD_FU_PAK)/launch.sh"
 	sh -n "$(DEV_GNGEO_STEWARD_FU_PAK)/launch.sh"
@@ -236,7 +243,7 @@ dev-install-gngeo: dev-install-gngeo-steward-fu
 # -----------------------------------------------------------------------------
 
 dev-check-minui:
-	@test -f "$(DEV_MINUI_DIR)/Makefile" || { \
+	@test -f "$(DEV_MINUI_DIR)/makefile" || { \
 		echo "ERROR: MinUI development tree not found: $(DEV_MINUI_DIR)" >&2; \
 		exit 1; \
 	}
@@ -256,20 +263,56 @@ dev-minui-system: dev-check-minui
 		MINUI_LIBS_TARGET=dev-minui-libs \
 		MINUI_LIBS_BUILD="$(DEV_MINUI_LIBS_BUILD)"
 
-dev-minui: dev-check-minui
-	$(MAKE) _build-minui \
-		MINUI_DIR="$(DEV_MINUI_DIR)" \
-		MINUI_LIBS_TARGET=dev-minui-libs \
-		MINUI_LIBS_BUILD="$(DEV_MINUI_LIBS_BUILD)"
+# Build only what we currently develop on MinUI itself: System (including
+# libmsettings/libmmenu and System.pak) plus Clock.pak. Do not rebuild the
+# bundled Legacy emulators; those remain available through the release targets
+# until the PicoArch migration is complete.
+dev-minui: dev-minui-system
+	$(MAKE) -C "$(DEV_MINUI_DIR)" clock \
+		CROSS_COMPILE="$(MINUI_CROSS)" \
+		PREFIX="$(MINUI_PREFIX)"
+	@test -d "$(DEV_MINUI_DIR)/build/PAYLOAD/System" || { \
+		echo "ERROR: MinUI System payload was not built" >&2; \
+		exit 1; \
+	}
+	@test -x "$(DEV_MINUI_CLOCK_PAK)/clock" || { \
+		echo "ERROR: Clock.pak was not built: $(DEV_MINUI_CLOCK_PAK)" >&2; \
+		exit 1; \
+	}
+	rm -rf "$(DEV_MINUI_OUTPUT_DIR)"
+	mkdir -p "$(DEV_MINUI_OUTPUT_TOOLS)"
+	cp -a "$(DEV_MINUI_DIR)/build/PAYLOAD/System" "$(DEV_MINUI_OUTPUT_DIR)/"
+	cp -a "$(DEV_MINUI_CLOCK_PAK)" "$(DEV_MINUI_OUTPUT_TOOLS)/"
+	@echo "MinUI dev output: $(DEV_MINUI_OUTPUT_DIR)"
 
+# Development clean intentionally mirrors only the System-side pieces we build
+# above. It does not touch bundled emulator source/build artifacts.
 dev-clean-minui: dev-check-minui
-	$(MAKE) clean-build-minui MINUI_DIR="$(DEV_MINUI_DIR)"
-	rm -rf "$(DEV_MINUI_LIBS_BUILD)"
-
-# Reuse the proven deploy recipe, but point it at the development payload.
-dev-deploy-minui: dev-check-minui
-	$(MAKE) deploy-minui \
-		MINUI_DEPLOY_SOURCE="$(DEV_MINUI_DIR)/build/PAYLOAD/System"
+	$(MAKE) -C "$(DEV_MINUI_DIR)/src/libmmenu" clean \
+		CROSS_COMPILE="$(MINUI_CROSS)" \
+		PREFIX="$(MINUI_PREFIX)"
+	$(MAKE) -C "$(DEV_MINUI_DIR)/src/MinUI" clean
+	$(MAKE) -C "$(DEV_MINUI_DIR)/src/show" clean
+	$(MAKE) -C "$(DEV_MINUI_DIR)/src/confirm" clean
+	$(MAKE) -C "$(DEV_MINUI_DIR)/src/flipbook" clean
+	$(MAKE) -C "$(DEV_MINUI_DIR)/src/clock" clean
+	$(MAKE) -C "$(DEV_MINUI_DIR)/TrimuiUpdate" clean
+	rm -f \
+		"$(DEV_MINUI_DIR)/src/libmsettings/msettings.o" \
+		"$(DEV_MINUI_DIR)/src/libmsettings/libmsettings.so" \
+		"$(DEV_MINUI_DIR)/src/keymon/keymon"
+	@if [ -f "$(DEV_MINUI_DIR)/third-party/SDL-1.2/Makefile" ]; then \
+		cd "$(DEV_MINUI_DIR)/third-party/SDL-1.2" && $(MAKE) distclean; \
+	fi
+	rm -f \
+		"$(DEV_MINUI_DIR)/third-party/SDL-1.2/SDL.spec" \
+		"$(DEV_MINUI_DIR)/third-party/SDL-1.2/include/SDL_config.h" \
+		"$(DEV_MINUI_DIR)/third-party/SDL-1.2/sdl.pc"
+	rm -rf \
+		"$(DEV_MINUI_DIR)/build/PAYLOAD/System" \
+		"$(DEV_MINUI_DIR)/build/PAYLOAD/Tools/Clock.pak" \
+		"$(DEV_MINUI_LIBS_BUILD)" \
+		"$(DEV_MINUI_OUTPUT_DIR)"
 
 # -----------------------------------------------------------------------------
 # PicoArch frontend and optional core worktrees

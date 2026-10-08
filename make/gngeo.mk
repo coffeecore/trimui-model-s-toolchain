@@ -46,7 +46,8 @@ source-gngeo:
 # Compatibility target: Steward Fu uses Makefile.trimui directly and has no
 # Autotools configure phase. Keep the target name so existing workflows do not
 # break.
-configure-gngeo: source-gngeo libs minui-libs
+# configure-gngeo: source-gngeo libs minui-libs
+configure-gngeo: libs minui-libs
 	@test -f "$(GNGEO_DIR)/Makefile.trimui" || { \
 		echo "ERROR: missing Makefile.trimui in $(GNGEO_DIR)" >&2; \
 		exit 1; \
@@ -66,8 +67,8 @@ clean-build-gngeo:
 		$(MAKE) -C "$(GNGEO_DIR)" -f Makefile.trimui clean; \
 	fi
 
-clean-source-gngeo:
-	rm -rf "$(GNGEO_DIR)"
+# clean-source-gngeo:
+# 	rm -rf "$(GNGEO_DIR)"
 
 install-gngeo:
 	@test -x "$(GNGEO_BINARY)" || { \
@@ -92,9 +93,10 @@ install-gngeo:
 	# non-system dependency private to the PAK instead of modifying the firmware.
 	@test -e "$(SYSROOT)/usr/lib/libts-1.0.so.0"
 	mkdir -p "$(GNGEO_PAK)/lib"
-	cp -a $(SYSROOT)/usr/lib/libts-1.0.so* "$(GNGEO_PAK)/lib/"
+	cp -L $(SYSROOT)/usr/lib/libts-1.0.so* "$(GNGEO_PAK)/lib/"
+	cp -L "$(SYSROOT)/usr/lib/libz.so.1" "$(GNGEO_PAK)/lib/libz.so.1"
 	@if [ -d "$(SYSROOT)/usr/lib/ts" ]; then \
-		cp -a "$(SYSROOT)/usr/lib/ts" "$(GNGEO_PAK)/lib/"; \
+		cp -aL "$(SYSROOT)/usr/lib/ts" "$(GNGEO_PAK)/lib/"; \
 	fi
 
 	chmod +x "$(GNGEO_PAK)/gngeo" "$(GNGEO_PAK)/launch.sh"

@@ -8,7 +8,7 @@
 #   make libs JOBS=4
 #   make build-minui JOBS=4
 
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := help-dev
 
 include make/common.mk
 include make/libs.mk
@@ -77,9 +77,9 @@ help-dev:
 	@echo "MinUI:"
 	@echo "  dev-minui-libs                    Build libmsettings/libmmenu from sources/minui"
 	@echo "  dev-minui-system                  Build only the MinUI System"
-	@echo "  dev-minui                         Build full MinUI from sources/minui"
-	@echo "  dev-clean-minui                   Clean generated MinUI artifacts"
-	@echo "  dev-deploy-minui                  Deploy dev MinUI System over ADB"
+	@echo "  dev-minui                         Build System + Clock and export output/dev/minui"
+	@echo "  dev-clean-minui                   Clean only MinUI System/Clock dev artifacts"
+	@echo "  Host deploy: ./scripts/deploy-minui-dev.sh"
 	@echo
 	@echo "PicoArch:"
 	@echo "  dev-picoarch-frontend             Build sources/picoarch using pinned MinUI libs"

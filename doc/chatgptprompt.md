@@ -1544,3 +1544,87 @@ cp fbalpha2012_neogeo_libretro.so \
 ```
 rm -f /mnt/SDCARD/Saves/picoarch/fbalpha2012_neogeo/mslug.fs
 ```
+
+# 14
+
+```
+make -f Makefile.libretro clean
+```
+
+```
+make -f Makefile.libretro CROSS_COMPILE=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi- SYSROOT=/workspace/build/sysroot LIBRETRO_DIR=/workspace/sources/picoarch/libretro-common/include
+```
+
+
+# 15
+
+```
+cp /workspace/sources/picoarch/unzip.{c,h} \
+   /workspace/build/picoarch/
+
+make -C /workspace/build/picoarch clean
+make picoarch-frontend
+
+cp /workspace/sources/picoarch/content.c \
+   /workspace/build/picoarch/
+```
+
+# 16
+
+Oui. Si `.gitmodules` pointe déjà vers ton fork `coffeecore/libmmenu`, tu as juste à mettre à jour le commit référencé par le submodule.
+
+Depuis la racine de `MinUI-Legacy-Trimui-Model-S` :
+
+```bash
+cd src/libmmenu
+
+git fetch origin
+git checkout trimui-model-s
+git pull --ff-only
+
+cd ../..
+```
+
+Puis vérifie :
+
+```bash
+git status
+git diff --submodule
+```
+
+Tu dois voir quelque chose du genre :
+
+```text
+modified:   src/libmmenu (new commits)
+```
+
+et avec :
+
+```bash
+git diff --submodule
+```
+
+quelque chose comme :
+
+```text
+Submodule src/libmmenu abc1234..def5678:
+  > ...
+```
+
+Ensuite tu enregistres simplement le nouveau pointeur du submodule dans MinUI :
+
+```bash
+git add src/libmmenu
+git commit -m "Update libmmenu"
+git push
+```
+
+Pas besoin de modifier `.gitmodules` cette fois-ci si l'URL est déjà :
+
+```ini
+[submodule "src/libmmenu"]
+    path = src/libmmenu
+    url = git@github.com:coffeecore/libmmenu.git
+```
+
+Le dépôt MinUI enregistrera alors le **SHA exact** du nouveau commit de `libmmenu`.

@@ -52,6 +52,7 @@ required_cores=(
     gambatte_libretro.so
     gme_libretro.so
     gpsp_libretro.so
+    handy_libretro.so
     mame2000_libretro.so
     mame2003_libretro.so
     mame2003_plus_libretro.so
@@ -166,6 +167,7 @@ ROM_DIR="/mnt/SDCARD/Roms/$system"
 PICOARCH_HOME="/mnt/SDCARD/.minui/picoarch"
 PICOARCH_SAVE_ROOT="/mnt/SDCARD/Saves/picoarch"
 PICOARCH_SYSTEM_ROOT="/mnt/SDCARD/Bios/picoarch"
+PICOARCH_CACHE_ROOT="/mnt/SDCARD/.minui/picoarch/cache"
 SYSTEM_DIR="\$PICOARCH_SYSTEM_ROOT/$core_name"
 
 EMU_NAME="$system"
@@ -262,6 +264,7 @@ EOF_LAUNCH
 export HOME="\$PICOARCH_HOME"
 export PICOARCH_SAVE_ROOT
 export PICOARCH_SYSTEM_ROOT
+export PICOARCH_CACHE_ROOT
 
 cd "\$EMU_DIR"
 
@@ -493,7 +496,7 @@ create_pak \
 
 create_pak \
     "Lynx" \
-    "handy_libretro.so" \
+    "handy_libretro.so"
 
 # ---------------------------------------------------------------------
 # Other
@@ -533,8 +536,8 @@ pak_count=$(
         | wc -l
 )
 
-if [ "$pak_count" -ne 28 ]; then
-    echo "ERROR: expected 28 PAKs, got $pak_count"
+if [ "$pak_count" -ne 29 ]; then
+    echo "ERROR: expected 29 PAKs, got $pak_count"
     exit 1
 fi
 
