@@ -15,7 +15,7 @@ PICOARCH_CC := $(PICOARCH_CROSS)gcc
 PICOARCH_CXX := $(PICOARCH_CROSS)g++
 
 # Exact PicoArch revision validated for Trimui Model S
-PICOARCH_REV := 0900670ca6edbae380c5890528ad19cfbf61287a
+PICOARCH_REV := fa0cebc98066355111ccc4664f0fffc9d3ae9fec
 
 # -----------------------------------------------------------------------------
 # Validated core revisions
@@ -225,6 +225,7 @@ picoarch-clean-output:
 picoarch-validated: picoarch-check-patches \
 	picoarch-fceumm \
 	picoarch-gambatte \
+	picoarch-gngeo \
 	picoarch-gpsp \
 	picoarch-handy \
 	picoarch-picodrive \
@@ -1346,6 +1347,22 @@ picoarch-clean-handy:
 	rm -f $(PICOARCH_BUILD)/handy_libretro.so
 
 # -----------------------------------------------------------------------------
+# GnGeo
+# -----------------------------------------------------------------------------
+
+.PHONY: picoarch-gngeo
+picoarch-gngeo: libs picoarch-check-patches picoarch-clean-gngeo
+	$(MAKE) -C $(PICOARCH_BUILD) \
+		$(PICOARCH_MAKE_ARGS) \
+		SYSROOT="$(SYSROOT)" \
+		gngeo_libretro.so
+
+.PHONY: picoarch-clean-gngeo
+picoarch-clean-gngeo:
+	rm -rf $(PICOARCH_BUILD)/gngeo
+	rm -f $(PICOARCH_BUILD)/gngeo_libretro.so
+
+# -----------------------------------------------------------------------------
 # Clean all validated cores
 # -----------------------------------------------------------------------------
 
@@ -1353,6 +1370,7 @@ picoarch-clean-handy:
 picoarch-clean-validated: \
 	picoarch-clean-fceumm \
 	picoarch-clean-gambatte \
+	picoarch-clean-gngeo \
 	picoarch-clean-gpsp \
 	picoarch-clean-handy \
 	picoarch-clean-picodrive \
