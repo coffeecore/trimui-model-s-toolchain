@@ -15,7 +15,7 @@ PICOARCH_CC := $(PICOARCH_CROSS)gcc
 PICOARCH_CXX := $(PICOARCH_CROSS)g++
 
 # Exact PicoArch revision validated for Trimui Model S
-PICOARCH_REV := fa0cebc98066355111ccc4664f0fffc9d3ae9fec
+PICOARCH_REV := ac33b33aea36df6b6926eff2a4ce4b3291361725
 
 # -----------------------------------------------------------------------------
 # Validated core revisions
