@@ -72,6 +72,7 @@ required_cores=(
     fbalpha2012_cps1_libretro.so
     fbalpha2012_cps2_libretro.so
     fbalpha2012_neogeo_libretro.so
+    gngeo_libretro.so
 )
 
 for core in "${required_cores[@]}"; do
@@ -421,6 +422,11 @@ create_pak \
     "mednafen_ngp_libretro.so"
 
 create_pak \
+    "Neo Geo" \
+    "gngeo_libretro.so" \
+    "swap"
+
+create_pak \
     "WonderSwan" \
     "mednafen_wswan_libretro.so"
 
@@ -536,8 +542,8 @@ pak_count=$(
         | wc -l
 )
 
-if [ "$pak_count" -ne 29 ]; then
-    echo "ERROR: expected 29 PAKs, got $pak_count"
+if [ "$pak_count" -ne 30 ]; then
+    echo "ERROR: expected 30 PAKs, got $pak_count"
     exit 1
 fi
 
