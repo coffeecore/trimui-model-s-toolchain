@@ -1555,6 +1555,18 @@ make -f Makefile.libretro clean
 make -f Makefile.libretro CROSS_COMPILE=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi- SYSROOT=/workspace/build/sysroot LIBRETRO_DIR=/workspace/sources/picoarch/libretro-common/include
 ```
 
+```
+make -f Makefile.trimui clean
+```
+
+```
+make -f Makefile.trimui \
+    CROSS_COMPILE=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi- \
+    SYSROOT=/workspace/build/sysroot \
+    MMENU_DIR=/workspace/build/minui-libs/libmmenu \
+    JOBS=4
+```
+
 
 # 15
 
@@ -1628,3 +1640,24 @@ Pas besoin de modifier `.gitmodules` cette fois-ci si l'URL est déjà :
 ```
 
 Le dépôt MinUI enregistrera alors le **SHA exact** du nouveau commit de `libmmenu`.
+
+# 17
+
+```
+make picoarch-fceumm \
+    fceumm_REVISION=<autre-sha>
+```
+
+```
+make \
+    platform=trimui \
+    CROSS_COMPILE=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi- \
+    clean-gambatte
+```
+
+```
+make \
+    platform=trimui \
+    CROSS_COMPILE=/opt/trimui-toolchain/bin/arm-buildroot-linux-gnueabi- \
+    gambatte_libretro.so
+```
