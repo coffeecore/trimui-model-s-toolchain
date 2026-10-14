@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+PICOARCH_PAK_COUNT_EXPECTED=27
+
 ROOT="/workspace"
 MODE="${1:-full}"
 
@@ -129,8 +131,8 @@ if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     [ -d "$PICOARCH" ] ||
         die "missing PicoArch PAK output"
 
-    [ "$(count_paks "$PICOARCH")" -eq 30 ] ||
-        die "expected 30 PicoArch PAKs"
+    [ "$(count_paks "$PICOARCH")" -eq "$PICOARCH_PAK_COUNT_EXPECTED" ] ||
+        die "expected $PICOARCH_PAK_COUNT_EXPECTED PicoArch PAKs"
 
     [ -d "$PICOARCH_TOOL" ] ||
         die "missing PicoArch Tool PAK"
@@ -232,7 +234,7 @@ if [ "$MODE" != "only" ]; then
 
     if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
         copy_paks "$PICOARCH"
-        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 30))
+        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + PICOARCH_PAK_COUNT_EXPECTED))
 
         mkdir -p "$INNER/Tools"
 
