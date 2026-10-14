@@ -123,8 +123,7 @@ help-release:
 	@echo
 	@echo "PicoArch release:"
 	@echo "  source-picoarch          Prepare pinned PicoArch source"
-	@echo "  prepare-picoarch         Create patched release build tree"
-	@echo "  picoarch-check-patches   Validate required PicoArch patches"
+	@echo "  prepare-picoarch         Create release build tree"
 	@echo "  picoarch-frontend        Build PicoArch frontend"
 	@echo "  picoarch-validated       Build all validated cores"
 	@echo "  picoarch-output          Collect frontend + validated cores"
@@ -175,9 +174,7 @@ shell:
 	docker compose run --rm builder
 
 
-# Validate local prerequisites before spending time compiling. Upstream PicoArch
-# patch files are validated separately by picoarch-check-patches after the pinned
-# PicoArch checkout has been prepared.
+# Validate local prerequisites before spending time compiling.
 preflight:
 	@set -e; \
 	for cmd in git make rsync patch zip unzip curl cmake autoreconf autoconf automake aclocal libtoolize pkg-config fmt tar; do \
@@ -198,20 +195,6 @@ preflight:
 		scripts/package-picoarch-paks.sh \
 		scripts/package-picoarch-tool.sh \
 		scripts/package-standalone-paks.sh \
-		patches/picoarch/beetle-pce-fast/0001-frameskip-interval.patch \
-		patches/picoarch/frontend/0001-fix-minui-directories.patch \
-		patches/picoarch/libpicofe/0001-key-combos.patch \
-		patches/picoarch/mame2000/0004-rotation.patch \
-		patches/picoarch/mednafen_ngp/1000-trimui-build.patch \
-		patches/picoarch/mednafen_wswan/1000-trimui-build.patch \
-		patches/picoarch/pcsx_rearmed/1000-trimui-support.patch \
-		patches/picoarch/picodrive/0002-lzma-old-arm-hwcap.patch \
-		patches/picoarch/pokemini/1000-trimui-build.patch \
-		patches/picoarch/prboom/1000-trimui-build.patch \
-		patches/picoarch/snes9x2005/1000-trimui-build.patch \
-		patches/picoarch/snes9x2005_plus/1000-trimui-build.patch \
-		patches/picoarch/snes9x2010/1000-trimui-build.patch \
-		patches/picoarch/stella2014/1000-trimui-build.patch; do \
 		test -f "$(WORKSPACE)/$$file" || { echo "ERROR: missing project file: $$file" >&2; exit 1; }; \
 	done
 	@test -f "$(WORKSPACE)/assets/minui-extra-paks/Famicom Disk System.pak/launch.sh" || { \
