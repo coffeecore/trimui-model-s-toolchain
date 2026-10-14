@@ -87,8 +87,6 @@ help-dev:
 	@echo "                                    Build PicoArch using sources/minui libmmenu"
 	@echo "  dev-picoarch-output               Copy dev frontend to output/dev/picoarch"
 	@echo "  dev-clean-picoarch                Remove dev PicoArch top-level build products"
-	@echo "  dev-picoarch-core CORE=<name>     Build sources/picoarch-cores/<name>"
-	@echo "                                    Example: make dev-picoarch-core CORE=mame2000"
 	@echo
 	@echo "Safety: dev targets never checkout/reset/clean Git and never auto-apply patches."
 
@@ -133,22 +131,19 @@ help-release:
 	@echo
 	@echo "Individual PicoArch cores:"
 	@echo "  picoarch-fceumm picoarch-gambatte picoarch-gpsp picoarch-picodrive"
-	@echo "  picoarch-mame2000 picoarch-mame2003 picoarch-mame2003-plus"
-	@echo "  picoarch-pcsx-rearmed picoarch-beetle-pce-fast picoarch-bluemsx"
-	@echo "  picoarch-fmsx picoarch-gme picoarch-mednafen-ngp picoarch-mednafen-wswan"
-	@echo "  picoarch-pokemini picoarch-quicknes picoarch-smsplus-gx"
-	@echo "  picoarch-snes9x2002 picoarch-snes9x2005 picoarch-snes9x2005-plus"
-	@echo "  picoarch-snes9x2010 picoarch-stella2014 picoarch-prboom picoarch-fbalpha2012"
-	@echo "  picoarch-fake08          Available experimental/non-validated target"
+	@echo "  picoarch-mame2000 picoarch-mame2003 picoarch-pcsx-rearmed"
+	@echo "  picoarch-beetle-pce-fast picoarch-bluemsx picoarch-fmsx picoarch-gme"
+	@echo "  picoarch-mednafen-ngp picoarch-mednafen-wswan picoarch-pokemini"
+	@echo "  picoarch-quicknes picoarch-smsplus-gx picoarch-snes9x2002"
+	@echo "  picoarch-snes9x2005 picoarch-stella2014 picoarch-handy picoarch-gngeo"
 	@echo "Core cleanup targets:"
 	@echo "  picoarch-clean-fceumm picoarch-clean-gambatte picoarch-clean-gpsp picoarch-clean-picodrive"
-	@echo "  picoarch-clean-mame2000 picoarch-clean-mame2003 picoarch-clean-mame2003-plus"
-	@echo "  picoarch-clean-pcsx-rearmed picoarch-clean-beetle-pce-fast picoarch-clean-bluemsx"
-	@echo "  picoarch-clean-fmsx picoarch-clean-gme picoarch-clean-mednafen-ngp picoarch-clean-mednafen-wswan"
-	@echo "  picoarch-clean-pokemini picoarch-clean-quicknes picoarch-clean-smsplus-gx"
-	@echo "  picoarch-clean-snes9x2002 picoarch-clean-snes9x2005 picoarch-clean-snes9x2005-plus"
-	@echo "  picoarch-clean-snes9x2010 picoarch-clean-stella2014 picoarch-clean-prboom picoarch-clean-fbalpha2012"
-	@echo "  picoarch-clean-fake08 picoarch-clean-validated"
+	@echo "  picoarch-clean-mame2000 picoarch-clean-mame2003 picoarch-clean-pcsx-rearmed"
+	@echo "  picoarch-clean-beetle-pce-fast picoarch-clean-bluemsx picoarch-clean-fmsx picoarch-clean-gme"
+	@echo "  picoarch-clean-mednafen-ngp picoarch-clean-mednafen-wswan picoarch-clean-pokemini"
+	@echo "  picoarch-clean-quicknes picoarch-clean-smsplus-gx picoarch-clean-snes9x2002"
+	@echo "  picoarch-clean-snes9x2005 picoarch-clean-stella2014 picoarch-clean-handy"
+	@echo "  picoarch-clean-gngeo picoarch-clean-validated"
 	@echo
 	@echo "Packaging / release variants:"
 	@echo "  picoarch-paks            Create output/picoarch-paks"
@@ -194,8 +189,11 @@ preflight:
 		scripts/package-minui-release.sh \
 		scripts/package-picoarch-paks.sh \
 		scripts/package-picoarch-tool.sh \
-		scripts/package-standalone-paks.sh \
-		test -f "$(WORKSPACE)/$$file" || { echo "ERROR: missing project file: $$file" >&2; exit 1; }; \
+		scripts/package-standalone-paks.sh; do \
+		test -f "$(WORKSPACE)/$$file" || { \
+			echo "ERROR: missing project file: $$file" >&2; \
+			exit 1; \
+		}; \
 	done
 	@test -f "$(WORKSPACE)/assets/minui-extra-paks/Famicom Disk System.pak/launch.sh" || { \
 		echo "ERROR: missing custom Famicom Disk System PAK asset" >&2; \

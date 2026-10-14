@@ -9,13 +9,11 @@
 # Expected development trees:
 #   /workspace/sources/minui
 #   /workspace/sources/picoarch
-#   /workspace/sources/picoarch-cores/<core>
 #   /workspace/sources/gngeo-coffeecore
 #   /workspace/sources/gngeo-steward-fu
 
 DEV_MINUI_DIR := $(DEV_SOURCES_DIR)/minui
 DEV_PICOARCH_DIR := $(DEV_SOURCES_DIR)/picoarch
-DEV_PICOARCH_CORES_DIR := $(DEV_SOURCES_DIR)/picoarch-cores
 
 DEV_GNGEO_COFFEECORE_DIR := $(DEV_SOURCES_DIR)/gngeo-coffeecore
 DEV_GNGEO_STEWARD_FU_DIR := $(DEV_SOURCES_DIR)/gngeo-steward-fu
@@ -46,7 +44,7 @@ DEV_PICOARCH_OUTPUT := $(DEV_OUTPUT_DIR)/picoarch
 	dev-gngeo dev-clean-gngeo dev-install-gngeo \
 	dev-check-minui dev-minui-libs dev-minui-system dev-minui dev-clean-minui \
 	dev-check-picoarch dev-picoarch-frontend dev-picoarch-frontend-with-dev-minui \
-	dev-picoarch-output dev-clean-picoarch dev-picoarch-core
+	dev-picoarch-output dev-clean-picoarch
 
 # -----------------------------------------------------------------------------
 # Status / guards
@@ -69,19 +67,6 @@ dev-status:
 			echo; \
 		fi; \
 	done
-	@if [ -d "$(DEV_PICOARCH_CORES_DIR)" ]; then \
-		echo "[picoarch cores]"; \
-		for path in "$(DEV_PICOARCH_CORES_DIR)"/*; do \
-			[ -d "$$path" ] || continue; \
-			name="$$(basename "$$path")"; \
-			if [ -d "$$path/.git" ]; then \
-				printf '%s: ' "$$name"; \
-				git -C "$$path" status --short --branch | head -n 1; \
-			else \
-				echo "$$name: present (not a Git worktree)"; \
-			fi; \
-		done; \
-	fi
 
 # -----------------------------------------------------------------------------
 # GnGeo - Coffeecore reference port (Autotools)
@@ -264,9 +249,8 @@ dev-minui-system: dev-check-minui
 		MINUI_LIBS_BUILD="$(DEV_MINUI_LIBS_BUILD)"
 
 # Build only what we currently develop on MinUI itself: System (including
-# libmsettings/libmmenu and System.pak) plus Clock.pak. Do not rebuild the
-# bundled Legacy emulators; those remain available through the release targets
-# until the PicoArch migration is complete.
+# libmsettings/libmmenu and System.pak) plus Clock.pak. Bundled Legacy
+# emulators remain handled by the release targets.
 dev-minui: dev-minui-system
 	$(MAKE) -C "$(DEV_MINUI_DIR)" clock \
 		CROSS_COMPILE="$(MINUI_CROSS)" \
@@ -315,7 +299,7 @@ dev-clean-minui: dev-check-minui
 		"$(DEV_MINUI_OUTPUT_DIR)"
 
 # -----------------------------------------------------------------------------
-# PicoArch frontend and optional core worktrees
+# PicoArch
 # -----------------------------------------------------------------------------
 
 dev-check-picoarch:
@@ -354,36 +338,3 @@ dev-clean-picoarch: dev-check-picoarch
 	rm -f "$(DEV_PICOARCH_DIR)/picoarch"
 	find "$(DEV_PICOARCH_DIR)" -maxdepth 1 -type f -name '*_libretro.so' -delete
 	rm -rf "$(DEV_PICOARCH_OUTPUT)"
-
-# Build a PicoArch core from a developer-owned source tree without copying or
-# resetting it. The PicoArch root Makefile expects the core as a child directory,
-# so a temporary symlink is created and removed around the build.
-#
-# Example:
-#   make dev-picoarch-core CORE=mame2000
-# For exceptional target names:
-#   make dev-picoarch-core CORE=pcsx_rearmed CORE_TARGET=pcsx_rearmed_libretro.so
-CORE_TARGET ?= $(CORE)_libretro.so
-
-dev-picoarch-core: dev-check-picoarch
-	@test -n "$(CORE)" || { \
-		echo "ERROR: CORE is required (example: make dev-picoarch-core CORE=mame2000)" >&2; \
-		exit 1; \
-	}
-	@test -d "$(DEV_PICOARCH_CORES_DIR)/$(CORE)" || { \
-		echo "ERROR: core development tree not found: $(DEV_PICOARCH_CORES_DIR)/$(CORE)" >&2; \
-		exit 1; \
-	}
-	@test ! -e "$(DEV_PICOARCH_DIR)/$(CORE)" -a ! -L "$(DEV_PICOARCH_DIR)/$(CORE)" || { \
-		echo "ERROR: $(DEV_PICOARCH_DIR)/$(CORE) already exists; refusing to replace it" >&2; \
-		exit 1; \
-	}
-	@set -e; \
-	ln -s "$(DEV_PICOARCH_CORES_DIR)/$(CORE)" "$(DEV_PICOARCH_DIR)/$(CORE)"; \
-	trap 'rm -f "$(DEV_PICOARCH_DIR)/$(CORE)"' EXIT INT TERM; \
-	$(MAKE) -C "$(DEV_PICOARCH_DIR)" \
-		$(PICOARCH_MAKE_ARGS) \
-		"$(CORE_TARGET)"; \
-	test -f "$(DEV_PICOARCH_DIR)/$(CORE_TARGET)"; \
-	mkdir -p "$(DEV_PICOARCH_OUTPUT)/cores"; \
-	cp "$(DEV_PICOARCH_DIR)/$(CORE_TARGET)" "$(DEV_PICOARCH_OUTPUT)/cores/$(CORE_TARGET)"
