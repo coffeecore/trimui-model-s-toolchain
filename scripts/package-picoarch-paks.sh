@@ -4,14 +4,17 @@ set -euo pipefail
 
 ROOT="/workspace"
 
+TOTAL_PAKS=27
+
+PICOARCH_BUILD="$ROOT/build/picoarch"
 PICOARCH_OUTPUT="$ROOT/output/picoarch"
 PICOARCH_BIN="$PICOARCH_OUTPUT/picoarch"
 CORES_DIR="$PICOARCH_OUTPUT/cores"
 
 OUTPUT="$ROOT/output/picoarch-paks"
 
-BLUEMSX_ASSETS="$ROOT/build/picoarch-sources/bluemsx/system/bluemsx"
-FMSX_ROMS="$ROOT/build/picoarch-sources/fmsx/fMSX/ROMs"
+BLUEMSX_ASSETS="$PICOARCH_BUILD/bluemsx/system/bluemsx"
+FMSX_ROMS="$PICOARCH_BUILD/fmsx/fMSX/ROMs"
 
 # ---------------------------------------------------------------------
 # Validation
@@ -32,7 +35,7 @@ fi
 # libpicofe loads menu graphics from ./skin relative to PicoArch's current
 # working directory. Locate the pinned checkout's skin and package it with every
 # PAK instead of relying on files already present on the SD card.
-SKIN_DIR="$ROOT/build/picoarch-sources/picodrive/platform/opendingux/data/skin"
+SKIN_DIR="$PICOARCH_BUILD/picodrive/platform/opendingux/data/skin"
 
 if [ ! -f "$SKIN_DIR/font.png" ] || \
    [ ! -f "$SKIN_DIR/selector.png" ] || \
@@ -45,34 +48,22 @@ fi
 required_cores=(
     beetle-pce-fast_libretro.so
     bluemsx_libretro.so
-    # fake08_libretro.so
-    fbalpha2012_libretro.so
     fceumm_libretro.so
-    fmsx_libretro.so
     gambatte_libretro.so
     gme_libretro.so
+    gngeo_libretro.so
     gpsp_libretro.so
     handy_libretro.so
     mame2000_libretro.so
     mame2003_libretro.so
-    mame2003_plus_libretro.so
     mednafen_ngp_libretro.so
     mednafen_wswan_libretro.so
     pcsx_rearmed_libretro.so
     picodrive_libretro.so
     pokemini_libretro.so
-    prboom_libretro.so
-    quicknes_libretro.so
     smsplus-gx_libretro.so
-    snes9x2002_libretro.so
     snes9x2005_libretro.so
-    snes9x2005_plus_libretro.so
-    snes9x2010_libretro.so
     stella2014_libretro.so
-    fbalpha2012_cps1_libretro.so
-    fbalpha2012_cps2_libretro.so
-    fbalpha2012_neogeo_libretro.so
-    gngeo_libretro.so
 )
 
 for core in "${required_cores[@]}"; do
@@ -366,27 +357,6 @@ create_pak \
     "Super Nintendo" \
     "snes9x2005_libretro.so"
 
-# create_pak \
-#     "Super Nintendo (Snes9x 2005 Plus)" \
-#     "snes9x2005_plus_libretro.so" \
-#     "Super Nintendo"
-
-# create_pak \
-#     "Super Nintendo (Snes9x 2010)" \
-#     "snes9x2010_libretro.so" \
-#     "Super Nintendo"
-
-# create_pak \
-#     "Satellaview (Snes9x 2010)" \
-#     "snes9x2010_libretro.so" \
-#     "Satellaview"
-
-# create_pak \
-#     "Sufami Turbo (Snes9x 2010)" \
-#     "snes9x2010_libretro.so" \
-#     "Sufami Turbo"
-
-
 # ---------------------------------------------------------------------
 # PlayStation
 # ---------------------------------------------------------------------
@@ -475,27 +445,6 @@ create_pak \
     "MAME 2003" \
     "mame2003_libretro.so" \
 
-# create_pak \
-#     "Arcade (MAME 2003 Plus)" \
-#     "mame2003_plus_libretro.so" \
-#     "Arcade"
-
-# create_pak \
-#     "FBA 2012" \
-#     "fbalpha2012_libretro.so"
-
-# create_pak \
-#     "Neo Geo" \
-#     "fbalpha2012_neogeo_libretro.so"
-
-# create_pak \
-#     "CPS1" \
-#     "fbalpha2012_cps1_libretro.so"
-
-# create_pak \
-#     "CPS2" \
-#     "fbalpha2012_cps2_libretro.so"
-
 # ---------------------------------------------------------------------
 # Atari Lynx
 # ---------------------------------------------------------------------
@@ -512,23 +461,6 @@ create_pak \
     "Game Music" \
     "gme_libretro.so"
 
-# create_pak \
-#     "PICO-8 (Fake-08)" \
-#     "fake08_libretro.so" \
-#     "PICO-8"
-
-create_pak \
-    "Doom" \
-    "prboom_libretro.so"
-
-create_pak \
-    "Heretic" \
-    "prboom_libretro.so"
-
-create_pak \
-    "Hexen" \
-    "prboom_libretro.so" \
-
 # ---------------------------------------------------------------------
 # Final validation
 # ---------------------------------------------------------------------
@@ -542,8 +474,8 @@ pak_count=$(
         | wc -l
 )
 
-if [ "$pak_count" -ne 30 ]; then
-    echo "ERROR: expected 30 PAKs, got $pak_count"
+if [ "$pak_count" -ne "$TOTAL_PAKS" ]; then
+    echo "ERROR: expected $TOTAL_PAKS PAKs, got $pak_count"
     exit 1
 fi
 

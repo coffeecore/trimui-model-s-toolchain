@@ -6,7 +6,7 @@ PICOARCH_BUILD="/workspace/build/picoarch"
 TOOL_OUTPUT="/workspace/output/picoarch-tool"
 PAK="$TOOL_OUTPUT/Tools/PicoArch.pak"
 
-TOTAL_CORES=29
+TOTAL_CORES=21
 
 rm -rf "$TOOL_OUTPUT"
 
@@ -14,7 +14,7 @@ mkdir -p "$PAK/cores"
 
 test -x "$PICOARCH_OUTPUT/picoarch"
 
-SKIN_DIR="/workspace/build/picoarch-sources/picodrive/platform/opendingux/data/skin"
+SKIN_DIR="$PICOARCH_BUILD/picodrive/platform/opendingux/data/skin"
 
 if [ ! -f "$SKIN_DIR/font.png" ] || \
    [ ! -f "$SKIN_DIR/selector.png" ] || \
@@ -37,7 +37,6 @@ find "$PICOARCH_OUTPUT/cores" \
     -maxdepth 1 \
     -type f \
     -name '*_libretro.so' \
-    ! -name 'fake08_libretro.so' \
     -exec cp {} "$PAK/cores/" \;
 
 cat > "$PAK/launch.sh" <<'EOF'
