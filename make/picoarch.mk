@@ -42,33 +42,19 @@ picoarch-clean-frontend:
 # -----------------------------------------------------------------------------
 
 PICOARCH_OUTPUT := /workspace/output/picoarch
-PICOARCH_OUTPUT_CORES := $(PICOARCH_OUTPUT)/cores
 
-.PHONY: picoarch-output picoarch-clean-output
+.PHONY: picoarch-output
+picoarch-output: libs source-minui
+	$(MAKE) -C "$(MINUI_DIR)" picoarch-output \
+		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
+		PICOARCH_OUTPUT="$(PICOARCH_OUTPUT)" \
+		CROSS_COMPILE="$(CROSS_COMPILE)" \
+		SYSROOT="$(SYSROOT)"
 
-picoarch-output: picoarch-validated picoarch-frontend
-	test -x "$(PICOARCH_BUILD)/picoarch"
-	@test "$$(find $(PICOARCH_BUILD) -maxdepth 1 -type f -name '*_libretro.so' \
-		| wc -l)" -eq 21 || { \
-		echo "ERROR: expected 21 validated PicoArch cores in $(PICOARCH_BUILD)" >&2; \
-		exit 1; \
-	}
-	rm -rf $(PICOARCH_OUTPUT)
-
-	mkdir -p $(PICOARCH_OUTPUT_CORES)
-
-	cp \
-		$(PICOARCH_BUILD)/picoarch \
-		$(PICOARCH_OUTPUT)/picoarch
-
-	find $(PICOARCH_BUILD) \
-		-maxdepth 1 \
-		-type f \
-		-name '*_libretro.so' \
-		-exec cp {} $(PICOARCH_OUTPUT_CORES)/ \;
-
-picoarch-clean-output:
-	rm -rf $(PICOARCH_OUTPUT)
+.PHONY: picoarch-clean-output
+picoarch-clean-output: source-minui
+	$(MAKE) -C "$(MINUI_DIR)" picoarch-clean-output \
+		PICOARCH_OUTPUT="$(PICOARCH_OUTPUT)"
 
 # -----------------------------------------------------------------------------
 # PicoArch cores
