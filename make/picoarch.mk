@@ -1,11 +1,7 @@
 # -----------------------------------------------------------------------------
 # PicoArch - Trimui Model S
 # -----------------------------------------------------------------------------
-
-PICOARCH_REPO := https://github.com/coffeecore/picoarch.git
-PICOARCH_SOURCE := $(RELEASE_SOURCES_DIR)/picoarch
 PICOARCH_BUILD := $(WORKSPACE)/build/picoarch
-PICOARCH_PREPARED_STAMP := $(PICOARCH_BUILD)/.prepared
 
 PICOARCH_PLATFORM := trimui
 PICOARCH_CROSS := $(CROSS_COMPILE)
@@ -33,27 +29,12 @@ PICOARCH_MAKE_ARGS := \
 # build/picoarch is a full copy of that checkout (including the top-level
 # Makefile and upstream patches), so the core targets such as
 # fceumm_libretro.so are available.
-.PHONY: source-picoarch prepare-picoarch \
-	picoarch-frontend picoarch-clean-frontend clean-source-picoarch
+.PHONY: prepare-picoarch \
+	picoarch-frontend picoarch-clean-frontend
 
-source-picoarch:
-	@if [ ! -d "$(PICOARCH_SOURCE)/.git" ]; then \
-		mkdir -p "$(dir $(PICOARCH_SOURCE))"; \
-		git clone --recursive "$(PICOARCH_REPO)" "$(PICOARCH_SOURCE)"; \
-	else \
-		git -C "$(PICOARCH_SOURCE)" fetch --prune origin; \
-	fi
-	git -C "$(PICOARCH_SOURCE)" checkout --detach "$(PICOARCH_REV)"
-	git -C "$(PICOARCH_SOURCE)" submodule update --init --recursive
-
-prepare-picoarch: source-picoarch
-	@if [ ! -f "$(PICOARCH_PREPARED_STAMP)" ] || \
-		[ "$$(cat "$(PICOARCH_PREPARED_STAMP)" 2>/dev/null)" != "$(PICOARCH_REV)" ]; then \
-		rm -rf "$(PICOARCH_BUILD)"; \
-		mkdir -p "$(dir $(PICOARCH_BUILD))"; \
-		cp -a "$(PICOARCH_SOURCE)" "$(PICOARCH_BUILD)"; \
-		echo "$(PICOARCH_REV)" > "$(PICOARCH_PREPARED_STAMP)"; \
-	fi
+prepare-picoarch: source-minui
+	$(MAKE) -C "$(MINUI_DIR)" picoarch-prepare \
+		PICOARCH_BUILD="$(PICOARCH_BUILD)"
 
 # The frontend and every core now share the same complete PicoArch working tree.
 # This is required because the root Makefile owns the *_libretro.so targets.
@@ -69,9 +50,6 @@ picoarch-frontend: source-minui minui-libs prepare-picoarch
 # Removing the PicoArch working tree also removes all built cores.
 picoarch-clean-frontend:
 	rm -rf $(PICOARCH_BUILD)
-
-clean-source-picoarch:
-	rm -rf $(PICOARCH_SOURCE)
 
 # -----------------------------------------------------------------------------
 # PicoArch output

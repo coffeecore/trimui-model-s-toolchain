@@ -59,14 +59,12 @@ help-release:
 	@echo "  deploy-minui             Deploy the release MinUI System over ADB"
 	@echo
 	@echo "PicoArch release:"
-	@echo "  source-picoarch          Prepare pinned PicoArch source"
-	@echo "  prepare-picoarch         Create release build tree"
+	@echo "  prepare-picoarch         Prepare PicoArch build tree from MinUI"
 	@echo "  picoarch-frontend        Build PicoArch frontend"
 	@echo "  picoarch-validated       Build all validated cores"
 	@echo "  picoarch-output          Collect frontend + validated cores"
 	@echo "  picoarch-clean-frontend  Remove release PicoArch working tree"
 	@echo "  picoarch-clean-output    Remove collected PicoArch output"
-	@echo "  clean-source-picoarch    Remove only the release PicoArch checkout"
 	@echo
 	@echo "Individual PicoArch cores:"
 	@echo "  picoarch-fceumm picoarch-gambatte picoarch-gpsp picoarch-picodrive"
