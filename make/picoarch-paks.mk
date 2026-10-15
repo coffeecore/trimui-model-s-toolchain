@@ -1,9 +1,11 @@
 PICOARCH_PAKS_OUTPUT := /workspace/output/picoarch-paks
-PICOARCH_PAKS_SCRIPT := /workspace/scripts/package-picoarch-paks.sh
 
 .PHONY: picoarch-paks
-picoarch-paks:
-	$(PICOARCH_PAKS_SCRIPT)
+picoarch-paks: source-minui
+	$(MAKE) -C "$(MINUI_DIR)" picoarch-paks \
+		PICOARCH_BUILD="/workspace/build/picoarch" \
+		PICOARCH_OUTPUT="/workspace/output/picoarch" \
+		PICOARCH_PAKS_OUTPUT="$(PICOARCH_PAKS_OUTPUT)"
 
 .PHONY: clean-picoarch-paks
 clean-picoarch-paks:

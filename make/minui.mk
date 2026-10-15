@@ -6,7 +6,7 @@
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_BRANCH := picoarch
-MINUI_COMMIT := f79b47e3cc0051f689fca8a7af1f955189373430
+MINUI_COMMIT := 79a0d8d0f53c85a9a362cde8db7eadcb5eb5145e
 MINUI_DIR := $(RELEASE_SOURCES_DIR)/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive

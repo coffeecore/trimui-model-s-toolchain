@@ -9,7 +9,6 @@ PICOARCH_PREPARED_STAMP := $(PICOARCH_BUILD)/.prepared
 
 PICOARCH_PLATFORM := trimui
 PICOARCH_CROSS := $(CROSS_COMPILE)
-PICOARCH_CC := $(PICOARCH_CROSS)gcc
 PICOARCH_CXX := $(PICOARCH_CROSS)g++
 
 # Exact PicoArch revision validated for Trimui Model S
@@ -35,7 +34,7 @@ PICOARCH_MAKE_ARGS := \
 # Makefile and upstream patches), so the core targets such as
 # fceumm_libretro.so are available.
 .PHONY: source-picoarch prepare-picoarch \
-	picoarch-frontend _build-picoarch-frontend picoarch-clean-frontend clean-source-picoarch
+	picoarch-frontend picoarch-clean-frontend clean-source-picoarch
 
 source-picoarch:
 	@if [ ! -d "$(PICOARCH_SOURCE)/.git" ]; then \
@@ -58,21 +57,12 @@ prepare-picoarch: source-picoarch
 
 # The frontend and every core now share the same complete PicoArch working tree.
 # This is required because the root Makefile owns the *_libretro.so targets.
-picoarch-frontend: minui-libs prepare-picoarch
-	$(MAKE) _build-picoarch-frontend
-
-_build-picoarch-frontend:
-	test -x "$(TOOLCHAIN_SYSROOT)/usr/bin/sdl-config"
-	test -f "$(MINUI_MMENU_BUILD)/mmenu.h"
-
-	PATH="$(TOOLCHAIN_SYSROOT)/usr/bin:$$PATH" \
-		$(MAKE) -C $(PICOARCH_BUILD) \
-		platform=$(PICOARCH_PLATFORM) \
-		MINUI=1 \
-		CROSS_COMPILE=$(PICOARCH_CROSS) \
-		CC="$(PICOARCH_CC) --sysroot=$(TOOLCHAIN_SYSROOT) -I$(MINUI_MMENU_BUILD)" \
-		CXX="$(PICOARCH_CXX) --sysroot=$(TOOLCHAIN_SYSROOT) -I$(MINUI_MMENU_BUILD)" \
-		picoarch
+picoarch-frontend: source-minui minui-libs prepare-picoarch
+	$(MAKE) -C "$(MINUI_DIR)" picoarch-frontend \
+		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
+		SYSROOT="$(TOOLCHAIN_SYSROOT)" \
+		CROSS_COMPILE="$(PICOARCH_CROSS)" \
+		MINUI_MMENU_BUILD="$(MINUI_MMENU_BUILD)"
 
 	test -x "$(PICOARCH_BUILD)/picoarch"
 
