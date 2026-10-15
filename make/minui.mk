@@ -6,7 +6,7 @@
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_BRANCH := picoarch
-MINUI_COMMIT := 8f031bc049c03e58ccd377fb2b014561f6b29769
+MINUI_COMMIT := f79b47e3cc0051f689fca8a7af1f955189373430
 MINUI_DIR := $(RELEASE_SOURCES_DIR)/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
@@ -157,6 +157,18 @@ _build-minui: _build-minui-system
 	cp -R \
 		"$(MINUI_DIR)/paks/Genesis.pak" \
 		"$(MINUI_PAYLOAD_DIR)/Emus"
+
+	mkdir -p "$(MINUI_ROMS_DIR)/Sega CD"
+	mkdir -p "$(MINUI_ROMS_DIR)/Sega 32X"
+
+	cp -R \
+			"$(MINUI_DIR)/paks/Sega CD.pak" \
+			"$(MINUI_PAYLOAD_DIR)/Emus"
+
+	cp -R \
+			"$(MINUI_DIR)/paks/Sega 32X.pak" \
+			"$(MINUI_PAYLOAD_DIR)/Emus"
+
 	cp \
 		"$(MINUI_PICODRIVE_DIR)/PicoDrive" \
 		"$(MINUI_PAYLOAD_DIR)/Emus/Genesis.pak"
@@ -172,6 +184,8 @@ _build-minui: _build-minui-system
 	$(MAKE) -C $(MINUI_DIR) pce
 	$(MAKE) -C $(MINUI_DIR) swan
 	$(MAKE) -C $(MINUI_DIR) lynx
+
+	$(MAKE) -C $(MINUI_DIR) standalone-emus
 
 	$(MAKE) -C $(MINUI_DIR) tools
 	$(MAKE) -C $(MINUI_DIR) zip
@@ -243,6 +257,21 @@ clean-build-minui:
 
 	# Handy has a verified idempotent `rm -f` clean target.
 	$(MAKE) -C $(MINUI_DIR)/third-party/handy-rs97 clean
+
+	$(MAKE) -C $(MINUI_DIR)/third-party/arnold clean
+	rm -f $(MINUI_DIR)/third-party/arnold/arnold
+
+	@if [ -f "$(MINUI_DIR)/third-party/stella/config.mak" ]; then \
+		$(MAKE) -C "$(MINUI_DIR)/third-party/stella" clean; \
+	fi
+	rm -f $(MINUI_DIR)/third-party/stella/config.mak
+	rm -f $(MINUI_DIR)/third-party/stella/stella
+
+	$(MAKE) -C $(MINUI_DIR)/third-party/retro8 clean
+
+	@if [ -f "$(MINUI_DIR)/third-party/gngeo/Makefile.trimui" ]; then \
+		$(MAKE) -C "$(MINUI_DIR)/third-party/gngeo" -f Makefile.trimui clean; \
+	fi
 
 	# Generated MinUI package trees.
 	rm -rf $(MINUI_DIR)/build

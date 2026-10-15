@@ -7,19 +7,21 @@ PICOARCH_PAK_COUNT_EXPECTED=27
 ROOT="/workspace"
 MODE="${1:-full}"
 
-BASE_RELEASE=$(find "$ROOT/sources/minui/release" \
+MINUI="$ROOT/build/release-sources/minui"
+
+BASE_RELEASE=$(find "$MINUI/release" \
     -maxdepth 1 \
     -type f \
     -name 'MinUI-*.zip' \
-    | sort \
-    | tail -n 1)
+    -printf '%T@ %p\n' \
+    | sort -nr \
+    | head -n 1 \
+    | cut -d' ' -f2-)
 
-MINUI_EXTRA="$ROOT/output/minui-extra-paks"
-STANDALONE="$ROOT/output/standalone-paks"
+SOURCE_UPDATE="$MINUI/paks/System.pak/update.sh"
+
 PICOARCH="$ROOT/output/picoarch-paks"
 PICOARCH_TOOL="$ROOT/output/picoarch-tool/Tools/PicoArch.pak"
-
-SOURCE_UPDATE="$ROOT/sources/minui/paks/System.pak/update.sh"
 
 BUILD="$ROOT/build/minui-release-$MODE"
 OUTER="$BUILD/outer"
@@ -27,8 +29,6 @@ INNER="$BUILD/inner"
 
 RELEASE_NAME="MinUI-$(TZ=Europe/Paris date +%Y%m%d)-0"
 
-INCLUDE_EXTRA=0
-INCLUDE_STANDALONE=0
 INCLUDE_PICOARCH=0
 
 case "$MODE" in
@@ -37,24 +37,7 @@ case "$MODE" in
         OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-minui-only.zip"
         ;;
 
-    standalone)
-        INCLUDE_EXTRA=1
-        INCLUDE_STANDALONE=1
-
-        OUTPUT="$ROOT/output/minui-standalone"
-        OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-standalone.zip"
-        ;;
-
-    picoarch)
-        INCLUDE_PICOARCH=1
-
-        OUTPUT="$ROOT/output/minui-picoarch"
-        OUTPUT_ZIP="$OUTPUT/${RELEASE_NAME}-picoarch.zip"
-        ;;
-
     full)
-        INCLUDE_EXTRA=1
-        INCLUDE_STANDALONE=1
         INCLUDE_PICOARCH=1
 
         OUTPUT="$ROOT/output/minui-release"
@@ -111,22 +94,6 @@ copy_paks()
 [ -f "$BASE_RELEASE" ] ||
     die "missing MinUI release"
 
-if [ "$INCLUDE_EXTRA" -eq 1 ]; then
-    [ -d "$MINUI_EXTRA" ] ||
-        die "missing MinUI extra PAK output"
-
-    [ "$(count_paks "$MINUI_EXTRA")" -eq 5 ] ||
-        die "expected 5 MinUI extra PAKs"
-fi
-
-if [ "$INCLUDE_STANDALONE" -eq 1 ]; then
-    [ -d "$STANDALONE" ] ||
-        die "missing standalone PAK output"
-
-    [ "$(count_paks "$STANDALONE")" -eq 4 ] ||
-        die "expected 4 standalone PAKs"
-fi
-
 if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     [ -d "$PICOARCH" ] ||
         die "missing PicoArch PAK output"
@@ -151,11 +118,7 @@ mkdir -p "$OUTER" "$OUTPUT"
 
 unzip -q "$BASE_RELEASE" -d "$OUTER"
 
-if [ "$INCLUDE_STANDALONE" -eq 1 ] || [ "$INCLUDE_PICOARCH" -eq 1 ]; then
-    # Standalone GnGeo expects neogeo.zip under /mnt/SDCARD/Bios/gngeo.
-    # Keep creating this directory for PicoArch releases too, as before.
-    mkdir -p "$OUTER/Bios/gngeo"
-fi
+mkdir -p "$OUTER/Bios/gngeo"
 
 if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
     mkdir -p "$OUTER/Bios/picoarch"
@@ -221,16 +184,6 @@ if [ "$MODE" != "only" ]; then
     # -----------------------------------------------------------------
 
     ADDED_PAK_COUNT=0
-
-    if [ "$INCLUDE_EXTRA" -eq 1 ]; then
-        copy_paks "$MINUI_EXTRA"
-        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 5))
-    fi
-
-    if [ "$INCLUDE_STANDALONE" -eq 1 ]; then
-        copy_paks "$STANDALONE"
-        ADDED_PAK_COUNT=$((ADDED_PAK_COUNT + 4))
-    fi
 
     if [ "$INCLUDE_PICOARCH" -eq 1 ]; then
         copy_paks "$PICOARCH"

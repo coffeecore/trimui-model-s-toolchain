@@ -13,19 +13,12 @@
 include make/common.mk
 include make/libs.mk
 include make/minui.mk
-include make/arnold.mk
-include make/stella.mk
-include make/gngeo.mk
-include make/retro8.mk
 include make/picoarch.mk
 include make/picoarch-tool.mk
 include make/picoarch-paks.mk
-include make/standalone-paks.mk
-include make/minui-extra-paks.mk
 include make/minui-release.mk
 include make/minui-libs.mk
 include make/mame4allx.mk
-include make/dev.mk
 include make/gno.mk
 
 .PHONY: help help-dev help-release shell preflight release-all release-fresh
@@ -53,43 +46,6 @@ help:
 	@echo '  gno-image                    Build the GNO converter Docker image'
 	@echo
 
-help-dev:
-	@echo "Development targets"
-	@echo "  Source root: $(DEV_SOURCES_DIR)"
-	@echo "  Output root: $(DEV_OUTPUT_DIR)"
-	@echo
-	@echo "Status:"
-	@echo "  dev-status                       Show Git branch/status of all known dev trees"
-	@echo
-	@echo "GnGeo - Steward Fu (active GNO port):"
-	@echo "  dev-gngeo-steward-fu             Build sources/gngeo-steward-fu"
-	@echo "  dev-clean-gngeo-steward-fu       Clean its build artifacts"
-	@echo "  dev-install-gngeo-steward-fu     Create output/dev/gngeo-steward-fu/NEOGEO.pak"
-	@echo "  dev-gngeo                         Alias of dev-gngeo-steward-fu"
-	@echo "  dev-clean-gngeo                   Alias of dev-clean-gngeo-steward-fu"
-	@echo "  dev-install-gngeo                 Alias of dev-install-gngeo-steward-fu"
-	@echo
-	@echo "GnGeo - Coffeecore (known Trimui reference):"
-	@echo "  dev-gngeo-coffeecore              Build sources/gngeo-coffeecore"
-	@echo "  dev-clean-gngeo-coffeecore        Clean its build artifacts"
-	@echo "  dev-install-gngeo-coffeecore      Create output/dev/gngeo-coffeecore/NEOGEO.pak"
-	@echo
-	@echo "MinUI:"
-	@echo "  dev-minui-libs                    Build libmsettings/libmmenu from sources/minui"
-	@echo "  dev-minui-system                  Build only the MinUI System"
-	@echo "  dev-minui                         Build System + Clock and export output/dev/minui"
-	@echo "  dev-clean-minui                   Clean only MinUI System/Clock dev artifacts"
-	@echo "  Host deploy: ./scripts/deploy-minui-dev.sh"
-	@echo
-	@echo "PicoArch:"
-	@echo "  dev-picoarch-frontend             Build sources/picoarch using pinned MinUI libs"
-	@echo "  dev-picoarch-frontend-with-dev-minui"
-	@echo "                                    Build PicoArch using sources/minui libmmenu"
-	@echo "  dev-picoarch-output               Copy dev frontend to output/dev/picoarch"
-	@echo "  dev-clean-picoarch                Remove dev PicoArch top-level build products"
-	@echo
-	@echo "Safety: dev targets never checkout/reset/clean Git and never auto-apply patches."
-
 help-release:
 	@echo "Release targets"
 	@echo "  Disposable pinned source root: $(RELEASE_SOURCES_DIR)"
@@ -107,17 +63,6 @@ help-release:
 	@echo "  clean-build-minui        Clean MinUI build artifacts"
 	@echo "  clean-source-minui       Remove only the release MinUI checkout"
 	@echo "  deploy-minui             Deploy the release MinUI System over ADB"
-	@echo
-	@echo "Standalone emulators:"
-	@echo "  arnold / source-arnold / build-arnold / install-arnold"
-	@echo "  clean-build-arnold / clean-install-arnold / clean-source-arnold"
-	@echo "  stella / source-stella / configure-stella / build-stella / install-stella"
-	@echo "  clean-build-stella / clean-install-stella / clean-source-stella"
-	@echo "  gngeo / source-gngeo / configure-gngeo / build-gngeo / install-gngeo"
-	@echo "      release GnGeo uses Steward Fu (GNGEO_REF); dev GnGeo trees are not used"
-	@echo "  clean-build-gngeo / clean-install-gngeo / clean-source-gngeo"
-	@echo "  retro8 / source-retro8 / build-retro8 / install-retro8"
-	@echo "  clean-build-retro8 / clean-install-retro8 / clean-source-retro8"
 	@echo
 	@echo "PicoArch release:"
 	@echo "  source-picoarch          Prepare pinned PicoArch source"
@@ -148,19 +93,13 @@ help-release:
 	@echo "Packaging / release variants:"
 	@echo "  picoarch-paks            Create output/picoarch-paks"
 	@echo "  picoarch-tool            Create output/picoarch-tool"
-	@echo "  standalone-paks          Create output/standalone-paks"
-	@echo "  minui-extra-paks         Create output/minui-extra-paks"
 	@echo "  mame4allx-pak            Package MAME4ALLX"
 	@echo "  minui-only-release       Build MinUI-only release"
-	@echo "  minui-standalone-release Build MinUI + standalone release"
-	@echo "  minui-picoarch-release   Build MinUI + PicoArch release"
 	@echo "  minui-release            Build full installable MinUI release"
 	@echo
 	@echo "Packaging cleanup:"
-	@echo "  clean-picoarch-paks / clean-picoarch-tool / clean-standalone-paks"
-	@echo "  clean-minui-extra-paks / clean-mame4allx-pak"
-	@echo "  clean-minui-only-release / clean-minui-standalone-release"
-	@echo "  clean-minui-picoarch-release / clean-minui-release"
+	@echo "  clean-picoarch-paks / clean-picoarch-tool"
+	@echo "  clean-minui-only-release"
 	@echo
 	@echo "Safety: release targets never remove, checkout or reset $(DEV_SOURCES_DIR)."
 
@@ -185,20 +124,14 @@ preflight:
 	@test -d "$(TOOLCHAIN_SYSROOT)" || { echo "ERROR: missing toolchain sysroot: $(TOOLCHAIN_SYSROOT)" >&2; exit 1; }
 	@set -e; \
 	for file in \
-		scripts/package-minui-extra-paks.sh \
 		scripts/package-minui-release.sh \
 		scripts/package-picoarch-paks.sh \
-		scripts/package-picoarch-tool.sh \
-		scripts/package-standalone-paks.sh; do \
+		scripts/package-picoarch-tool.sh; do \
 		test -f "$(WORKSPACE)/$$file" || { \
 			echo "ERROR: missing project file: $$file" >&2; \
 			exit 1; \
 		}; \
 	done
-	@test -f "$(WORKSPACE)/assets/minui-extra-paks/Famicom Disk System.pak/launch.sh" || { \
-		echo "ERROR: missing custom Famicom Disk System PAK asset" >&2; \
-		exit 1; \
-	}
 	@echo "Preflight OK"
 
 # Build the complete release in a deterministic serial order. Each recursive make
@@ -207,22 +140,11 @@ release-all:
 	$(MAKE) preflight
 	$(MAKE) libs
 	$(MAKE) build-minui
-	$(MAKE) build-arnold
-	$(MAKE) install-arnold
-	$(MAKE) build-stella
-	$(MAKE) install-stella
-	$(MAKE) build-gngeo
-	$(MAKE) install-gngeo
-	$(MAKE) build-retro8
-	$(MAKE) install-retro8
 	$(MAKE) picoarch-frontend
 	$(MAKE) picoarch-validated
 	$(MAKE) picoarch-output
-	$(MAKE) picoarch-paks
-	$(MAKE) standalone-paks
-	$(MAKE) minui-extra-paks
-	$(MAKE) picoarch-tool
 	$(MAKE) minui-release
+
 # Force the high-level orchestration to remain serial even if the caller adds -j.
 # Individual projects still use JOBS internally where their build systems support it.
 .NOTPARALLEL: release-all release-fresh picoarch-validated
