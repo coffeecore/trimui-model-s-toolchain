@@ -7,9 +7,6 @@ PICOARCH_PLATFORM := trimui
 PICOARCH_CROSS := $(CROSS_COMPILE)
 PICOARCH_CXX := $(PICOARCH_CROSS)g++
 
-# Exact PicoArch revision validated for Trimui Model S
-PICOARCH_REV := 5cabcad277c41ee92424cc50fdc60c22338825a1
-
 # -----------------------------------------------------------------------------
 # Common PicoArch build arguments
 # -----------------------------------------------------------------------------
