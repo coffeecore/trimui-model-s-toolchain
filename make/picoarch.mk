@@ -23,7 +23,8 @@ prepare-picoarch: source-minui
 		PICOARCH_BUILD="$(PICOARCH_BUILD)"
 
 # The frontend and every core now share the same complete PicoArch working tree.
-# This is required because the root Makefile owns the *_libretro.so targets.
+# Frontend and cores share the same PicoArch working tree.
+# MinUI owns the PicoArch build targets.
 picoarch-frontend: source-minui minui-libs prepare-picoarch
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-frontend \
 		PICOARCH_BUILD="$(PICOARCH_BUILD)" \

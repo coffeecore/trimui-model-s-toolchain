@@ -66,22 +66,6 @@ help-release:
 	@echo "  picoarch-clean-frontend  Remove release PicoArch working tree"
 	@echo "  picoarch-clean-output    Remove collected PicoArch output"
 	@echo
-	@echo "Individual PicoArch cores:"
-	@echo "  picoarch-fceumm picoarch-gambatte picoarch-gpsp picoarch-picodrive"
-	@echo "  picoarch-mame2000 picoarch-mame2003 picoarch-pcsx-rearmed"
-	@echo "  picoarch-beetle-pce-fast picoarch-bluemsx picoarch-fmsx picoarch-gme"
-	@echo "  picoarch-mednafen-ngp picoarch-mednafen-wswan picoarch-pokemini"
-	@echo "  picoarch-quicknes picoarch-smsplus-gx picoarch-snes9x2002"
-	@echo "  picoarch-snes9x2005 picoarch-stella2014 picoarch-handy picoarch-gngeo"
-	@echo "Core cleanup targets:"
-	@echo "  picoarch-clean-fceumm picoarch-clean-gambatte picoarch-clean-gpsp picoarch-clean-picodrive"
-	@echo "  picoarch-clean-mame2000 picoarch-clean-mame2003 picoarch-clean-pcsx-rearmed"
-	@echo "  picoarch-clean-beetle-pce-fast picoarch-clean-bluemsx picoarch-clean-fmsx picoarch-clean-gme"
-	@echo "  picoarch-clean-mednafen-ngp picoarch-clean-mednafen-wswan picoarch-clean-pokemini"
-	@echo "  picoarch-clean-quicknes picoarch-clean-smsplus-gx picoarch-clean-snes9x2002"
-	@echo "  picoarch-clean-snes9x2005 picoarch-clean-stella2014 picoarch-clean-handy"
-	@echo "  picoarch-clean-gngeo picoarch-clean-validated"
-	@echo
 	@echo "Packaging / release variants:"
 	@echo "  picoarch-paks            Create output/picoarch-paks"
 	@echo "  picoarch-tool            Create output/picoarch-tool"
@@ -116,9 +100,7 @@ preflight:
 	@test -d "$(TOOLCHAIN_SYSROOT)" || { echo "ERROR: missing toolchain sysroot: $(TOOLCHAIN_SYSROOT)" >&2; exit 1; }
 	@set -e; \
 	for file in \
-		scripts/package-minui-release.sh \
-		scripts/package-picoarch-paks.sh \
-		scripts/package-picoarch-tool.sh; do \
+		scripts/package-minui-release.sh; do \
 		test -f "$(WORKSPACE)/$$file" || { \
 			echo "ERROR: missing project file: $$file" >&2; \
 			exit 1; \
