@@ -1,12 +1,13 @@
 # ==============================================================================
 # MinUI Legacy - Trimui Model S
 # ==============================================================================
-# MinUI is kept completely upstream-clean. Compatibility fixes live here in the
-# orchestration layer instead of modifying MinUI or its submodules.
+# MinUI owns its platform build and packaging behavior.
+# This file only prepares the pinned source, supplies the toolchain/sysroot,
+# and orchestrates MinUI targets.
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_BRANCH := picoarch
-MINUI_COMMIT := e311c7981f81c62696facde7e04aac64cbbe59f3
+MINUI_COMMIT := a9f02f4df0ab7a701d7c2ff362fc2b35f6d7a0bb
 MINUI_DIR := $(RELEASE_SOURCES_DIR)/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
@@ -133,54 +134,7 @@ _build-minui: _build-minui-system
 	$(MAKE) -C $(MINUI_DIR) ps
 	$(MAKE) -C $(MINUI_DIR) gba
 	$(MAKE) -C $(MINUI_DIR) nes
-
-	# PicoDrive equivalent of MinUI's `gen` target.
-	mkdir -p "$(MINUI_ROMS_DIR)/Genesis"
-	mkdir -p "$(MINUI_PAYLOAD_DIR)/Emus"
-
-	@if [ ! -f "$(MINUI_PICODRIVE_DIR)/config.mak" ]; then \
-        cd "$(MINUI_PICODRIVE_DIR)" && \
-        PATH="$(MINUI_TOOLCHAIN)/usr/bin:$$PATH" \
-        CROSS_COMPILE="$(MINUI_CROSS)" \
-        PREFIX="$(MINUI_PREFIX)" \
-        SYSROOT="$(MINUI_SYSROOT)" \
-        PKG_CONFIG_SYSROOT_DIR="$(MINUI_SYSROOT)" \
-        PKG_CONFIG_LIBDIR="$(MINUI_PREFIX)/lib/pkgconfig" \
-                ./configure --platform=trimui; \
-	fi
-
-	# PicoDrive's Makefile uses PWD directly, therefore `cd && make` is required.
-	# `make -C` produces incorrect internal include paths for this revision.
-	cd "$(MINUI_PICODRIVE_DIR)" && $(MAKE) -j$(JOBS)
-
-	rm -rf "$(MINUI_PAYLOAD_DIR)/Emus/Genesis.pak"
-	cp -R \
-		"$(MINUI_DIR)/paks/Genesis.pak" \
-		"$(MINUI_PAYLOAD_DIR)/Emus"
-
-	mkdir -p "$(MINUI_ROMS_DIR)/Sega CD"
-	mkdir -p "$(MINUI_ROMS_DIR)/Sega 32X"
-
-	cp -R \
-			"$(MINUI_DIR)/paks/Sega CD.pak" \
-			"$(MINUI_PAYLOAD_DIR)/Emus"
-
-	cp -R \
-			"$(MINUI_DIR)/paks/Sega 32X.pak" \
-			"$(MINUI_PAYLOAD_DIR)/Emus"
-
-	cp \
-		"$(MINUI_PICODRIVE_DIR)/PicoDrive" \
-		"$(MINUI_PAYLOAD_DIR)/Emus/Genesis.pak"
-
-	# MinUI expects a Trimui skin directory that does not exist in the pinned
-	# PicoDrive commit. Copy the equivalent OpenDingux skin into the generated
-	# payload only; the upstream checkout remains untouched.
-	mkdir -p "$(MINUI_PAYLOAD_DIR)/Emus/Genesis.pak/skin"
-	cp -R \
-		"$(MINUI_PICODRIVE_DIR)/platform/opendingux/data/skin/." \
-		"$(MINUI_PAYLOAD_DIR)/Emus/Genesis.pak/skin/"
-
+	$(MAKE) -C $(MINUI_DIR) gen
 	$(MAKE) -C $(MINUI_DIR) pce
 	$(MAKE) -C $(MINUI_DIR) swan
 	$(MAKE) -C $(MINUI_DIR) lynx
