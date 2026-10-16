@@ -14,8 +14,6 @@ include make/common.mk
 include make/libs.mk
 include make/minui.mk
 include make/picoarch.mk
-include make/picoarch-tool.mk
-include make/picoarch-paks.mk
 include make/minui-release.mk
 include make/minui-libs.mk
 include make/mame4allx.mk
@@ -49,14 +47,12 @@ help-release:
 	@echo "  release-all              Build/reuse pinned sources and create the complete release"
 	@echo "  release-fresh            Delete generated libs/build/output and rebuild from scratch"
 	@echo
-	@echo "MinUI release source/build:"
-	@echo "  minui                    Clean and build pinned MinUI"
-	@echo "  source-minui             Prepare pinned MinUI source"
-	@echo "  build-minui-system       Build MinUI system + libraries"
-	@echo "  build-minui              Build full MinUI"
-	@echo "  clean-build-minui        Clean MinUI build artifacts"
-	@echo "  clean-source-minui       Remove only the release MinUI checkout"
-	@echo "  deploy-minui             Deploy the release MinUI System over ADB"
+	@echo "Release variants:"
+	@echo "  minui-only-release       Build MinUI-only release"
+	@echo "  minui-picoarch-release   Build MinUI + PicoArch release"
+	@echo "  minui-release            Alias for minui-picoarch-release"
+	@echo "  minui-releases           Build both release variants"
+	@echo "  clean-minui-release      Remove generated release ZIPs"
 	@echo
 	@echo "PicoArch release:"
 	@echo "  prepare-picoarch         Prepare PicoArch build tree from MinUI"
@@ -67,14 +63,11 @@ help-release:
 	@echo "  picoarch-clean-output    Remove collected PicoArch output"
 	@echo
 	@echo "Packaging / release variants:"
-	@echo "  picoarch-paks            Create output/picoarch-paks"
-	@echo "  picoarch-tool            Create output/picoarch-tool"
 	@echo "  mame4allx-pak            Package MAME4ALLX"
 	@echo "  minui-only-release       Build MinUI-only release"
 	@echo "  minui-release            Build full installable MinUI release"
 	@echo
 	@echo "Packaging cleanup:"
-	@echo "  clean-picoarch-paks / clean-picoarch-tool"
 	@echo "  clean-minui-only-release"
 	@echo
 	@echo "Safety: release targets never remove, checkout or reset $(DEV_SOURCES_DIR)."
@@ -98,26 +91,13 @@ preflight:
 		}; \
 	done
 	@test -d "$(TOOLCHAIN_SYSROOT)" || { echo "ERROR: missing toolchain sysroot: $(TOOLCHAIN_SYSROOT)" >&2; exit 1; }
-	@set -e; \
-	for file in \
-		scripts/package-minui-release.sh; do \
-		test -f "$(WORKSPACE)/$$file" || { \
-			echo "ERROR: missing project file: $$file" >&2; \
-			exit 1; \
-		}; \
-	done
 	@echo "Preflight OK"
 
 # Build the complete release in a deterministic serial order. Each recursive make
 # must succeed before the next stage starts.
 release-all:
 	$(MAKE) preflight
-	$(MAKE) libs
-	$(MAKE) build-minui
-	$(MAKE) picoarch-frontend
-	$(MAKE) picoarch-validated
-	$(MAKE) picoarch-output
-	$(MAKE) minui-release
+	$(MAKE) minui-releases
 
 # Force the high-level orchestration to remain serial even if the caller adds -j.
 # Individual projects still use JOBS internally where their build systems support it.

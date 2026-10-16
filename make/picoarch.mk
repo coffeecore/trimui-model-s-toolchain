@@ -1,30 +1,26 @@
 # -----------------------------------------------------------------------------
 # PicoArch - Trimui Model S
 # -----------------------------------------------------------------------------
+
 PICOARCH_BUILD := $(WORKSPACE)/build/picoarch
 
-# -----------------------------------------------------------------------------
-# Common PicoArch build arguments
-# -----------------------------------------------------------------------------
+PICOARCH_OUTPUT := $(WORKSPACE)/output/picoarch
+PICOARCH_PAKS_OUTPUT := $(WORKSPACE)/output/picoarch-paks
+PICOARCH_TOOL_OUTPUT := $(WORKSPACE)/output/picoarch-tool
 
 # -----------------------------------------------------------------------------
-# PicoArch source/build tree and frontend (MinUI)
+# PicoArch source/build tree and frontend
 # -----------------------------------------------------------------------------
 
-# Keep a pinned pristine-ish release checkout under build/release-sources/. The working tree in
-# build/picoarch is a full copy of that checkout (including the top-level
-# Makefile and upstream patches), so the core targets such as
-# The complete PicoArch working tree is used for frontend and core builds.
 .PHONY: prepare-picoarch \
 	picoarch-frontend picoarch-clean-frontend
 
+# MinUI owns the PicoArch source and prepares the shared working tree.
 prepare-picoarch: source-minui
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-prepare \
 		PICOARCH_BUILD="$(PICOARCH_BUILD)"
 
-# The frontend and every core now share the same complete PicoArch working tree.
-# Frontend and cores share the same PicoArch working tree.
-# MinUI owns the PicoArch build targets.
+# MinUI owns the frontend build. The toolchain only provides its environment.
 picoarch-frontend: source-minui minui-libs prepare-picoarch
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-frontend \
 		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
@@ -34,25 +30,24 @@ picoarch-frontend: source-minui minui-libs prepare-picoarch
 
 	test -x "$(PICOARCH_BUILD)/picoarch"
 
-# Removing the PicoArch working tree also removes all built cores.
+# Removing the shared working tree also removes its built frontend and cores.
 picoarch-clean-frontend:
-	rm -rf $(PICOARCH_BUILD)
+	rm -rf "$(PICOARCH_BUILD)"
 
 # -----------------------------------------------------------------------------
 # PicoArch output
 # -----------------------------------------------------------------------------
 
-PICOARCH_OUTPUT := /workspace/output/picoarch
+.PHONY: picoarch-output picoarch-clean-output
 
-.PHONY: picoarch-output
 picoarch-output: libs source-minui
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-output \
 		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
 		PICOARCH_OUTPUT="$(PICOARCH_OUTPUT)" \
 		CROSS_COMPILE="$(CROSS_COMPILE)" \
-		SYSROOT="$(SYSROOT)"
+		SYSROOT="$(SYSROOT)" \
+		MINUI_MMENU_BUILD="$(MINUI_MMENU_BUILD)"
 
-.PHONY: picoarch-clean-output
 picoarch-clean-output: source-minui
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-clean-output \
 		PICOARCH_OUTPUT="$(PICOARCH_OUTPUT)"
@@ -61,14 +56,14 @@ picoarch-clean-output: source-minui
 # PicoArch cores
 # -----------------------------------------------------------------------------
 
-.PHONY: picoarch-validated
+.PHONY: picoarch-validated picoarch-clean-validated
+
 picoarch-validated: libs source-minui
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-validated \
 		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
 		CROSS_COMPILE="$(CROSS_COMPILE)" \
 		SYSROOT="$(SYSROOT)"
 
-.PHONY: picoarch-clean-validated
 picoarch-clean-validated: source-minui
 	$(MAKE) -C "$(MINUI_DIR)" picoarch-clean-validated \
 		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
