@@ -44,31 +44,26 @@ help-release:
 	@echo
 	@echo "Orchestration:"
 	@echo "  preflight                Validate release prerequisites"
-	@echo "  release-all              Build/reuse pinned sources and create the complete release"
-	@echo "  release-fresh            Delete generated libs/build/output and rebuild from scratch"
+	@echo "  release-all              Build both MinUI release variants"
+	@echo "  release-fresh            Remove generated build/output and rebuild from scratch"
 	@echo
-	@echo "Release variants:"
+	@echo "MinUI releases:"
 	@echo "  minui-only-release       Build MinUI-only release"
 	@echo "  minui-picoarch-release   Build MinUI + PicoArch release"
 	@echo "  minui-release            Alias for minui-picoarch-release"
 	@echo "  minui-releases           Build both release variants"
-	@echo "  clean-minui-release      Remove generated release ZIPs"
+	@echo "  clean-minui-release      Remove generated MinUI release ZIPs"
 	@echo
-	@echo "PicoArch release:"
+	@echo "PicoArch:"
 	@echo "  prepare-picoarch         Prepare PicoArch build tree from MinUI"
 	@echo "  picoarch-frontend        Build PicoArch frontend"
 	@echo "  picoarch-validated       Build all validated cores"
 	@echo "  picoarch-output          Collect frontend + validated cores"
-	@echo "  picoarch-clean-frontend  Remove release PicoArch working tree"
+	@echo "  picoarch-clean-frontend  Remove PicoArch working tree"
 	@echo "  picoarch-clean-output    Remove collected PicoArch output"
 	@echo
-	@echo "Packaging / release variants:"
+	@echo "Other packaging:"
 	@echo "  mame4allx-pak            Package MAME4ALLX"
-	@echo "  minui-only-release       Build MinUI-only release"
-	@echo "  minui-release            Build full installable MinUI release"
-	@echo
-	@echo "Packaging cleanup:"
-	@echo "  clean-minui-only-release"
 	@echo
 	@echo "Safety: release targets never remove, checkout or reset $(DEV_SOURCES_DIR)."
 
