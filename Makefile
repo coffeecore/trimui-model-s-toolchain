@@ -16,7 +16,6 @@ include make/minui.mk
 include make/picoarch.mk
 include make/minui-release.mk
 include make/minui-libs.mk
-include make/mame4allx.mk
 
 .PHONY: help help-dev help-release shell preflight release-all release-fresh
 
