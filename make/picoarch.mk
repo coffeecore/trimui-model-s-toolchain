@@ -4,7 +4,6 @@
 
 PICOARCH_BUILD := $(WORKSPACE)/build/picoarch
 
-PICOARCH_OUTPUT := $(WORKSPACE)/output/picoarch
 PICOARCH_PAKS_OUTPUT := $(WORKSPACE)/output/picoarch-paks
 PICOARCH_TOOL_OUTPUT := $(WORKSPACE)/output/picoarch-tool
 
@@ -33,24 +32,6 @@ picoarch-frontend: source-minui minui-libs prepare-picoarch
 # Removing the shared working tree also removes its built frontend and cores.
 picoarch-clean-frontend:
 	rm -rf "$(PICOARCH_BUILD)"
-
-# -----------------------------------------------------------------------------
-# PicoArch output
-# -----------------------------------------------------------------------------
-
-.PHONY: picoarch-output picoarch-clean-output
-
-picoarch-output: libs source-minui
-	$(MAKE) -C "$(MINUI_DIR)" picoarch-output \
-		PICOARCH_BUILD="$(PICOARCH_BUILD)" \
-		PICOARCH_OUTPUT="$(PICOARCH_OUTPUT)" \
-		CROSS_COMPILE="$(CROSS_COMPILE)" \
-		SYSROOT="$(SYSROOT)" \
-		MINUI_MMENU_BUILD="$(MINUI_MMENU_BUILD)"
-
-picoarch-clean-output: source-minui
-	$(MAKE) -C "$(MINUI_DIR)" picoarch-clean-output \
-		PICOARCH_OUTPUT="$(PICOARCH_OUTPUT)"
 
 # -----------------------------------------------------------------------------
 # PicoArch cores

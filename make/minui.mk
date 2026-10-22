@@ -7,7 +7,7 @@
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_BRANCH := picoarch
-MINUI_COMMIT := e8a6a48c04bab40c159dc51b169de21c01493f4e
+MINUI_COMMIT := 168e81d2b13283180f6dc171081d5e57fac59cdb
 MINUI_DIR := $(RELEASE_SOURCES_DIR)/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
@@ -79,7 +79,14 @@ source-minui:
 			--branch "$(MINUI_BRANCH)" \
 			$(MINUI_REPO) \
 			$(MINUI_DIR); \
-		git -C "$(MINUI_DIR)" checkout "$(MINUI_COMMIT)"; \
+	fi
+
+	@CURRENT="$$(git -C "$(MINUI_DIR)" rev-parse HEAD)"; \
+	if [ "$$CURRENT" != "$(MINUI_COMMIT)" ]; then \
+		git -C "$(MINUI_DIR)" fetch origin "$(MINUI_BRANCH)"; \
+		git -C "$(MINUI_DIR)" checkout --detach --force "$(MINUI_COMMIT)"; \
+	else \
+		git -C "$(MINUI_DIR)" reset --hard "$(MINUI_COMMIT)" >/dev/null; \
 	fi
 
 	# Certains submodules upstream utilisent des URLs SSH GitHub.

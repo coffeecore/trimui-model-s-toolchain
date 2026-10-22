@@ -57,9 +57,7 @@ help-release:
 	@echo "  prepare-picoarch         Prepare PicoArch build tree from MinUI"
 	@echo "  picoarch-frontend        Build PicoArch frontend"
 	@echo "  picoarch-validated       Build all validated cores"
-	@echo "  picoarch-output          Collect frontend + validated cores"
 	@echo "  picoarch-clean-frontend  Remove PicoArch working tree"
-	@echo "  picoarch-clean-output    Remove collected PicoArch output"
 	@echo
 	@echo "Other packaging:"
 	@echo "  mame4allx-pak            Package MAME4ALLX"
