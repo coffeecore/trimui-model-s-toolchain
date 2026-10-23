@@ -43,8 +43,8 @@ help-release:
 	@echo
 	@echo "Orchestration:"
 	@echo "  preflight                Validate release prerequisites"
-	@echo "  release-all              Build both MinUI release variants"
-	@echo "  release-fresh            Remove generated build/output and rebuild from scratch"
+	@echo "  release-all              Build both MinUI release variants (WITH_GMENUNX=0|1)"
+	@echo "  release-fresh            Remove generated build/output and rebuild from scratch (WITH_GMENUNX=0|1)"
 	@echo
 	@echo "MinUI releases:"
 	@echo "  minui-only-release       Build MinUI-only release"
