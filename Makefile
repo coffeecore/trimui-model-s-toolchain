@@ -64,6 +64,15 @@ help-release:
 	@echo
 	@echo "Safety: release targets never remove, checkout or reset $(DEV_SOURCES_DIR)."
 
+help-dev:
+	@echo "Development targets:"
+	@echo "  build-minui"
+	@echo "  build-minui-system"
+	@echo "  minui-libs"
+	@echo "  picoarch-frontend"
+	@echo "  picoarch-validated"
+	@echo "  deploy-minui"
+
 # Open an interactive shell in the build container.
 shell:
 	docker compose run --rm builder

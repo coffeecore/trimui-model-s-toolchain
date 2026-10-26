@@ -7,7 +7,7 @@
 
 MINUI_REPO := https://github.com/coffeecore/MinUI-Legacy-Trimui-Model-S.git
 MINUI_BRANCH := picoarch
-MINUI_COMMIT := d7145718af328ce778c121e8f12226b5fd17f778
+MINUI_COMMIT := 52904a942b7b1768d0b7e7b6ade353055c6d120d
 MINUI_DIR := $(RELEASE_SOURCES_DIR)/minui
 
 MINUI_PICODRIVE_DIR := $(MINUI_DIR)/third-party/picodrive
@@ -149,7 +149,6 @@ _build-minui: _build-minui-system
 	$(MAKE) -C $(MINUI_DIR) standalone-emus
 
 	$(MAKE) -C $(MINUI_DIR) tools
-	$(MAKE) -C $(MINUI_DIR) zip
 
 # MinUI's upstream global clean is not fully idempotent (notably Oswan), and it
 # omits Handy. Clean each verified component explicitly instead of suppressing
